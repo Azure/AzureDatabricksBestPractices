@@ -50,8 +50,8 @@
 - [Table 3: Batch vs Interactive Workloads](#heading)
 
 
-# Table of Contents - save for later
-- [Introduction](#heading)
+# Table of x - save for later
+- [Heading](#heading)
   * [Sub-heading](#sub-heading)
     + [Sub-sub-heading](#sub-sub-heading)
 
@@ -66,20 +66,25 @@
 
 Planning, deploying, and running Azure Databricks (ADB) at scale requires one to make many
 architectural decisions.
+
 While each ADB deployment is unique to an organization's needs we have found that some patterns are
 common across most successful ADB projects. Unsurprisingly, these patterns are also in-line with
 modern Cloud-centric development best practices.
+
 This short guide summarizes these patterns into prescriptive and actionable best practices for Azure
 Databricks. We follow a logical path of planning the infrastructure, provisioning the workspaces,
 developing Azure Databricks applications, and finally, running Azure Databricks in production.
+
 The audience of this guide are system architects, field engineers, and development teams of customers,
 Microsoft, and Databricks. Since the Azure Databricks product goes through fast iteration cycles, we
 have avoided recommendations based on roadmap or Private Preview features.
+
 Our recommendations should apply to a typical Fortune 500 enterprise with at least intermediate level
 of Azure and Databricks knowledge. We've also classified each recommendation according to its likely
 impact on solution's quality attributes. Using the **Impact** factor, you can weigh the recommendation
 against other competing choices. Example: if the impact is classified as “Very High”, the implications of
 not adopting the best practice can have a significant impact on your deployment.
+
 As ardent cloud proponents, we value agility and bringing value quickly to our customers. Hence, we’re
 releasing the first version somewhat quickly, omitting some important but advanced topics in the
 interest of time. We will cover the missing topics and add more details in the next round, while sincerely
