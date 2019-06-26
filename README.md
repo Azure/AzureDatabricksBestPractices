@@ -8,7 +8,7 @@ Published: June 22, 2019
 
 Version: 1.0
 
-Please proceed to the Best Practices here
+Click here for the Best Practices 
 [Please proceed to the Best Practices here](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/toc.md)
 
 Disclaimers: 
