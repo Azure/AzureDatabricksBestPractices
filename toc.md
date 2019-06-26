@@ -113,11 +113,43 @@ The first user to login and initialize the workspace is the workspace ***owner**
 
 *Figure 1: Databricks user menu*
 
+## Map Workspaces to Business Units
+*Impact: Very High*
+
+Though partitioning of workspaces depends on the organization structure and scenarios, it is generally recommended to partition workspaces based on a related group of people working together collaboratively. This also helps in streamlining your access control matrix within your workspace (folders, notebooks etc.) and also across all your resources that the workspace interacts with (storage, related data stores like Azure SQL DB, Azure SQL DW etc.). This type of division scheme is also known as the Business Unit Subscription design pattern and aligns well with Databricks chargeback model.
 
 
-### Sub-heading
+![Figure 2: Business Unit Subscription Design Pattern](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure2.PNG "Figure 1: Databricks user menu")
 
-This is an h2 heading
+*Figure 2: Business Unit Subscription Design Pattern*
+
+
+## Deploy Workspaces in Multiple Subscriptions
+*Impact: Very High*
+
+Customers commonly partition workspaces based on teams or departments and arrive at that division naturally. But it is also important to partition keeping Azure Subscription and ADB Workspace level limits in mind.
+
+
+### ADB Workspace Limits
+Azure Databricks is a multitenant service and to provide fair resource sharing to all regional customers, it imposes limits on API calls. These limits are expressed at the Workspace level and are due to internal ADB components. For instance, you can only run up to 150 concurrent jobs in a workspace. Beyond that, ADB will deny your job submissions. There are also other limits such as max hourly job submissions, etc.
+
+Key workspace limits are:
+● There is a limit of **1000** scheduled jobs that can be seen in the UI.
+● The maximum number of jobs that a workspace can create in an hour is **1000**.
+● At any time, you cannot have more than **150 jobs** simultaneously running in a workspace.
+● There can be a maximum of **150 notebooks or execution contexts** attached to a cluster.
+
+### Azure Subscription Limits
+Next, there are {FLAG THIS  TO PREMAL IS THIS SUPPOSED TO BE A LINK?} Azure limits [Azure limits](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/toc.md) to consider since ADB deployments are built on top of the Azure infrastructure.
+
+Key Azure limits are:
+● Storage accounts per region per subscription: **250**
+● Maximum egress for general-purpose v2 and Blob storage accounts (all regions): **50 Gbps**
+● VMs per subscription per region: **25,000**.
+● Resource groups per subscription: **980**
+
+Due to security reasons, we also highly recommend separating the production and dev/stage environments into separate subscriptions.
+
 
 #### Sub-sub-heading
 
