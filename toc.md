@@ -62,40 +62,24 @@
 
 ## Introduction
 
-Planning, deploying, and running Azure Databricks (ADB) at scale requires one to make many
-architectural decisions.
+Planning, deploying, and running Azure Databricks (ADB) at scale requires one to make many architectural decisions.
 
-While each ADB deployment is unique to an organization's needs we have found that some patterns are
-common across most successful ADB projects. Unsurprisingly, these patterns are also in-line with
-modern Cloud-centric development best practices.
+While each ADB deployment is unique to an organization's needs we have found that some patterns are common across most successful ADB projects. Unsurprisingly, these patterns are also in-line with modern Cloud-centric development best practices.
 
-This short guide summarizes these patterns into prescriptive and actionable best practices for Azure
-Databricks. We follow a logical path of planning the infrastructure, provisioning the workspaces,
-developing Azure Databricks applications, and finally, running Azure Databricks in production.
+This short guide summarizes these patterns into prescriptive and actionable best practices for Azure Databricks. We follow a logical path of planning the infrastructure, provisioning the workspaces,developing Azure Databricks applications, and finally, running Azure Databricks in production.
 
-The audience of this guide are system architects, field engineers, and development teams of customers,
-Microsoft, and Databricks. Since the Azure Databricks product goes through fast iteration cycles, we
-have avoided recommendations based on roadmap or Private Preview features.
+The audience of this guide are system architects, field engineers, and development teams of customers, Microsoft, and Databricks. Since the Azure Databricks product goes through fast iteration cycles, we have avoided recommendations based on roadmap or Private Preview features.
 
-Our recommendations should apply to a typical Fortune 500 enterprise with at least intermediate level
-of Azure and Databricks knowledge. We've also classified each recommendation according to its likely
-impact on solution's quality attributes. Using the **Impact** factor, you can weigh the recommendation
-against other competing choices. Example: if the impact is classified as “Very High”, the implications of
-not adopting the best practice can have a significant impact on your deployment.
+Our recommendations should apply to a typical Fortune 500 enterprise with at least intermediate level of Azure and Databricks knowledge. We've also classified each recommendation according to its likely impact on solution's quality attributes. Using the **Impact** factor, you can weigh the recommendation against other competing choices. Example: if the impact is classified as “Very High”, the implications of not adopting the best practice can have a significant impact on your deployment.
 
-As ardent cloud proponents, we value agility and bringing value quickly to our customers. Hence, we’re
-releasing the first version somewhat quickly, omitting some important but advanced topics in the
-interest of time. We will cover the missing topics and add more details in the next round, while sincerely
+As ardent cloud proponents, we value agility and bringing value quickly to our customers. Hence, we’re releasing the first version somewhat quickly, omitting some important but advanced topics in the interest of time. We will cover the missing topics and add more details in the next round, while sincerely
 hoping that this version is still useful to you.
 
 ## Provisioning ADB: Guidelines for Networking and Security
 
-Azure Databricks (ADB) deployments for very small organizations, PoC applications, or for personal
-education hardly require any planning. You can spin up a Workspace using Azure Portal in a matter of
-minutes, create a Notebook, and start writing code.
+Azure Databricks (ADB) deployments for very small organizations, PoC applications, or for personal education hardly require any planning. You can spin up a Workspace using Azure Portal in a matter of minutes, create a Notebook, and start writing code.
 
-Enterprise-grade large scale deployments are a different story altogether. Some upfront planning is
-necessary to avoid cost overruns, throttling issues, etc. In particular, you need to understand:
+Enterprise-grade large scale deployments are a different story altogether. Some upfront planning is necessary to avoid cost overruns, throttling issues, etc. In particular, you need to understand:
 
 ● Networking requirements of Databricks
 
@@ -125,6 +109,9 @@ called Admin, not to be confused with AAD’s admin.
 The first user to login and initialize the workspace is the workspace ***owner***. This person can invite other users to the workspace, create groups, etc. The ADB logged in user’s identity is provided by AAD, and shows up under the user menu in Workspace:
 
 ![](Figure1.png)
+
+![Figure 1: Databricks user menu](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure1.PNG "Figure 1: Databricks user menu")
+
 
 *Figure 1: Databricks user menu*
 
