@@ -108,12 +108,12 @@ called Admin, not to be confused with AAD’s admin.
 
 The first user to login and initialize the workspace is the workspace ***owner***. This person can invite other users to the workspace, create groups, etc. The ADB logged in user’s identity is provided by AAD, and shows up under the user menu in Workspace:
 
-![](Figure1.png)
-
 ![Figure 1: Databricks user menu](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure1.PNG "Figure 1: Databricks user menu")
 
 
 *Figure 1: Databricks user menu*
+
+
 
 ### Sub-heading
 
