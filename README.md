@@ -1,6 +1,7 @@
 # Azure Databricks Best Practices
 
 Dhruv Kumar, Databricks Senior Solutions Architect
+
 Premal Shah, Azure Databricks PM, Microsoft
 
 
