@@ -6,7 +6,7 @@
   * [Map Workspaces to Business Units](#Map-Workspaces-To-Business-Units)
   * [Deploy Workspaces in Multiple Subscriptions](#Deploy-Workspaces-in-Multiple-Subscriptions)
     + [ADB Workspace Limits](#ADB-Workspace-Limits)
-    + [Azure Subscription Limits](#Azure-Subscription-Limits)
+    + [Azure Subscription Limits](#azure-subscription-limits)
   * [Consider Isolating Each Workspace in its own VNet](#Consider-Isolating-Each-Workspace-in-its-own-VNet)
   * [Select the largest CIDR possible for a VNet](#sub-heading-1)
   * [Do not store any production data in default DBFS folders](#sub-heading-1)
