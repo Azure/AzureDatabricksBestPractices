@@ -29,22 +29,32 @@
   * [Installation for being able to capture VM metrics in Log Analytics](#sub-heading)
 
 
+   
+    
+    
+    
+    
 # Table of Figures
 
-- [Introduction](#heading)
-  * [Sub-heading](#sub-heading)
-    + [Sub-sub-heading](#sub-sub-heading)
-    
-    
-    
-    
-    
-    
-# Table of Tables
+- [Figure 1: Databricks user menu](#heading)
+- [Figure 2: Business Unit Subscription Design Pattern](#heading)
+- [Figure 3: Azure Databricks Isolation Domains Workspace](#heading)
+- [Figure 4: Hub and Spoke Model](#heading)
+- [Figure 5: Interactive clusters](#heading)
+- [Figure 6: Ephemeral Job Cluster](#heading)
+- [Figure 7: Shuffle vs. no-shuffleu](#heading)
 
+# Table of Tables
+- [Table 1: CIDR Ranges](#heading)
+- [Table 2: Cluster modes and their characteristics](#heading)
+- [Table 3: Batch vs Interactive Workloads](#heading)
+
+
+# Table of Contents - save for later
 - [Introduction](#heading)
   * [Sub-heading](#sub-heading)
     + [Sub-sub-heading](#sub-sub-heading)
+
 
 # Heading levels
 
