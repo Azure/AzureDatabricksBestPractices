@@ -1,7 +1,7 @@
 # Table of Contents
 
 - [Introduction](#Introduction)
-- [Provisioning ADB: Guidelines for Networking and Security](#ProvisioningADB:GuidelinesforNetworkingandSecurity)
+- [Provisioning ADB: Guidelines for Networking and Security](#ProvisioningADBGuidelinesforNetworkingandSecurity)
   * [Azure Databricks 101](#sub-heading-1)
   * [Map Workspaces to Business Units](#sub-heading-1)
   * [Deploy Workspaces in Multiple Subscriptions](#sub-heading-1)
