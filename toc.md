@@ -150,6 +150,9 @@ Key Azure limits are:
 
 Due to security reasons, we also highly recommend separating the production and dev/stage environments into separate subscriptions.
 
+# It is important to divide your workspaces appropriately using different subscriptions based on your business keeping in mind the Azure limits.
+
+> It is important to divide your workspaces appropriately using different subscriptions based on your business keeping in mind the Azure limits.
 
 #### Sub-sub-heading
 
