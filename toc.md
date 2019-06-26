@@ -4,7 +4,7 @@
 - [Provisioning ADB: Guidelines for Networking and Security](#Provisioning-ADB-Guidelines-for-Networking-and-Security)
   * [Azure Databricks 101](#Azure-Databricks-101)
   * [Map Workspaces to Business Units](#Map-Workspaces-To-Business-Units)
-  * [Deploy Workspaces in Multiple Subscriptions](#Deploy-Workspaces-in Multiple-Subscriptions)
+  * [Deploy Workspaces in Multiple Subscriptions](#Deploy-Workspaces-in-Multiple-Subscriptions)
     + [ADB Workspace Limits](#ADB-Workspace-Limits)
     + [Azure Subscription Limits](#Azure-Subscription-Limits)
   * [Consider Isolating Each Workspace in its own VNet](#Consider-Isolating-Each-Workspace-in-its-own-VNet)
