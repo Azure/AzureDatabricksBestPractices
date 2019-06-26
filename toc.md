@@ -119,7 +119,7 @@ The first user to login and initialize the workspace is the workspace ***owner**
 Though partitioning of workspaces depends on the organization structure and scenarios, it is generally recommended to partition workspaces based on a related group of people working together collaboratively. This also helps in streamlining your access control matrix within your workspace (folders, notebooks etc.) and also across all your resources that the workspace interacts with (storage, related data stores like Azure SQL DB, Azure SQL DW etc.). This type of division scheme is also known as the Business Unit Subscription design pattern and aligns well with Databricks chargeback model.
 
 
-![Figure 2: Business Unit Subscription Design Pattern](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure2.PNG "Figure 1: Databricks user menu")
+![Figure 2: Business Unit Subscription Design Pattern](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure2.PNG "Figure 2: Business Unit Subscription Design Pattern")
 
 *Figure 2: Business Unit Subscription Design Pattern*
 
@@ -150,9 +150,11 @@ Key Azure limits are:
 
 Due to security reasons, we also highly recommend separating the production and dev/stage environments into separate subscriptions.
 
-# It is important to divide your workspaces appropriately using different subscriptions based on your business keeping in mind the Azure limits.
+# Note:
 
-> It is important to divide your workspaces appropriately using different subscriptions based on your business keeping in mind the Azure limits.
+> ***It is important to divide your workspaces appropriately using different subscriptions based on your business keeping in mind the Azure limits.***
+
+![Figure 3: Azure Databricks Isolation Domains Workspace](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure3.PNG "Figure 3: Azure Databricks Isolation Domains Workspace")
 
 #### Sub-sub-heading
 
