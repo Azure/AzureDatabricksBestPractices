@@ -1,5 +1,6 @@
 # Azure Databricks Best Practices
 
+Created by:
 Dhruv Kumar, Databricks Senior Solutions Architect
 
 Premal Shah, Azure Databricks PM, Microsoft
