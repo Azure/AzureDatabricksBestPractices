@@ -96,13 +96,15 @@ minutes, create a Notebook, and start writing code.
 
 Enterprise-grade large scale deployments are a different story altogether. Some upfront planning is
 necessary to avoid cost overruns, throttling issues, etc. In particular, you need to understand:
+
 ● Networking requirements of Databricks
+
 ● The number and the type of Azure networking resources required to launch clusters
-● Relationship between Azure and Databricks jargon: Subscription, VNet., Workspaces, Clusters,
-Subnets, etc.
+
+● Relationship between Azure and Databricks jargon: Subscription, VNet., Workspaces, Clusters, Subnets, etc.
+
 ● Overall Capacity Planning process: where to begin, what to consider?
-Let’s start with a short Azure Databricks 101 and then discuss some best practices for scalable and
-secure deployments.
+Let’s start with a short Azure Databricks 101 and then discuss some best practices for scalable and secure deployments.
 
 ### Sub-heading
 
