@@ -106,6 +106,28 @@ necessary to avoid cost overruns, throttling issues, etc. In particular, you nee
 ● Overall Capacity Planning process: where to begin, what to consider?
 Let’s start with a short Azure Databricks 101 and then discuss some best practices for scalable and secure deployments.
 
+
+## Azure Databricks 101
+
+ADB is a Big Data analytics service. Being a Cloud Optimized managed PaaS offering, it is designed to hide the underlying distributed systems and networking complexity as much as possible from the end user. It is backed by a team of support staff who monitor its health, debug tickets filed via Azure, etc. This allows ADB users to focus on developing value generating apps rather than stressing over infrastructure management.
+
+You can deploy ADB using Azure Portal or using ARM templates. One successful ADB deployment produces exactly one Workspace, a space where users can log in and author analytics apps. It comprises the file browser, notebooks, tables, clusters, DBFS storage, etc. More importantly, Workspace is a fundamental isolation unit in Databricks. All workspaces are expected to be completely isolated from each other -- i.e., we intend that no action in one workspace should noticeably impact another workspace.
+
+Each workspace is identified by a globally unique 53-bit number, called ***Workspace ID or Organization ID***. The URL that a customer sees after logging in always uniquely identifies the workspace they are using:
+
+*https://regionName.azuredatabricks.net/?o=workspaceId*
+
+Azure Databricks uses Azure Active Directory (AAD) as the exclusive Identity Provider and there’s a seamless out of the box integration between them. Any AAD member belonging to the Owner or Contributor role can deploy Databricks and is automatically added to the ADB members list upon first login. If a user is not a member of the Active Directory tenant, they can’t login to the workspace.
+
+Azure Databricks comes with its own user management interface. You can create users and groups in a workspace, assign them certain privileges, etc. While users in AAD are equivalent to Databricks users, by default AAD roles have no relationship with groups created inside ADB. ADB also has a special group
+called Admin, not to be confused with AAD’s admin.
+
+The first user to login and initialize the workspace is the workspace ***owner***. This person can invite other users to the workspace, create groups, etc. The ADB logged in user’s identity is provided by AAD, and shows up under the user menu in Workspace:
+
+![](Figure1.png)
+
+*Figure 1: Databricks user menu*
+
 ### Sub-heading
 
 This is an h2 heading
