@@ -1,9 +1,7 @@
 # Table of Contents
 
 - [Introduction](#Introduction)
-  * [Sub-heading](#sub-heading)
-    + [Sub-sub-heading](#sub-sub-heading)
-- [Provisioning ADB: Guidelines for Networking and Security](#heading-1)
+- [Provisioning ADB: Guidelines for Networking and Security](#Provisioning ADB)
   * [Azure Databricks 101](#sub-heading-1)
   * [Map Workspaces to Business Units](#sub-heading-1)
   * [Deploy Workspaces in Multiple Subscriptions](#sub-heading-1)
@@ -89,6 +87,8 @@ As ardent cloud proponents, we value agility and bringing value quickly to our c
 releasing the first version somewhat quickly, omitting some important but advanced topics in the
 interest of time. We will cover the missing topics and add more details in the next round, while sincerely
 hoping that this version is still useful to you.
+
+## Provisioning ADB: Guidelines for Networking and Security
 
 ### Sub-heading
 
