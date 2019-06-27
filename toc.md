@@ -10,7 +10,7 @@
   * [Consider Isolating Each Workspace in its own VNet](#Consider-Isolating-Each-Workspace-in-its-own-VNet)
   * [Select the largest CIDR possible for a VNet](#Select-the-largest-CIDR-possible-for-a-VNet)
   * [Do not store any production data in default DBFS folders](#Do-not-store-any-production-data-in-default-DBFS-folders)
-  * [Always hide secrets in Key Vault and do not expose them openly in Notebooks](#sub-heading-1)
+  * [Always hide secrets in Key Vault and do not expose them openly in Notebooks](#always-hide-secrets-in-key-vault-and-do-not-expose-them-openly-in-notebooks)
 - [Developing applications on ADB: Guidelines for selecting clusters](#heading-2)
   * [Support Interactive analytics using shared High Concurrency clusters](#sub-heading-2)
    * [Support Batch ETL workloads with single user ephemeral Standard clusters](#sub-heading-2)
@@ -217,10 +217,27 @@ This recommendation is driven by security and data availability concerns. Every 
 
 > ***This recommendation doesn't apply to Blob or ADLS folders explicitly mounted as DBFS by the end user*** 
 
+**More information: [Databricks File System]**(https://docs.databricks.com/user-guide/dbfs-databricks-file-system.html)
+
+## Always hide secrets in a Key Vault and do not expose them openly in Notebooks
+*Impact: High*
+
+It is a significant security risk to expose sensitive data such as access credentials openly in Notebooks or other places such as job configs, etc. You should instead use a vault to securely store and access them.
+You can either use ADB’s internal Key Vault for this purpose or use Azure’s Key Vault (AKV) service.
+
+If using Azure Key Vault, create separate AKV-backed secret scopes and corresponding AKVs to store credentials pertaining to different data stores. This will help prevent users from accessing credentials that they might not have access to. Since access controls are applicable to the entire secret scope, users with access to the scope will see all secrets for the AKV associated with that scope.
+
+**More Information:**
+[Create an Azure Key Vault-backed secret scope](https://docs.azuredatabricks.net/user-guide/secrets/secret-scopes.html)
+[Example of using secrets in a notebook]
+(https://docs.azuredatabricks.net/user-guide/secrets/example-secret-workflow.html)
+[Best practices for creating secret scopes](https://docs.azuredatabricks.net/user-guide/secrets/secret-acl.html)
 
 
 
 
+
+# Developing applications on ADB: Guidelines for selecting clusters
 
 
 
