@@ -102,8 +102,7 @@ Each workspace is identified by a globally unique 53-bit number, called ***Works
 
 Azure Databricks uses Azure Active Directory (AAD) as the exclusive Identity Provider and there’s a seamless out of the box integration between them. Any AAD member belonging to the Owner or Contributor role can deploy Databricks and is automatically added to the ADB members list upon first login. If a user is not a member of the Active Directory tenant, they can’t login to the workspace.
 
-Azure Databricks comes with its own user management interface. You can create users and groups in a workspace, assign them certain privileges, etc. While users in AAD are equivalent to Databricks users, by default AAD roles have no relationship with groups created inside ADB. ADB also has a special group
-called Admin, not to be confused with AAD’s admin.
+Azure Databricks comes with its own user management interface. You can create users and groups in a workspace, assign them certain privileges, etc. While users in AAD are equivalent to Databricks users, by default AAD roles have no relationship with groups created inside ADB. ADB also has a special group called Admin, not to be confused with AAD’s admin.
 
 The first user to login and initialize the workspace is the workspace ***owner***. This person can invite other users to the workspace, create groups, etc. The ADB logged in user’s identity is provided by AAD, and shows up under the user menu in Workspace:
 
@@ -111,15 +110,16 @@ The first user to login and initialize the workspace is the workspace ***owner**
 
 
 
-  *Figure 1: Databricks user menu*
-  
-<p align="center">
-    *Figure 1: Databricks user menu*
+                         *Figure 1: Databricks user menu*
+   
+
   <!--
+<p align="center">
     <img width="460" height="300" src="http://www.fillmurray.com/460/300">
+</p>
 -->
   
-</p>
+
 
 ## Map Workspaces to Business Units
 *Impact: Very High*
