@@ -187,7 +187,11 @@ Recall the each Workspace can have multiple clusters:
 o Half of address space is reserved for future use
 
 
-
+● Each cluster node requires 1 Public IP and 2 Private IPs
+● These IPs and are logically grouped into 2 subnets named “public” and “private”
+● For a desired cluster size of X, number of Public IPs = X, number of Private IPs = 4X
+● The 4X requirement for Private IPs is due to the fact that for each deployment:
+        o Half of address space is reserved for future use
 
 
 
