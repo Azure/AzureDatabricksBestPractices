@@ -1,10 +1,12 @@
 # Azure Databricks Best Practices
 
-![Azure Databricks](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/ADBicon.jpg "Azure Databricks")
+![Azure Databricks](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/ADBicon.jpg "Azure Databricks" align = "center")
 
 Created by: 
 
-Dhruv Kumar, Databricks Senior Solutions Architect and Premal Shah, Azure Databricks PM, Microsoft
+Dhruv Kumar, Databricks Senior Solutions Architect 
+
+Premal Shah, Azure Databricks PM, Microsoft
 
 Published: June 22, 2019
 
