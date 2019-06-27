@@ -8,7 +8,7 @@
     + [ADB Workspace Limits](#ADB-Workspace-Limits)
     + [Azure Subscription Limits](#azure-subscription-limits)
   * [Consider Isolating Each Workspace in its own VNet](#Consider-Isolating-Each-Workspace-in-its-own-VNet)
-  * [Select the largest CIDR possible for a VNet](#select-the-largest-CIDR-possible-for-a-vnet)
+  * [Select the largest CIDR possible for a VNet](#Select-the-largest-CIDR-possible-for-a-VNet)
   * [Do not store any production data in default DBFS folders](#sub-heading-1)
   * [Always hide secrets in Key Vault and do not expose them openly in Notebooks](#sub-heading-1)
 - [Developing applications on ADB: Guidelines for selecting clusters](#heading-2)
@@ -189,8 +189,15 @@ Recall the each Workspace can have multiple clusters:
   * For a desired cluster size of X, number of Public IPs = X, number of Private IPs = 4X
   * The 4X requirement for Private IPs is due to the fact that for each deployment:
     + Half of address space is reserved for future use
-
-
+    + The other half is equally divided into the two subnets: private and public
+  * The size of private and public subnets thur determines total number of VMs available for clusters 
+    + /22 mask is larger than /23, so setting private and public to /22 will have more VMs available for creating clusters, than say /23 or below
+   * But, because of the address space allocation scheme, the size of private and public subnets is constrained by the VNet’s CIDR
+   * The allowed values for the enclosing VNet CIDR are from /16 through /24
+   * The private and public subnet masks must be:
+    + Equal
+    + At least two steps down from enclosing VNet CIDR mask
+    + Must be greater than /26
 
 
 
