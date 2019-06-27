@@ -1,6 +1,6 @@
 # Azure Databricks Best Practices
 
-![Azure Databricks](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/ADBicon.JPG "Azure Databricks")
+![Azure Databricks](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/ADBicon.jpg "Azure Databricks")
 
 Created by: 
 
