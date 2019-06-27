@@ -226,7 +226,9 @@ This recommendation is driven by security and data availability concerns. Every 
 
 > ***This recommendation doesn't apply to Blob or ADLS folders explicitly mounted as DBFS by the end user*** 
 
-**More information: [Databricks File System] (https://docs.databricks.com/user-guide/dbfs-databricks-file-system.html)**
+**More Information:**
+[Databricks File System](https://docs.databricks.com/user-guide/dbfs-databricks-file-system.html) 
+
 
 ## Always hide secrets in a Key Vault and do not expose them openly in Notebooks
 *Impact: High*
