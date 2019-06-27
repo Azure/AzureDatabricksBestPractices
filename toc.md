@@ -26,12 +26,19 @@
    + [Querying VM metrics in Log Analytics once you have started the collection using the above document](#Querying-VM-metrics-in-log-analytics-once-you-have-started-the-collection-using-the-above-document)
 - [Appendix A](#Appendix-A)
   * [Installation for being able to capture VM metrics in Log Analytics](#Installation-for-being-able-to-capture-VM-metrics-in-Log-Analytics)
+  
     +[Overview](#Overview)
+    
     +[Step 1 - Create a Log Analytics Workspace](#Create-a-Log-Analytics-Workspace)    
+    
     +[Step 2 - Get Log Analytics Workspace Credentials](#Get-Log-Analytics-Workspace-Credentials)
+    
     +[Step 3 - Configure Data Collection in Log Analytics Workspace](#Configure-Data-Collection-in-Log-Analytics-Workspace) 
+    
     +[Step 4 - Configure the Init Script](#Configure-the-init-script) 
+    
     +[Step 5 - View Collected Data via Azure Portal](#View-collected-data-via-Azure-Portal)
+    
     +[References](#References)
     
     
