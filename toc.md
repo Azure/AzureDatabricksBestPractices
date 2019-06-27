@@ -111,7 +111,7 @@ The first user to login and initialize the workspace is the workspace ***owner**
 
 
 
- -> *Figure 1: Databricks user menu* <- 
+ <p *Figure 1: Databricks user menu* align="center"> </p>
 
 ## Map Workspaces to Business Units
 *Impact: Very High*
