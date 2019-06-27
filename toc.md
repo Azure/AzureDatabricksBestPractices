@@ -294,14 +294,30 @@ Because of these differences, supporting Interactive workloads entails minimizin
   3. **Security:** Table Access control feature is only available in High Concurrency mode and needs to be turned on so that users can limit access to their database objects (tables, views, functions...) created on the shared cluster. In case of ADLS, we recommend restricting access using the AAD Credential Passthrough feature instead of Table Access Controls.
 
 
+![Figure 5: Interactive clusters](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure5.PNG "Figure 5: Interactive clusters")
+
+*Figure 5: Interactive clusters*
+
+That said, irrespective of the mode (Standard or High Concurrency), all Azure Databricks clusters use Spark Standalone cluster resource allocator and hence execute all Java and Scala user code in the same JVM. A shared cluster model is secure only for SQL or Python programs because:
+
+  1. It is possible to isolate each user’s Spark SQL configuration storing sensitive credentials, temporary tables, etc. in a Spark Session. ADB creates a new Spark Session for each Notebook attached to a High Concurrency cluster. If you’re running SQL queries, then this isolation model works because there’s no way to examine JVM’s contents using SQL.
+  2. Similarly, PySpark runs user queries in a separate process, so ADB can isolate DataFrames and DataSet operations belonging to different PySpark users.
+  
+In contrast a Scala or Java program from one user could easily steal secrets belonging to another user sharing the same cluster by doing a thread dump. Hence the isolation model of HC clusters, and this  recommendation, only applies to interactive queries expressed in SQL or Python. In practice this is rarely a limitation because Scala and Java languages are seldom used for interactive exploration. They are mostly used by Data Engineers to build data pipelines consisting of batch jobs. Those type of scenarios involve batch ETL jobs and are covered by the next recommendation.
 
 
+# Support Batch ETL workloads with single user ephemeral Standard clusters
+*Impact: Medium*
+
+Unlike Interactive workloads, logic in batch Jobs is well defined and their cluster resource requirements are known a priori. Hence to minimize cost, there’s no reason to follow the shared cluster model and we
+recommend letting each job create a separate cluster for its execution. Thus, instead of submitting batch ETL jobs to a cluster already created from ADB’s UI, submit them using the Jobs APIs. These APIs automatically create new clusters to run Jobs and also terminate them after running it. We call this the **Ephemeral Job Cluster** pattern for running jobs because the clusters short life is tied to the job lifecycle.
+
+Azure Data Factory uses this pattern as well - each job ends up creating a separate cluster since the underlying call is made using the Runs-Submit Jobs API.
 
 
+![Figure 6: Ephemeral Job cluster](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure6.PNG "Figure 6: Ephemeral Job cluster")
 
-
-
-
+*Figure 6: Ephemeral Job cluster*
 
 
 
