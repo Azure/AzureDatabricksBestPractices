@@ -264,7 +264,9 @@ When it comes to taxonomy, ADB clusters are divided along notions of “type”,
 
 *Table 2: Cluster modes and their characteristics*
 
-![Table 2: CIDR ranges](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Table2.PNG "Table 2: Cluster modes and their characteristics")
+![Table 2: Cluster modes and their characteristics](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Table2.PNG "Table 2: Cluster modes and their characteristics")
+
+
 
 #### Sub-sub-heading
 
