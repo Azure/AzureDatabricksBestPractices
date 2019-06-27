@@ -13,7 +13,7 @@
   * [Always hide secrets in Key Vault and do not expose them openly in Notebooks](#always-hide-secrets-in-a-key-vault-and-do-not-expose-them-openly-in-notebooks)
 - [Developing applications on ADB: Guidelines for selecting clusters](#Developing-applications-on-ADB-Guidelines-for-selecting-clusters)
   * [Support Interactive analytics using shared High Concurrency clusters](#sub-heading-2)
-   * [Support Batch ETL workloads with single user ephemeral Standard clusters](#sub-heading-2)
+   * [Support Batch ETL workloads with single user ephemeral Standard clusters](#support-batch-etl-workloads-with-single-user-ephemeral-standard-clusters)
    * [Favor Cluster Scoped Init scripts over Global and Named scripts](#sub-heading-2)
    * [Send logs to blob store instead of default DBFS using Cluster Log delivery](#sub-heading-2)
    * [Choose cluster VMs to match workload class](#sub-heading-2)
@@ -318,6 +318,44 @@ Azure Data Factory uses this pattern as well - each job ends up creating a separ
 ![Figure 6: Ephemeral Job cluster](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure6.PNG "Figure 6: Ephemeral Job cluster")
 
 *Figure 6: Ephemeral Job cluster*
+
+Just like the previous recommendation, this pattern will achieve general goals of minimizing cost, improving the target metric (throughput), and enhancing security by:
+
+1. **Enhanced Security:** ephemeral clusters run only one job at a time, so each executor’s JVM runs code from only one user. This makes ephemeral clusters more secure than shared clusters for Java and Scala code.
+2. **Lower Cost:** if you run jobs on a cluster created from ADB’s UI, you will be charged at the higher Interactive DBU rate. The lower Data Engineering DBUs are only available when the lifecycle of job and cluster are same. This is only achievable using the Jobs APIs to launch jobs on ephemeral clusters.
+3. **Better Throughput:** cluster’s resources are dedicated to one job only, making the job finish faster than while running in a shared environment.
+
+For very short duration jobs (< 10 min) the cluster launch time (~ 7 min) adds a significant overhead to total execution time. Historically this forced users to run short jobs on existing clusters created by UI -- a
+costlier and less secure alternative. To fix this, ADB is coming out with a new feature called Warm Pools in Q3 2019 bringing down cluster launch time to 30 seconds or less.
+
+## Favor Cluster Scoped Init Scripts over Global and Named scripts
+*Impact: High*
+
+Init Scripts provide a way to configure cluster’s nodes and can be used in the following modes:
+
+  1. **Global:** by placing the init script in /databricks/init folder, you force the script’s execution every time any cluster is created or restarted by users of the workspace.
+  2. **Cluster Named:** you can limit the init script to run only on for a specific cluster’s creation and restarts by placing it in /databricks/init/<cluster_name> folder.
+  3. **Cluster Scoped:** in this mode the init script is not tied to any cluster by its name and its automatic execution is not a virtue of its dbfs location. Rather, you specify the script in cluster’s configuration by either writing it directly or providing its location on DBFS. Any location under DBFS /databricks folder except /databricks/init can be used for this purpose. eg, /databricks/<my-directory>/set-env-var.sh
+ 
+You should treat Init scripts with extreme caution because they can easily lead to intractable cluster launch failures. If you *really* need them, a) try to use the Cluster Scoped execution mode as much as possible, and, b) write them directly in the cluster’s configuration rather than placing them on default DBFS and specifying the path. We say this because:
+
+  1. ADB executes the script’s body in each cluster node’s LxC container before starting Spark’s executor or driver JVM in it -- the processes which ultimately run user code. Thus, a successful cluster launch and subsequent operation is predicated on all nodal init scripts executing in a timely manner without any errors and reporting a zero exit code. This process is highly error prone, especially for scripts downloading artifacts from an external service over unreliable and/or misconfigured networks.
+  2. Because Global and Cluster Named init scripts execute automatically due to their placement in a special DBFS location, it is easy to overlook that they could be causing a cluster to not launch. By specifying the Init script in the Configuration, there’s a higher chance that you’ll consider them while debugging launch failures.
+  3. As we explained earlier, all folders inside default DBFS are accessible to workspace users. Your init scripts containing sensitive data can be viewed by everyone if you place them there.
+  
+  
+## Send logs to blob store instead of default DBFS using Cluster Log delivery
+*Impact: Medium*
+
+By default, Cluster logs are sent to default DBFS but you should consider sending the logs to a blob store location using the Cluster Log delivery feature. The Cluster Logs contain logs emitted by user code, as well as Spark framework’s Driver and Executor logs. Sending them to blob store is recommended over DBFS because:
+  1. ADB’s automatic 30-day DBFS log purging policy might be too short for certain compliance scenarios. Blob store is the solution for long term log archival.
+  2. You can ship logs to other tools only if they are present in your storage account and a resource group governed by you. The root DBFS, although present in your subscription, is launched inside a Microsoft-Azure Databricks managed resource group and is protected by a read lock. Because of this lock the logs are only accessible by privileged Azure Databricks framework code which shows them on UI. Constructing a pipeline to ship the logs to downstream log analytics tools requires logs to be in a lock-free location first.
+
+## Choose cluster VMs to match workload class
+*Impact: High*
+
+To allocate the right amount and type of cluster resresource for a job, we need to understand how different types of jobs demand different types of cluster resources.
+
 
 
 
