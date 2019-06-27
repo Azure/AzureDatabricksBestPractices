@@ -195,9 +195,9 @@ Recall the each Workspace can have multiple clusters:
    * But, because of the address space allocation scheme, the size of private and public subnets is constrained by the VNet’s CIDR
    * The allowed values for the enclosing VNet CIDR are from /16 through /24
    * The private and public subnet masks must be:
-    + Equal
-    + At least two steps down from enclosing VNet CIDR mask
-    + Must be greater than /26
+     + Equal
+     + At least two steps down from enclosing VNet CIDR mask
+     + Must be greater than /26
     
    
     
