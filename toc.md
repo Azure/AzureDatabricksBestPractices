@@ -480,7 +480,7 @@ Please follow the instructions here
 #### Step 4 - Configure the Init Script
 Replace the *LOG_ANALYTICS_WORKSPACE_ID* and *LOG_ANALYTICS_WORKSPACE_KEY* with your own info.
 
-![Python Snippet](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Python Snippet.PNG "Python Snippet")
+![PythonSnippet](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/PythonSnippet.PNG "PythonSnippet")
 
 
 Now it could be used as a global script with all clusters (change the path to /databricks/init in that case), or as a cluster-scoped script with specific ones.
