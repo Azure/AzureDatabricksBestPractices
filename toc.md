@@ -170,11 +170,31 @@ Recall that a Databricks Workspace is designed to be a logical isolation unit, a
 VNet can therefore communicate. While this is normally innocuous from our experience, it should be avoided if as much as possible.
 
 **More information:** RFC 1918: Address allocation for private internets
-{FLAG THIS  TO PREMAL IS THIS SUPPOSED TO BE A LINK?} RFC 1918: Address allocation for private internets [RFC 1918: Address allocation for private internets](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/toc.md)
+RFC 1918: Address allocation for private internets [RFC 1918: Address allocation for private internets](https://tools.ietf.org/html/rfc1918)
 
 ![Figure 4: Hub and Spoke Model](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure4.PNG "Figure 4: Hub and Spoke Model")
 
 *Figure 4: Hub and Spoke Model*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
