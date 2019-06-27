@@ -1,6 +1,6 @@
 # Azure Databricks Best Practices
 
-<img src="https://images.app.goo.gl/DS7fTsKAEmuDT2fv9" align = "right">
+![Azure Databricks](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/ADBicon.JPG "Azure Databricks")
 
 Created by: 
 
