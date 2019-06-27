@@ -85,14 +85,6 @@ Enterprise-grade large scale deployments are a different story altogether. Some 
   * The number and the type of Azure networking resources required to launch clusters
   * Relationship between Azure and Databricks jargon: Subscription, VNet., Workspaces, Clusters, Subnets, etc.
   * Overall Capacity Planning process: where to begin, what to consider?
-  
-● Networking requirements of Databricks
-
-● The number and the type of Azure networking resources required to launch clusters
-
-● Relationship between Azure and Databricks jargon: Subscription, VNet., Workspaces, Clusters, Subnets, etc.
-
-● Overall Capacity Planning process: where to begin, what to consider?
 
 
 Let’s start with a short Azure Databricks 101 and then discuss some best practices for scalable and secure deployments.
@@ -141,19 +133,20 @@ Customers commonly partition workspaces based on teams or departments and arrive
 Azure Databricks is a multitenant service and to provide fair resource sharing to all regional customers, it imposes limits on API calls. These limits are expressed at the Workspace level and are due to internal ADB components. For instance, you can only run up to 150 concurrent jobs in a workspace. Beyond that, ADB will deny your job submissions. There are also other limits such as max hourly job submissions, etc.
 
 Key workspace limits are:
-● There is a limit of **1000** scheduled jobs that can be seen in the UI.
-● The maximum number of jobs that a workspace can create in an hour is **1000**.
-● At any time, you cannot have more than **150 jobs** simultaneously running in a workspace.
-● There can be a maximum of **150 notebooks or execution contexts** attached to a cluster.
+
+● * There is a limit of **1000** scheduled jobs that can be seen in the UI.
+● * The maximum number of jobs that a workspace can create in an hour is **1000**.
+●  * At any time, you cannot have more than **150 jobs** simultaneously running in a workspace.
+● * There can be a maximum of **150 notebooks or execution contexts** attached to a cluster.
 
 ### Azure Subscription Limits
 Next, there are {FLAG THIS  TO PREMAL IS THIS SUPPOSED TO BE A LINK?} Azure limits [Azure limits](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/toc.md) to consider since ADB deployments are built on top of the Azure infrastructure.
 
 Key Azure limits are:
-● Storage accounts per region per subscription: **250**
-● Maximum egress for general-purpose v2 and Blob storage accounts (all regions): **50 Gbps**
-● VMs per subscription per region: **25,000**.
-● Resource groups per subscription: **980**
+● * Storage accounts per region per subscription: **250**
+● * Maximum egress for general-purpose v2 and Blob storage accounts (all regions): **50 Gbps**
+● * VMs per subscription per region: **25,000**.
+● * Resource groups per subscription: **980**
 
 Due to security reasons, we also highly recommend separating the production and dev/stage environments into separate subscriptions.
 
