@@ -199,9 +199,10 @@ Recall the each Workspace can have multiple clusters:
      + At least two steps down from enclosing VNet CIDR mask
      + Must be greater than /26
     
-   
+With this info, we can quickly arrive at the table below, showing how many nodes one can use across all clusters for a given VNet CIDR. It is clear that selection of VNet CIDR has far reaching implications in terms of maximum cluster size.   
     
 
+![Table 1: CIDR ranges](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Table1.PNG "Table 1: CIDR ranges")
 
 
 
