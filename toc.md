@@ -9,7 +9,7 @@
     + [Azure Subscription Limits](#azure-subscription-limits)
   * [Consider Isolating Each Workspace in its own VNet](#Consider-Isolating-Each-Workspace-in-its-own-VNet)
   * [Select the largest CIDR possible for a VNet](#Select-the-largest-CIDR-possible-for-a-VNet)
-  * [Do not store any production data in default DBFS folders](#sub-heading-1)
+  * [Do not store any production data in default DBFS folders](#Do-not-store-any-production-data-in-default-DBFS-folders)
   * [Always hide secrets in Key Vault and do not expose them openly in Notebooks](#sub-heading-1)
 - [Developing applications on ADB: Guidelines for selecting clusters](#heading-2)
   * [Support Interactive analytics using shared High Concurrency clusters](#sub-heading-2)
@@ -211,7 +211,7 @@ This recommendation is driven by security and data availability concerns. Every 
 1. The lifecycle of default DBFS is tied to the Workspace. Deleting the workspace will also delete the default DBFS and permanently remove its contentents.
 2. One can't restrict access to this default folder and its contents.
 
-
+**Note:** This recommendation doesn't apply to Blob or ADLS folders explicitly mounted as DBFS by the end user.
 
 
 
