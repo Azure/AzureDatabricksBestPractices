@@ -1,5 +1,7 @@
 # Azure Databricks Best Practices
 
+<img src="https://images.app.goo.gl/DS7fTsKAEmuDT2fv9" align = "right">
+
 Created by: 
 
 Dhruv Kumar, Databricks Senior Solutions Architect and Premal Shah, Azure Databricks PM, Microsoft
