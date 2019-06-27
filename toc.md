@@ -215,7 +215,7 @@ This recommendation is driven by security and data availability concerns. Every 
 
 # Note:
 
-> ***This recommendation doesn't apply to Blob or ADLS folders explicitly mounted as DBFS by the end user*** <span style="color:blue">***This recommendation doesn't apply to Blob or ADLS folders explicitly mounted as DBFS by the end user***</span>.
+> ***This recommendation doesn't apply to Blob or ADLS folders explicitly mounted as DBFS by the end user*** 
 
 
 
