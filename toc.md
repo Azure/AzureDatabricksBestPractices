@@ -10,7 +10,7 @@
   * [Consider Isolating Each Workspace in its own VNet](#Consider-Isolating-Each-Workspace-in-its-own-VNet)
   * [Select the largest CIDR possible for a VNet](#Select-the-largest-CIDR-possible-for-a-VNet)
   * [Do not store any production data in default DBFS folders](#Do-not-store-any-production-data-in-default-DBFS-folders)
-  * [Always hide secrets in Key Vault and do not expose them openly in Notebooks](#Always-hide-secrets-in-Key-Vault-and-do-not-expose-them-openly-in-Notebooks)
+  * [Always hide secrets in Key Vault and do not expose them openly in Notebooks](#always-hide-secrets-in-a-key-vault-and-do-not-expose-them-openly-in-notebooks)
 - [Developing applications on ADB: Guidelines for selecting clusters](#Developing-applications-on-ADB-Guidelines-for-selecting-clusters)
   * [Support Interactive analytics using shared High Concurrency clusters](#sub-heading-2)
    * [Support Batch ETL workloads with single user ephemeral Standard clusters](#sub-heading-2)
