@@ -23,6 +23,7 @@
     + [Sub-sub-heading](#sub-sub-heading-2)
 - [Monitoring](#Monitoring)
   * [Collect resource utilization metrics across Azure Databricks cluster in a Log Analytics workspace](#Collect-resource-utilization-metrics-across-Azure-Databricks-cluster-in-a-Log-Analytics-workspace)
+    +[Querying VM metrics in Log Analytics once you have started the collection using the above document](#Querying-VM-metrics-in-log-analytics-once-you-have-started-the-collection-using-the-above-document)
 - [Appendix A](#Appendix-A)
   * [Installation for being able to capture VM metrics in Log Analytics](#Installation-for-being-able-to-capture-VM-metrics-in-Log-Analytics)
 
@@ -163,10 +164,6 @@ Due to security reasons, we also highly recommend separating the production and 
 # Note:
 
 > ***It is important to divide your workspaces appropriately using different subscriptions based on your business keeping in mind the Azure limits.***
-
-# Note:
-
-      *** Note: It is important to divide your workspaces appropriately using different subscriptions based on your business keeping in mind the Azure limits.***
 
 ![Figure 3: Azure Databricks Isolation Domains Workspace](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure3.PNG "Figure 3: Azure Databricks Isolation Domains Workspace")
 
@@ -406,17 +403,45 @@ A shuffle occurs when we need to move data from one node to another in order to 
 
 You’ve got two control knobs of a shuffle you can use to optimize
   * The number of partitions being shuffled:
-spark.conf.set("spark.sql.shuffle.partitions", 10)
+    spark.conf.set("spark.sql.shuffle.partitions", 10) <--Priya to review HTML CSS later
   * The amount of partitions that you can compute in parallel.
-    + This is equal to the number of cores in a cluster.
+        + This is equal to the number of cores in a cluster.
 
 These two determine the partition size, which we recommend should be in the Megabytes to 1 Gigabyte range. If your shuffle partitions are too small, you may be unnecessarily adding more tasks to the stage. But if they are too big, you may get bottlenecked by the network.
 
+## Store Data In Parquet Partitions
+*Impact: High*
 
+Azure Databricks has an optimized Parquet reader, enhanced over the Open Source Spark implementation and it is the recommended data storage format. In addition, storing data in partitions allows you to take advantage of partition pruning and data skipping. Most of the time partitions will be
+on a date field but choose your partitioning field based on the relevancy to the queries the data is supporting. For example, if you’re always going to be filtering based on “Region,” then consider partitioning your data by region.
+   * Evenly distributed data across all partitions (date is the most common)
+   * 10s of GB per partition (~10 to ~50GB)
+   * Small data sets should not be partitioned
+   * Beware of over partitioning
+   
 
+# Monitoring
 
+Once you have your clusters setup and your Spark applications running, there is a need to monitor your Azure Databricks pipelines. These pipelines are rarely executed in isolation and need to be monitored
+along with a set of other services. Monitoring falls into four broad areas:
 
+   (1) Resource utilization (CPU/Memory/Network) across an Azure        Databricks cluster. This is referred to as VM metrics
+   (2) Spark metrics which enables monitoring of Spark applications to      help uncover bottlenecks 
+   (3) Spark application logs which enables administrators/developers to query the logs, debug issues and investigate job run failures. This is specifically helpful to also understand exceptions across your workloads
+   (4) Application instrumentation which is native instrumentation that you add to your application for custom troubleshooting
 
+For the purposes of this version of this document we will focus on (1). This is the most common ask from customers.
+
+## Collect resource utilization metrics across Azure Databricks cluster in a Log Analytics workspace
+*Impact: Medium*
+
+An important facet of monitoring is understanding the resource utilization across an Azure Databricks cluster. You can also extend this to understand utilization across all your Azure Databricks clusters in a workspace. This could be useful in arriving at a cluster size and VM sizes given each VM size does have a set of limits (cores/disk throughput/network throughput) and could play a role in the performance profile of an Azure Databricks job.
+In order to get utilization metrics of the Azure Databricks cluster, we use the Azure Linux diagnostic extension as an init script into the clusters we want to monitor. Note: This could increase your cluster
+startup time by a minute.
+
+You can use the instructions in Appendix A to install the Log Analytics agent on Azure Databricks agent to collect VM metrics in your Log Analytics workspace.
+
+### Querying VM metrics in Log Analytics once you have started the collection using the above document
 
 #### Sub-sub-heading
 
