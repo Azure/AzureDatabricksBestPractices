@@ -29,9 +29,9 @@
     + [Overview](#Overview)
     + [Step 1 - Create a Log Analytics Workspace](#step-1---create-a-log-analytics-workspace)    
     + [Step 2 - Get Log Analytics Workspace Credentials](#step-2--get-log-analytics-workspace-credentials)
-    + [Step 3 - Configure Data Collection in Log Analytics Workspace](#Step-3---Configure-Data-Collection-in-Log-Analytics-Workspace) 
-    + [Step 4 - Configure the Init Script](#Step-3---Configure-the-Init-script) 
-    + [Step 5 - View Collected Data via Azure Portal](#Step-3---View-Collected-Data-via-Azure-Portal)
+    + [Step 3 - Configure Data Collection in Log Analytics Workspace](#step-3---configure-data-collection-in-log-analytics-workspace) 
+    + [Step 4 - Configure the Init Script](#Step-4---Configure-the-Init-script) 
+    + [Step 5 - View Collected Data via Azure Portal](#Step-5---View-Collected-Data-via-Azure-Portal)
     + [References](#References)
     
 
