@@ -3,9 +3,8 @@
 ![Azure Databricks](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/ADBicon.jpg "Azure Databricks")
 
 Created by: 
-
 Dhruv Kumar, Databricks Senior Solutions Architect 
-
+and 
 Premal Shah, Azure Databricks PM, Microsoft
 
 
