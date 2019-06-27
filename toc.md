@@ -406,7 +406,6 @@ A shuffle occurs when we need to move data from one node to another in order to 
 You’ve got two control knobs of a shuffle you can use to optimize
   * The number of partitions being shuffled:
   ![SparkSnippet](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/SparkSnippet.PNG "SparkSnippet")
-    spark.conf.set("spark.sql.shuffle.partitions", 10) <--Priya to review HTML CSS later
   * The amount of partitions that you can compute in parallel.
         + This is equal to the number of cores in a cluster.
 
