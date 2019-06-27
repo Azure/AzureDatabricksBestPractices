@@ -198,6 +198,9 @@ Recall the each Workspace can have multiple clusters:
     + Equal
     + At least two steps down from enclosing VNet CIDR mask
     + Must be greater than /26
+    
+   
+    
 
 
 
