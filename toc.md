@@ -8,7 +8,7 @@
     + [ADB Workspace Limits](#ADB-Workspace-Limits)
     + [Azure Subscription Limits](#azure-subscription-limits)
   * [Consider Isolating Each Workspace in its own VNet](#Consider-Isolating-Each-Workspace-in-its-own-VNet)
-  * [Select the largest CIDR possible for a VNet](#sub-heading-1)
+  * [Select the largest CIDR possible for a VNet](#select-the-largest-CIDR-possible-for-a-vnet)
   * [Do not store any production data in default DBFS folders](#sub-heading-1)
   * [Always hide secrets in Key Vault and do not expose them openly in Notebooks](#sub-heading-1)
 - [Developing applications on ADB: Guidelines for selecting clusters](#heading-2)
@@ -137,8 +137,8 @@ Key workspace limits are:
 
   * There is a limit of **1000** scheduled jobs that can be seen in the UI
   * The maximum number of jobs that a workspace can create in an hour is **1000**
-    * At any time, you cannot have more than **150 jobs** simultaneously running in a workspace
-    * There can be a maximum of **150 notebooks or execution contexts** attached to a cluster    
+  * At any time, you cannot have more than **150 jobs** simultaneously running in a workspace
+  * There can be a maximum of **150 notebooks or execution contexts** attached to a cluster    
 
 
 ### Azure Subscription Limits
@@ -183,18 +183,12 @@ RFC 1918: Address allocation for private internets [RFC 1918: Address allocation
 *Impact: High*
 
 Recall the each Workspace can have multiple clusters:
- Each cluster node requires 1 Public IP and 2 Private IPs
- These IPs and are logically grouped into 2 subnets named “public” and “private”
- For a desired cluster size of X, number of Public IPs = X, number of Private IPs = 4X
- The 4X requirement for Private IPs is due to the fact that for each deployment:
-o Half of address space is reserved for future use
 
-
-● Each cluster node requires 1 Public IP and 2 Private IPs
-● These IPs and are logically grouped into 2 subnets named “public” and “private”
-● For a desired cluster size of X, number of Public IPs = X, number of Private IPs = 4X
-● The 4X requirement for Private IPs is due to the fact that for each deployment:
-        o Half of address space is reserved for future use
+  * Each cluster node requires 1 Public IP and 2 Private IPs
+  * These IPs and are logically grouped into 2 subnets named “public” and “private”
+  * For a desired cluster size of X, number of Public IPs = X, number of Private IPs = 4X
+  * The 4X requirement for Private IPs is due to the fact that for each deployment:
+    + Half of address space is reserved for future use
 
 
 
