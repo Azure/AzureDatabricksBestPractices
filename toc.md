@@ -176,6 +176,15 @@ RFC 1918: Address allocation for private internets [RFC 1918: Address allocation
 
 *Figure 4: Hub and Spoke Model*
 
+## Select the largest CIDR possible for a VNet
+*Impact: High*
+
+Recall the each Workspace can have multiple clusters:
+ Each cluster node requires 1 Public IP and 2 Private IPs
+ These IPs and are logically grouped into 2 subnets named “public” and “private”
+ For a desired cluster size of X, number of Public IPs = X, number of Private IPs = 4X
+ The 4X requirement for Private IPs is due to the fact that for each deployment:
+o Half of address space is reserved for future use
 
 
 
