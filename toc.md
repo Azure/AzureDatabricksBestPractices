@@ -204,8 +204,12 @@ With this info, we can quickly arrive at the table below, showing how many nodes
 
 ![Table 1: CIDR ranges](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Table1.PNG "Table 1: CIDR ranges")
 
+## Do not store any production data in default DBFS folders
+*Impact: High*
 
-
+This recommendation is driven by security and data availability concerns. Every Workspace comes with a default DBFS, primarily designed to store libraries and other system-level configuration artifacts such as Init scripts. You should not store any production data in it, because:
+1. The lifecycle of default DBFS is tied to the Workspace. Deleting the workspace will also delete the default DBFS and permanently remove its contentents.
+2. One can't restrict access to this default folder and its contents.
 
 
 
