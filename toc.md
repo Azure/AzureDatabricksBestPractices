@@ -443,6 +443,56 @@ You can use the instructions in Appendix A to install the Log Analytics agent on
 
 ### Querying VM metrics in Log Analytics once you have started the collection using the above document
 
+You can use Log analytics directly to query the Perf data. Here is an example of a query which charts out CPU for the VM’s in question for a specific cluster ID. See log analytics overview for further documentation on log analytics and query syntax.
+
+
+![Perfsnippet](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/PerfSnippet.PNG "PerfSnippet")
+
+![Grafana](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Grafana.PNG "Grafana")
+
+You can also use Grafana to visualize your data from Log Analytics.
+
+# Appendix A
+
+## Installation for being able to capture VM metrics in Log Analytics
+
+### Overview
+
+This is a **temporary** init script-based solution to integrate Azure Databricks with Azure Log Analytics.
+
+"Temporary" because of two reasons:
+  * There'll be a proper first-class integration between the two in early calendar year 2019, and that's how it should be positioned to customers too.
+  * It is based on OMS Agent (aka Log Analytics Agent), and requires changing the execution policy on each cluster node. Security team has qualified that to be "**less than ideal**".
+  
+If you're proposing this to any customer (probably because they're blocked), please do mention the above. **Customer should use the supported integration once available and remove any related init scripts at that point.**
+
+#### Step 1 - Create a Log Analytics Workspace
+Please follow the instructions here to create a Log Analytics workspace
+
+#### Step 2- Get Log Analytics Workspace Credentials
+Get the workspace id and key using instructions here
+
+Store these in Azure Key Vault-based Secrets backend
+
+#### Step 3 - Configure Data Collection in Log Analytics Workspace
+Please follow the instructions here
+
+#### Step 4 - Configure the Init Script
+Replace the *LOG_ANALYTICS_WORKSPACE_ID* and *LOG_ANALYTICS_WORKSPACE_KEY* with your own info.
+
+![Python Snippet](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Python Snippet.PNG "Python Snippet")
+
+
+Now it could be used as a global script with all clusters (change the path to /databricks/init in that case), or as a cluster-scoped script with specific ones.
+
+#### Step 5 - View Collected Data via Azure Portal
+See this document.
+
+#### References
+   * https://docs.microsoft.com/en-us/azure/azure-monitor/learn/quick-collect-linux-computer
+   * https://github.com/Microsoft/OMS-Agent-for-Linux/blob/master/docs/OMS-Agent-for-Linux.md
+   * https://github.com/Microsoft/OMS-Agent-for-Linux/blob/master/docs/Troubleshooting.md
+
 #### Sub-sub-heading
 
 This is an h3 heading
