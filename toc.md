@@ -39,18 +39,18 @@
     
 # Table of Figures
 
-- [Figure 1: Databricks user menu](#heading)
-- [Figure 2: Business Unit Subscription Design Pattern](#heading)
-- [Figure 3: Azure Databricks Isolation Domains Workspace](#heading)
-- [Figure 4: Hub and Spoke Model](#heading)
-- [Figure 5: Interactive clusters](#heading)
-- [Figure 6: Ephemeral Job Cluster](#heading)
-- [Figure 7: Shuffle vs. no-shuffleu](#heading)
+- [Figure 1: Databricks user menu](#Figure-1-Databricks-user-menu)
+- [Figure 2: Business Unit Subscription Design Pattern](#Figure-2-Business-Unit-Subscription-Design-Pattern)
+- [Figure 3: Azure Databricks Isolation Domains Workspace](#Figure-3-Azure-Databricks-Isolation-Domains-Workspace)
+- [Figure 4: Hub and Spoke Model](#Figure-4-hub-and-spoke-model)
+- [Figure 5: Interactive clusters](#Figure-5-interactive-clusters)
+- [Figure 6: Ephemeral Job Cluster](#Figure-6-ephemeral-job-clusters)
+- [Figure 7: Shuffle vs. no-shuffle](#Figure-7-shuffle-vs.-no-shuffle)
 
 # Table of Tables
-- [Table 1: CIDR Ranges](#heading)
-- [Table 2: Cluster modes and their characteristics](#heading)
-- [Table 3: Batch vs Interactive Workloads](#heading)
+- [Table 1: CIDR Ranges](#Table-1-CIDR-Ranges)
+- [Table 2: Cluster modes and their characteristics](#Table-2-Cluster-modes-and-their-characteristics)
+- [Table 3: Batch vs Interactive Workloads](#Table-3-Batch-vs-Interactive-Workloads)
 
 <!-- 
 # Table of x - save for later
