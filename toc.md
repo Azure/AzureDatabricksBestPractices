@@ -110,11 +110,6 @@ The first user to login and initialize the workspace is the workspace ***owner**
 
 *Figure 1: Databricks user menu*
 
-Test text
-{: style="color:gray; font-size: 80%; text-align: center;"}
-                  
-   
-
   <!--
                      *Figure 1: Databricks user menu*
 <p align="center">
@@ -168,6 +163,10 @@ Due to security reasons, we also highly recommend separating the production and 
 # Note:
 
 > ***It is important to divide your workspaces appropriately using different subscriptions based on your business keeping in mind the Azure limits.***
+
+# Note:
+
+      *** Note: It is important to divide your workspaces appropriately using different subscriptions based on your business keeping in mind the Azure limits.***
 
 ![Figure 3: Azure Databricks Isolation Domains Workspace](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure3.PNG "Figure 3: Azure Databricks Isolation Domains Workspace")
 
