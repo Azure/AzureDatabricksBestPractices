@@ -278,13 +278,12 @@ There are three steps for supporting Interactive workloads on ADB:
 
 # Note:
 
-> ***If you’re using ADLS, we currently recommend that you select either Table Access Control*** 
+> ***If you’re using ADLS, we currently recommend that you select either Table Access Control or AAD Credential Passthrough. Do not combine them together.*** 
 
-or 
-===
+To understand why, let’s quickly see how interactive workloads are different from batch workloads:
 
-***AAD Credential Passthrough. Do not combine them together.***
-
+*Table 3: Batch vs. Interactive workloads*
+![Table 3: Batch vs. Interactive workloads](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Table3.PNG "Table 3: Batch vs. Interactive workloads")
 
 #### Sub-sub-heading
 
