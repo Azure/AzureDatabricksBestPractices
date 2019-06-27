@@ -229,9 +229,12 @@ If using Azure Key Vault, create separate AKV-backed secret scopes and correspon
 
 **More Information:**
 [Create an Azure Key Vault-backed secret scope](https://docs.azuredatabricks.net/user-guide/secrets/secret-scopes.html)
+
 [Example of using secrets in a notebook]
 (https://docs.azuredatabricks.net/user-guide/secrets/example-secret-workflow.html)
+
 [Best practices for creating secret scopes](https://docs.azuredatabricks.net/user-guide/secrets/secret-acl.html)
+
 
 
 
