@@ -110,8 +110,8 @@ The first user to login and initialize the workspace is the workspace ***owner**
 ![Figure 1: Databricks user menu](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure1.PNG "Figure 1: Databricks user menu")
 
 
-<center>*Figure 1: Databricks user menu*</center>
-*Figure 1: Databricks user menu*
+
+ -> *Figure 1: Databricks user menu* <- 
 
 ## Map Workspaces to Business Units
 *Impact: Very High*
