@@ -113,7 +113,7 @@ The first user to login and initialize the workspace is the workspace ***owner**
 
   *Figure 1: Databricks user menu*
   
-   <div style="text-align:center"><span style="color:red; font-family:Georgia; font-size:2em;">The goal of the Women’s Enterprise Action Loan Fund, (WEALF): helping women business owners become financially self-sufficient.</span></div>
+<div class="align-center">Centered text</div>
 
 ## Map Workspaces to Business Units
 *Impact: Very High*
