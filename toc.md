@@ -156,6 +156,32 @@ Due to security reasons, we also highly recommend separating the production and 
 
 ![Figure 3: Azure Databricks Isolation Domains Workspace](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure3.PNG "Figure 3: Azure Databricks Isolation Domains Workspace")
 
+*Figure 3: Azure Databricks Isolation Domains Workspace*
+
+**Note:** These limits are at a point in time and might change going forward.
+
+
+## Consider Isolating Each Workspace in its own VNet
+*Impact: Low*
+
+While you can deploy more than one Workspace in a VNet by keeping the subnets separate, we recommend that you follow the hub and spoke model 
+
+{FLAG THIS  TO PREMAL IS THIS SUPPOSED TO BE A LINK?} hub and spoke model [hub and spoke model](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/toc.md)
+
+and separate each workspace in its own VNet.
+
+Recall that a Databricks Workspace is designed to be a logical isolation unit, and that Azure’s VNets are designed for unconstrained connectivity among the resources placed inside it. Unfortunately, these two design goals are at odds with each other since VMs belonging to two different workspaces in the same
+VNet can therefore communicate. While this is normally innocuous from our experience, it should be avoided if as much as possible.
+
+**More information:** RFC 1918: Address allocation for private internets
+{FLAG THIS  TO PREMAL IS THIS SUPPOSED TO BE A LINK?} RFC 1918: Address allocation for private internets [RFC 1918: Address allocation for private internets](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/toc.md)
+
+![Figure 4: Hub and Spoke Model](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure4.PNG "Figure 4: Hub and Spoke Model")
+
+
+
+
+
 #### Sub-sub-heading
 
 This is an h3 heading
