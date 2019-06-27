@@ -5,9 +5,12 @@
 Created by: 
 
 Dhruv Kumar, Databricks Senior Solutions Architect 
+
 Premal Shah, Azure Databricks PM, Microsoft
 
+
 Published: June 22, 2019
+
 
 Version: 1.0
 
