@@ -164,11 +164,7 @@ Due to security reasons, we also highly recommend separating the production and 
 ## Consider Isolating Each Workspace in its own VNet
 *Impact: Low*
 
-While you can deploy more than one Workspace in a VNet by keeping the subnets separate, we recommend that you follow the hub and spoke model [hub and spoke model](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure4.PNG)
-
-and separate each workspace in its own VNet.
-
-- [hub and spoke model](#hub-and-spoke-model)
+While you can deploy more than one Workspace in a VNet by keeping the subnets separate, we recommend that you follow the hub and spoke model [hub and spoke model](#hub-and-spoke-model) and separate each workspace in its own VNet.
 
 Recall that a Databricks Workspace is designed to be a logical isolation unit, and that Azure’s VNets are designed for unconstrained connectivity among the resources placed inside it. Unfortunately, these two design goals are at odds with each other since VMs belonging to two different workspaces in the same
 VNet can therefore communicate. While this is normally innocuous from our experience, it should be avoided if as much as possible.
