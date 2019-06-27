@@ -178,6 +178,7 @@ VNet can therefore communicate. While this is normally innocuous from our experi
 
 ![Figure 4: Hub and Spoke Model](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure4.PNG "Figure 4: Hub and Spoke Model")
 
+*Figure 4: Hub and Spoke Model*
 
 
 
