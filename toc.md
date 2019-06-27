@@ -108,12 +108,15 @@ The first user to login and initialize the workspace is the workspace ***owner**
 
 ![Figure 1: Databricks user menu](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure1.PNG "Figure 1: Databricks user menu")
 
+*Figure 1: Databricks user menu*
 
-
-                         *Figure 1: Databricks user menu*
+Test text
+{: style="color:gray; font-size: 80%; text-align: center;"}
+                  
    
 
   <!--
+                     *Figure 1: Databricks user menu*
 <p align="center">
     <img width="460" height="300" src="http://www.fillmurray.com/460/300">
 </p>
