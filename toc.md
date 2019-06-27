@@ -211,7 +211,6 @@ This recommendation is driven by security and data availability concerns. Every 
 1. The lifecycle of default DBFS is tied to the Workspace. Deleting the workspace will also delete the default DBFS and permanently remove its contentents.
 2. One can't restrict access to this default folder and its contents.
 
-**Note:** This recommendation doesn't apply to Blob or ADLS folders explicitly mounted as DBFS by the end user.
 
 # Note:
 
@@ -266,6 +265,25 @@ When it comes to taxonomy, ADB clusters are divided along notions of “type”,
 
 ![Table 2: Cluster modes and their characteristics](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Table2.PNG "Table 2: Cluster modes and their characteristics")
 
+
+Support Interactive analytics using shared High Concurrency clusters
+*Impact: Medium*
+
+There are three steps for supporting Interactive workloads on ADB:
+ 1. Deploy a shared cluster instead of letting each user create their own cluster.
+ 2. Create the shared cluster in High Concurrency mode instead of Standard mode.
+ 3. Configure security on the shared High Concurrency cluster, using one of the following options:
+     a. Turn on AAD Credential Passthrough if you’re using ADLS
+     b. Turn on Table Access Control for all other stores
+
+# Note:
+
+> ***If you’re using ADLS, we currently recommend that you select either Table Access Control*** 
+
+or 
+===
+
+***AAD Credential Passthrough. Do not combine them together.***
 
 
 #### Sub-sub-heading
