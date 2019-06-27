@@ -22,7 +22,7 @@
    * [Store Data In Parquet Partitions](#Store-Data-In-Parquet-Partitions)
     + [Sub-sub-heading](#sub-sub-heading-2)
 - [Monitoring](#Monitoring)
-  * [Collect resource utilization metrics across Azure Databricks cluster in a Log Analytics workspace](#collect-resource-utilization-metrics-across-azure-databricks-cluster-in-a-Log Analytics-workspace)
+  * [Collect resource utilization metrics across Azure Databricks cluster in a Log Analytics workspace](#Collect-resource-utilization-metrics-across-Azure-Databricks-cluster-in-a-Log-Analytics-workspace)
 - [Appendix A](#Appendix-A)
   * [Installation for being able to capture VM metrics in Log Analytics](#Installation-for-being-able-to-capture-VM-metrics-in-Log-Analytics)
 
@@ -110,6 +110,7 @@ The first user to login and initialize the workspace is the workspace ***owner**
 ![Figure 1: Databricks user menu](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure1.PNG "Figure 1: Databricks user menu")
 
 
+<center>*Figure 1: Databricks user menu*</center>
 *Figure 1: Databricks user menu*
 
 ## Map Workspaces to Business Units
