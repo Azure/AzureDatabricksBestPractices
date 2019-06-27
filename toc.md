@@ -12,19 +12,19 @@
   * [Do not store any production data in default DBFS folders](#Do-not-store-any-production-data-in-default-DBFS-folders)
   * [Always hide secrets in Key Vault and do not expose them openly in Notebooks](#always-hide-secrets-in-a-key-vault-and-do-not-expose-them-openly-in-notebooks)
 - [Developing applications on ADB: Guidelines for selecting clusters](#Developing-applications-on-ADB-Guidelines-for-selecting-clusters)
-  * [Support Interactive analytics using shared High Concurrency clusters](#sub-heading-2)
+  * [Support Interactive analytics using shared High Concurrency clusters](#support-interactive-analytics-using-shared-high-concurrency-clusters)
    * [Support Batch ETL workloads with single user ephemeral Standard clusters](#support-batch-etl-workloads-with-single-user-ephemeral-standard-clusters)
-   * [Favor Cluster Scoped Init scripts over Global and Named scripts](#sub-heading-2)
-   * [Send logs to blob store instead of default DBFS using Cluster Log delivery](#sub-heading-2)
-   * [Choose cluster VMs to match workload class](#sub-heading-2)
-   * [Arrive at correct cluster size by iterative performance testing](#sub-heading-2)
-   * [Tune shuffle for optimal performance](#sub-heading-2)
-   * [Store Data In Parquet Partitions](#sub-heading-2)
+   * [Favor Cluster Scoped Init scripts over Global and Named scripts](#favor-cluster-scoped-init-scripts-over-global-and-named-scripts)
+   * [Send logs to blob store instead of default DBFS using Cluster Log delivery](#send-logs-to-blob-store-instead-of-default-DBFS-using-Cluster-Log-delivery)
+   * [Choose cluster VMs to match workload class](#Choose-cluster-VMs-to-match-workload-class)
+   * [Arrive at correct cluster size by iterative performance testing](#Arrive-at-correct-cluster-size-by-iterative-performance-testing)
+   * [Tune shuffle for optimal performance](#Tune-shuffle-for-optimal-performance)
+   * [Store Data In Parquet Partitions](#Store-Data-In-Parquet-Partitions)
     + [Sub-sub-heading](#sub-sub-heading-2)
-- [Monitoring](#heading)
-  * [Collect resource utilization metrics across Azure Databricks cluster in a Log Analytics workspace](#sub-heading)
-- [Appendix A](#heading)
-  * [Installation for being able to capture VM metrics in Log Analytics](#sub-heading)
+- [Monitoring](#Monitoring)
+  * [Collect resource utilization metrics across Azure Databricks cluster in a Log Analytics workspace](#collect-resource-utilization-metrics-across-azure-databricks-cluster-in-a-Log Analytics-workspace)
+- [Appendix A](#Appendix-A)
+  * [Installation for being able to capture VM metrics in Log Analytics](#Installation-for-being-able-to-capture-VM-metrics-in-Log-Analytics)
 
 
    
@@ -356,12 +356,50 @@ By default, Cluster logs are sent to default DBFS but you should consider sendin
 
 To allocate the right amount and type of cluster resresource for a job, we need to understand how different types of jobs demand different types of cluster resources.
 
+   * **Machine Learning** - To train machine learning models it’s usually required cache all of the data in memory. Consider using memory optimized VMs so that the cluster can take advantage of the RAM cache. To size the cluster, take a % of the data set → cache it → see how much memory it
+used → extrapolate that to the rest of the data. The tungsten data serializer op􀆟mizes the data in-memory. Which means you’ll need to test the data to see the relative magnitude of compression.
+
+  * **Streaming** - You need to make sure that the processing rate is just above the input rate at peak times of the day. Depending peak input rate times, consider compute optimized VMs for the cluster to make sure processing rate is higher than your input rate.
+  
+  * **ETL** - In this case, data size and deciding how fast a job needs to be will be a leading indicator. Spark doesn’t always require data to be loaded into memory in order to execute transformations, but you’ll at the very least need to see how large the task sizes are on shuffles and compare that to the task throughput you’d like. To analyze the performance of these jobs start with basics and check if the job is by CPU, network, or local I/O, and go from there. Consider using a general purpose VM for these jobs.
+  * **Interactive / Development Workloads** - The ability for a cluster to auto scale is most important for these types of jobs. Azure Databricks has a cluster manager and Serverless clusters to optimize the size of cluster during peak and low times. In this case taking advantage of Serverless clusters and Autoscaling will be your best friend in managing the cost of the infrastructure.
+
+## Arrive at correct cluster size by iterative performance testing
+*Impact: High*
+
+It is impossible to predict the correct cluster size without developing the application because Spark and Azure Databricks use numerous techniques to improve cluster utilization. The broad approach you should follow for sizing is:
+
+  1. Develop on a medium sized cluster of 2-8 nodes, with VMs matched to workload class as explained earlier.
+  
+  2. After meeting functional requirements, run end to end test on larger representative data while measuring CPU, memory and I/O used by the cluster at an aggregate level.
+  
+  3. Optimize cluster to remove bottlenecks found in step 2:
+         a. CPU bound: add more cores by adding more nodes
+         b. Network bound: use fewer, bigger SSD backed machines to reduce             network size and improve remote read performance
+         c. Disk I/O bound: if jobs are spilling to disk, use VMs with                 more memory.
+         
+   4. Repeat steps 2 and 3 by adding nodes and/or evaluating different VMs until all obvious bottlenecks have been addressed.
+   
+   
+Performing these steps will help you to arrive at a baseline cluster size which can meet SLA on a subset of data. Because Spark workloads exhibit linear scaling, you can arrive at the production cluster size easily from here. For example, if it takes 5 nodes to meet SLA on a 100TB dataset, and the production data is around 1PB, then prod cluster is likely going to be around 50 nodes in size. 
+
+## Tune shuffle for optimal performance
+*Impact: High*
+
+A shuffle occurs when we need to move data from one node to another in order to complete a stage. Depending on the type of transformation you are doing you may cause a shuffle to occur. This happens when all the executors require seeing all of the data in order to accurately perform the action. If the Job requires a wide transformation, you can expect the job to execute slower because all of the partitions need to be shuffled around in order to complete the job. Eg: Group by, Distinct.
+
+![Figure 7: Ephemeral Job cluster](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure7.PNG "Figure 7: Ephemeral Job cluster")
+
+*Figure 7: Shuffle vs. no-shuffle*
 
 
+You’ve got two control knobs of a shuffle you can use to optimize
+  * The number of partitions being shuffled:
+spark.conf.set("spark.sql.shuffle.partitions", 10)
+  * The amount of partitions that you can compute in parallel.
+    + This is equal to the number of cores in a cluster.
 
-
-
-
+These two determine the partition size, which we recommend should be in the Megabytes to 1 Gigabyte range. If your shuffle partitions are too small, you may be unnecessarily adding more tasks to the stage. But if they are too big, you may get bottlenecked by the network.
 
 
 
