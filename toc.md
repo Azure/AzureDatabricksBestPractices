@@ -198,7 +198,6 @@ Recall the each Workspace can have multiple clusters:
     
 With this info, we can quickly arrive at the table below, showing how many nodes one can use across all clusters for a given VNet CIDR. It is clear that selection of VNet CIDR has far reaching implications in terms of maximum cluster size.   
     
-
 ![Table 1: CIDR ranges](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Table1.PNG "Table 1: CIDR ranges")
 
 ## Do not store any production data in default DBFS folders
@@ -233,12 +232,6 @@ If using Azure Key Vault, create separate AKV-backed secret scopes and correspon
 
 [Best practices for creating secret scopes](https://docs.azuredatabricks.net/user-guide/secrets/secret-acl.html)
 
-
-
-
-
-
-
 # Developing applications on ADB: Guidelines for selecting clusters
 
 After understanding how to provision the workspaces, best practices in networking, etc., let’s put on the developer’s hat and see the design choices typically faced by them:
@@ -251,19 +244,18 @@ In this chapter we will address such concerns and provide our recommendations, w
 1. **Cloud Optimized:** Azure Databricks is a product built exclusively for cloud environments, like Azure. No on-prem deployments currently exist. It assumes certain features are provided by the Cloud, is designed keeping Cloud best practices, and conversely, provides Cloud-friendly features.
 2. **Platform/Software as a Service Abstraction:** ADB sits somewhere between the PaaS and SaaS ends of the spectrum, depending on how you use it. In either case ADB is designed to hide infrastructure details as much as possible so the user can focus on application development. It is
 not, for example, an IaaS offering exposing the guts of the OS Kernel to you.
-3. **Managed Service:** ADB guarantees a 99.95% uptime SLA. There’s a large team of dedicated staff members who monitor various aspects of its health and get alerted when something goes wrong. It is run like an always-on website and the staff strives to minimize any downtime.
+3. **Managed Service:** ADB guarantees a 99.95% uptime SLA. There’s a large team of dedicated staff members who monitor various aspects of its health and get alerted when something goes wrong. It is run like an always-on website and Microsoft and Databricks system operations team strives to minimize any downtime.
 
 These three attributes make ADB very different than other Spark platforms such as HDP, CDH, Mesos, etc. which are designed for on-prem datacenters and allow the user complete control over the hardware. The concept of a cluster is pretty unique in Azure Databricks. Unlike YARN or Mesos clusters which are just a collection of worker machines waiting for an application to be scheduled on them, clusters in ADB come with a pre-configured Spark application. ADB submits all subsequent user requests
-like notebook commands, SQL queries, Java jar jobs, etc. to this primordial app for execution. This app is called the “Databricks Shell.”
+like notebook commands, SQL queries, Java jar jobs, etc. to this primordial app for execution. 
 
 Under the covers Databricks clusters use the lightweight Spark Standalone resource allocator. 
 
-When it comes to taxonomy, ADB clusters are divided along notions of “type”, and “mode.” There are two ***types*** of ADB clusters, according to how they are created. Clusters created using UI are called Interactive Clusters, whereas those created using Databricks API are called Jobs Clusters. Further, each cluster can be of two ***modes***: Standard and High Concurrency. All clusters in Azure Databricks can automatically scale to match the workload, called Autoscaling.
+When it comes to taxonomy, ADB clusters are divided along the notions of “type”, and “mode.” There are two ***types*** of ADB clusters, according to how they are created. Clusters created using UI and [Clusters API](https://docs.databricks.com/api/latest/clusters.html)  are called Interactive Clusters, whereas those created using Jobs API(https://docs.databricks.com/api/latest/jobs.html) are called Jobs Clusters. Further, each cluster can be of two ***modes***: Standard and High Concurrency. Regardless of types or mode, all clusters in Azure Databricks can automatically scale to match the workload, using a feature known as [Autoscaling](https://docs.azuredatabricks.net/user-guide/clusters/sizing.html#cluster-size-and-autoscaling).
 
 *Table 2: Cluster modes and their characteristics*
 
 ![Table 2: Cluster modes and their characteristics](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Table2.PNG "Table 2: Cluster modes and their characteristics")
-
 
 Support Interactive analytics using shared High Concurrency clusters
 *Impact: Medium*
