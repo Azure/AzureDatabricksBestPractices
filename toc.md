@@ -117,6 +117,13 @@ The first user to login and initialize the workspace is the workspace ***owner**
     <img width="460" height="300" src="http://www.fillmurray.com/460/300">
 </p>
 -->
+
+
+![Figure 3: Azure Databricks Isolation Domains Workspace](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure3.PNG "Figure 3: Azure Databricks Isolation Domains Workspace")
+
+*Figure 3: Azure Databricks Isolation Domains Workspace*
+
+Multiple clusters can exist within a workspace, hence there’s a one-to-many mapping between a Subscription to Workspaces, and further, from one Workspace to multiple Clusters. With this basic understanding let’s discuss how to plan a typical ADB deployment. We first grapple with the issue of how to divide workspaces and assign them to users and teams.
   
 ## Map Workspaces to Business Units
 *Impact: Very High*
@@ -163,9 +170,6 @@ Due to security reasons, we also highly recommend separating the production and 
 
 > ***It is important to divide your workspaces appropriately using different subscriptions based on your business keeping in mind the Azure limits.***
 
-![Figure 3: Azure Databricks Isolation Domains Workspace](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure3.PNG "Figure 3: Azure Databricks Isolation Domains Workspace")
-
-*Figure 3: Azure Databricks Isolation Domains Workspace*
 
 **Note:** These limits are at a point in time and might change going forward.
 
