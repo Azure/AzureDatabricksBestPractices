@@ -257,7 +257,7 @@ When it comes to taxonomy, ADB clusters are divided along the notions of “type
 
 ![Table 2: Cluster modes and their characteristics](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Table2.PNG "Table 2: Cluster modes and their characteristics")
 
-Support Interactive analytics using shared High Concurrency clusters
+## Support Interactive analytics using shared High Concurrency clusters
 *Impact: Medium*
 
 There are three steps for supporting Interactive workloads on ADB:
@@ -278,7 +278,7 @@ To understand why, let’s quickly see how interactive workloads are different f
 
 Because of these differences, supporting Interactive workloads entails minimizing cost variability and optimizing for latency over throughput, while providing a secure environment. These goals are satisfied by shared High Concurrency clusters with Table access controls or AAD Passthrough turned on (in case of ADLS):
 
-  1. **Minimizing Cost:** By forcing users to share an autoscaling cluster you have configured with maximum node count, rather than say, asking them to create a new one for their use each time they log in, you can control the total cost easily. The max cost of shared cluster can be calculated by assuming it is running 24X7 at maximum size with the particular VMs. You can’t achieve this if each user is given free reign over creating clusters of arbitrary size and VMs.
+  1. **Minimizing Cost:** By forcing users to share an autoscaling cluster you have configured with maximum node count, rather than say, asking them to create a new one for their use each time they log in, you can control the total cost easily. The max cost of shared cluster can be calculated by assuming it is running X hours at maximum size with the particular VMs. It is difficult to achieve this if each user is given free reign over creating clusters of arbitrary size and VMs.
   
   2. **Optimizing for Latency:** Only High Concurrency clusters have features which allow queries from different users share cluster resources in a fair, secure manner. HC clusters come with Query Watchdog, a process which keeps disruptive queries in check by automatically pre-empting rogue queries, limiting the maximum size of output rows returned, etc.
   
@@ -289,21 +289,13 @@ Because of these differences, supporting Interactive workloads entails minimizin
 
 *Figure 5: Interactive clusters*
 
-That said, irrespective of the mode (Standard or High Concurrency), all Azure Databricks clusters use Spark Standalone cluster resource allocator and hence execute all Java and Scala user code in the same JVM. A shared cluster model is secure only for SQL or Python programs because:
-
-  1. It is possible to isolate each user’s Spark SQL configuration storing sensitive credentials, temporary tables, etc. in a Spark Session. ADB creates a new Spark Session for each Notebook attached to a High Concurrency cluster. If you’re running SQL queries, then this isolation model works because there’s no way to examine JVM’s contents using SQL.
-  2. Similarly, PySpark runs user queries in a separate process, so ADB can isolate DataFrames and DataSet operations belonging to different PySpark users.
-  
-In contrast a Scala or Java program from one user could easily steal secrets belonging to another user sharing the same cluster by doing a thread dump. Hence the isolation model of HC clusters, and this  recommendation, only applies to interactive queries expressed in SQL or Python. In practice this is rarely a limitation because Scala and Java languages are seldom used for interactive exploration. They are mostly used by Data Engineers to build data pipelines consisting of batch jobs. Those type of scenarios involve batch ETL jobs and are covered by the next recommendation.
-
-
-# Support Batch ETL workloads with single user ephemeral Standard clusters
+## Support Batch ETL workloads with single user ephemeral Standard clusters
 *Impact: Medium*
 
 Unlike Interactive workloads, logic in batch Jobs is well defined and their cluster resource requirements are known a priori. Hence to minimize cost, there’s no reason to follow the shared cluster model and we
 recommend letting each job create a separate cluster for its execution. Thus, instead of submitting batch ETL jobs to a cluster already created from ADB’s UI, submit them using the Jobs APIs. These APIs automatically create new clusters to run Jobs and also terminate them after running it. We call this the **Ephemeral Job Cluster** pattern for running jobs because the clusters short life is tied to the job lifecycle.
 
-Azure Data Factory uses this pattern as well - each job ends up creating a separate cluster since the underlying call is made using the Runs-Submit Jobs API.
+Azure Data Factory uses this pattern as well - each job ends up creating a separate cluster since the underlying call is made using the [Runs-Submit Jobs API](https://docs.azuredatabricks.net/api/latest/jobs.html#runs-submit).
 
 
 ![Figure 6: Ephemeral Job cluster](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure6.PNG "Figure 6: Ephemeral Job cluster")
@@ -317,25 +309,23 @@ Just like the previous recommendation, this pattern will achieve general goals o
 3. **Better Throughput:** cluster’s resources are dedicated to one job only, making the job finish faster than while running in a shared environment.
 
 For very short duration jobs (< 10 min) the cluster launch time (~ 7 min) adds a significant overhead to total execution time. Historically this forced users to run short jobs on existing clusters created by UI -- a
-costlier and less secure alternative. To fix this, ADB is coming out with a new feature called Warm Pools in Q3 2019 bringing down cluster launch time to 30 seconds or less.
+costlier and less secure alternative. To fix this, ADB is coming out with a new feature called Instance Pools in Q3 2019 bringing down cluster launch time to 30 seconds or less.
 
 ## Favor Cluster Scoped Init Scripts over Global and Named scripts
 *Impact: High*
 
-Init Scripts provide a way to configure cluster’s nodes and can be used in the following modes:
+[Init Scripts](https://docs.azuredatabricks.net/user-guide/clusters/init-scripts.html) provide a way to configure cluster’s nodes and can be used in the following modes:
 
   1. **Global:** by placing the init script in /databricks/init folder, you force the script’s execution every time any cluster is created or restarted by users of the workspace.
-  2. **Cluster Named:** you can limit the init script to run only on for a specific cluster’s creation and restarts by placing it in /databricks/init/<cluster_name> folder.
-  3. **Cluster Scoped:** in this mode the init script is not tied to any cluster by its name and its automatic execution is not a virtue of its dbfs location. Rather, you specify the script in cluster’s configuration by either writing it directly or providing its location on DBFS. Any location under DBFS /databricks folder except /databricks/init can be used for this purpose. eg, /databricks/<my-directory>/set-env-var.sh
+  2. **Cluster Named (deprecated):** you can limit the init script to run only on for a specific cluster’s creation and restarts by placing it in /databricks/init/<cluster_name> folder.
+  3. **Cluster Scoped:** in this mode the init script is not tied to any cluster by its name and its automatic execution is not a virtue of its dbfs location. Rather, you specify the script in cluster’s configuration by either writing it directly in the cluster configuration UI or storing it on DBFS and specifying the path in [Cluster Create API](https://docs.azuredatabricks.net/user-guide/clusters/init-scripts.html#cluster-scoped-init-script). Any location under DBFS /databricks folder except /databricks/init can be used for this purpose. eg, /databricks/<my-directory>/set-env-var.sh
  
 You should treat Init scripts with extreme caution because they can easily lead to intractable cluster launch failures. If you *really* need them, a) try to use the Cluster Scoped execution mode as much as possible, and, b) write them directly in the cluster’s configuration rather than placing them on default DBFS and specifying the path. We say this because:
 
-  1. ADB executes the script’s body in each cluster node’s LxC container before starting Spark’s executor or driver JVM in it -- the processes which ultimately run user code. Thus, a successful cluster launch and subsequent operation is predicated on all nodal init scripts executing in a timely manner without any errors and reporting a zero exit code. This process is highly error prone, especially for scripts downloading artifacts from an external service over unreliable and/or misconfigured networks.
+  1. ADB executes the script’s body in each cluster node. Thus, a successful cluster launch and subsequent operation is predicated on all nodal init scripts executing in a timely manner without any errors and reporting a zero exit code. This process is highly error prone, especially for scripts downloading artifacts from an external service over unreliable and/or misconfigured networks.
   2. Because Global and Cluster Named init scripts execute automatically due to their placement in a special DBFS location, it is easy to overlook that they could be causing a cluster to not launch. By specifying the Init script in the Configuration, there’s a higher chance that you’ll consider them while debugging launch failures.
-  3. As we explained earlier, all folders inside default DBFS are accessible to workspace users. Your init scripts containing sensitive data can be viewed by everyone if you place them there.
-  
-  
-## Send logs to blob store instead of default DBFS using Cluster Log delivery
+ 
+ ## Send logs to blob store instead of default DBFS using Cluster Log delivery
 *Impact: Medium*
 
 By default, Cluster logs are sent to default DBFS but you should consider sending the logs to a blob store location using the Cluster Log delivery feature. The Cluster Logs contain logs emitted by user code, as well as Spark framework’s Driver and Executor logs. Sending them to blob store is recommended over DBFS because:
@@ -347,13 +337,13 @@ By default, Cluster logs are sent to default DBFS but you should consider sendin
 
 To allocate the right amount and type of cluster resresource for a job, we need to understand how different types of jobs demand different types of cluster resources.
 
-   * **Machine Learning** - To train machine learning models it’s usually required cache all of the data in memory. Consider using memory optimized VMs so that the cluster can take advantage of the RAM cache. To size the cluster, take a % of the data set → cache it → see how much memory it
-used → extrapolate that to the rest of the data. The tungsten data serializer op􀆟mizes the data in-memory. Which means you’ll need to test the data to see the relative magnitude of compression.
+   * **Machine Learning** - To train machine learning models it’s usually required cache all of the data in memory. Consider using memory optimized VMs so that the cluster can take advantage of the RAM cache. You can also use storage optimized instances for very large datasets. To size the cluster, take a % of the data set → cache it → see how much memory it
+used → extrapolate that to the rest of the data. 
 
   * **Streaming** - You need to make sure that the processing rate is just above the input rate at peak times of the day. Depending peak input rate times, consider compute optimized VMs for the cluster to make sure processing rate is higher than your input rate.
   
   * **ETL** - In this case, data size and deciding how fast a job needs to be will be a leading indicator. Spark doesn’t always require data to be loaded into memory in order to execute transformations, but you’ll at the very least need to see how large the task sizes are on shuffles and compare that to the task throughput you’d like. To analyze the performance of these jobs start with basics and check if the job is by CPU, network, or local I/O, and go from there. Consider using a general purpose VM for these jobs.
-  * **Interactive / Development Workloads** - The ability for a cluster to auto scale is most important for these types of jobs. Azure Databricks has a cluster manager and Serverless clusters to optimize the size of cluster during peak and low times. In this case taking advantage of Serverless clusters and Autoscaling will be your best friend in managing the cost of the infrastructure.
+  * **Interactive / Development Workloads** - The ability for a cluster to auto scale is most important for these types of jobs. In this case taking advantage of the [Autoscaling feature](https://docs.azuredatabricks.net/user-guide/clusters/sizing.html#cluster-size-and-autoscaling) will be your best friend in managing the cost of the infrastructure.
 
 ## Arrive at correct cluster size by iterative performance testing
 *Impact: High*
@@ -372,7 +362,7 @@ It is impossible to predict the correct cluster size without developing the appl
    4. Repeat steps 2 and 3 by adding nodes and/or evaluating different VMs until all obvious bottlenecks have been addressed.
    
    
-Performing these steps will help you to arrive at a baseline cluster size which can meet SLA on a subset of data. Because Spark workloads exhibit linear scaling, you can arrive at the production cluster size easily from here. For example, if it takes 5 nodes to meet SLA on a 100TB dataset, and the production data is around 1PB, then prod cluster is likely going to be around 50 nodes in size. 
+Performing these steps will help you to arrive at a baseline cluster size which can meet SLA on a subset of data. In theory, Spark jobs, like jobs on other Data Intensive frameworks (Hadoop) exhibit linear scaling. For example, if it takes 5 nodes to meet SLA on a 100TB dataset, and the production data is around 1PB, then prod cluster is likely going to be around 50 nodes in size. You can use this back of the envelope calculation as a first guess to do capacity planning. However, there are scenarios where Spark jobs don’t scale linearly. In some cases this is due to large amounts of shuffle adding an exponential synchronization cost (explained next), but there could be other reasons as well. Hence, to refine the first estimate and arrive at a more accurate node count we recommend repeating this process 3-4 times on increasingly larger data set sizes, say 5%, 10%, 15%, 30%, etc. The overall accuracy of the process depends on how closely the test data matches the live workload both in type and size.
 
 ## Tune shuffle for optimal performance
 *Impact: High*
@@ -408,8 +398,8 @@ on a date field but choose your partitioning field based on the relevancy to the
 Once you have your clusters setup and your Spark applications running, there is a need to monitor your Azure Databricks pipelines. These pipelines are rarely executed in isolation and need to be monitored
 along with a set of other services. Monitoring falls into four broad areas:
 
-   (1) Resource utilization (CPU/Memory/Network) across an Azure        Databricks cluster. This is referred to as VM metrics
-   (2) Spark metrics which enables monitoring of Spark applications to      help uncover bottlenecks 
+   (1) Resource utilization (CPU/Memory/Network) across an Azure Databricks cluster. This is referred to as VM metrics
+   (2) Spark metrics which enables monitoring of Spark applications to help uncover bottlenecks 
    (3) Spark application logs which enables administrators/developers to query the logs, debug issues and investigate job run failures. This is specifically helpful to also understand exceptions across your workloads
    (4) Application instrumentation which is native instrumentation that you add to your application for custom troubleshooting
 
