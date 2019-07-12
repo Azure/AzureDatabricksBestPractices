@@ -124,65 +124,53 @@ The first user to login and initialize the workspace is the workspace ***owner**
 
 Multiple clusters can exist within a workspace, hence there’s a one-to-many mapping between a Subscription to Workspaces, and further, from one Workspace to multiple Clusters. With this basic understanding let’s discuss how to plan a typical ADB deployment. We first grapple with the issue of how to divide workspaces and assign them to users and teams.
   
-## Map Workspaces to Business Units
+## Map Workspaces to Business Divisions
 *Impact: Very High*
 
-Though partitioning of workspaces depends on the organization structure and scenarios, it is generally recommended to partition workspaces based on a related group of people working together collaboratively. This also helps in streamlining your access control matrix within your workspace (folders, notebooks etc.) and also across all your resources that the workspace interacts with (storage, related data stores like Azure SQL DB, Azure SQL DW etc.). This type of division scheme is also known as the Business Unit Subscription design pattern and aligns well with Databricks chargeback model.
+How many workspaces do you need to deploy? The answer to this question depends a lot on your organization’s structure. We recommend that you assign workspaces based on a related group of people working together collaboratively. This also helps in streamlining your access control matrix within your workspace (folders, notebooks etc.) and also across all your resources that the workspace interacts with (storage, related data stores like Azure SQL DB, Azure SQL DW etc.). This type of division scheme is also known as the Business Unit Subscription design pattern and aligns well with Databricks chargeback model.
 
 
-![Figure 2: Business Unit Subscription Design Pattern](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure2.PNG "Figure 2: Business Unit Subscription Design Pattern")
+![Figure 3: Business Unit Subscription Design Pattern](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure2.PNG "Figure 2: Business Unit Subscription Design Pattern")
 
-*Figure 2: Business Unit Subscription Design Pattern*
+*Figure 3: Business Unit Subscription Design Pattern*
 
-
-## Deploy Workspaces in Multiple Subscriptions
+## Deploy Workspaces in Multiple Subscriptions to honor Azure capacity limits
 *Impact: Very High*
 
 Customers commonly partition workspaces based on teams or departments and arrive at that division naturally. But it is also important to partition keeping Azure Subscription and ADB Workspace level limits in mind.
 
-
 ### ADB Workspace Limits
 Azure Databricks is a multitenant service and to provide fair resource sharing to all regional customers, it imposes limits on API calls. These limits are expressed at the Workspace level and are due to internal ADB components. For instance, you can only run up to 150 concurrent jobs in a workspace. Beyond that, ADB will deny your job submissions. There are also other limits such as max hourly job submissions, etc.
-  
-  
+    
 Key workspace limits are:
 
-  * There is a limit of **1000** scheduled jobs that can be seen in the UI
   * The maximum number of jobs that a workspace can create in an hour is **1000**
   * At any time, you cannot have more than **150 jobs** simultaneously running in a workspace
   * There can be a maximum of **150 notebooks or execution contexts** attached to a cluster    
 
-
 ### Azure Subscription Limits
-Next, there are {FLAG THIS  TO PREMAL IS THIS SUPPOSED TO BE A LINK?} Azure limits [Azure limits](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/toc.md) to consider since ADB deployments are built on top of the Azure infrastructure.
+Next, there are [Azure limits](https://docs.microsoft.com/en-us/azure/azure-subscription-service-limits) to consider since ADB deployments are built on top of the Azure infrastructure.
 
 Key Azure limits are:
   * Storage accounts per region per subscription: **250**
   * Maximum egress for general-purpose v2 and Blob storage accounts (all regions): **50 Gbps**
   * VMs per subscription per region: **25,000**
   * Resource groups per subscription: **980**
-  
 
 Due to security reasons, we also highly recommend separating the production and dev/stage environments into separate subscriptions.
+
+**Note:** These limits are at a point in time and might change going forward. For more information and help in understanding these limits, please contact Microsoft or Databricks technical architects.
 
 # Note:
 
 > ***It is important to divide your workspaces appropriately using different subscriptions based on your business keeping in mind the Azure limits.***
 
-
-**Note:** These limits are at a point in time and might change going forward.
-
-
 ## Consider Isolating Each Workspace in its own VNet
 *Impact: Low*
 
-While you can deploy more than one Workspace in a VNet by keeping the subnets separate, we recommend that you follow the hub and spoke model [hub and spoke model](https://en.wikipedia.org/wiki/Spoke%E2%80%93hub_distribution_paradigm) and separate each workspace in its own VNet.
+While you can deploy more than one Workspace in a VNet by keeping the subnets separate, we recommend that you follow [hub and spoke model](https://en.wikipedia.org/wiki/Spoke%E2%80%93hub_distribution_paradigm) and separate each workspace in its own spoke VNet, and place all the common networking resources in a central hub.
 
-Recall that a Databricks Workspace is designed to be a logical isolation unit, and that Azure’s VNets are designed for unconstrained connectivity among the resources placed inside it. Unfortunately, these two design goals are at odds with each other since VMs belonging to two different workspaces in the same
-VNet can therefore communicate. While this is normally innocuous from our experience, it should be avoided if as much as possible.
-
-**More information:** RFC 1918: Address allocation for private internets
-RFC 1918: Address allocation for private internets [RFC 1918: Address allocation for private internets](https://tools.ietf.org/html/rfc1918)
+More information: [Azure Virtual Datacenter: a network perspective](https://docs.microsoft.com/en-us/azure/architecture/vdc/networking-virtual-datacenter#topology)
 
 ![Figure 4: Hub and Spoke Model](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure4.PNG "Figure 4: Hub and Spoke Model")
 
