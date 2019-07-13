@@ -6,6 +6,7 @@
     <img width="250" height="150" src="https://github.com/Azure/AzureDatabricksBestPractices/blob/master/ADBicon.jpg">
 </p>
 
+# Azure Databricks Best Practices
 
 Created by: 
 * Dhruv Kumar, Senior Solutions Architect, Databricks 
@@ -14,7 +15,7 @@ Created by:
 # Table of Contents
 
 - [Introduction](#Introduction)
-- [Provisioning ADB: Guidelines for Networking and Security](#Provisioning-ADB-Guidelines-for-Networking-and-Security)
+- [Scalable ADB Deployments: Guidelines for Networking, Security, and Capacity Planning](#Provisioning-ADB-Guidelines-for-Networking-and-Security)
   * [Azure Databricks 101](#Azure-Databricks-101)
   * [Map Workspaces to Business Units](#Map-Workspaces-To-Business-Units)
   * [Deploy Workspaces in Multiple Subscriptions](#Deploy-Workspaces-in-Multiple-Subscriptions)
@@ -24,7 +25,7 @@ Created by:
   * [Select the largest CIDR possible for a VNet](#Select-the-largest-CIDR-possible-for-a-VNet)
   * [Do not store any production data in default DBFS folders](#Do-not-store-any-production-data-in-default-DBFS-folders)
   * [Always hide secrets in Key Vault and do not expose them openly in Notebooks](#always-hide-secrets-in-a-key-vault-and-do-not-expose-them-openly-in-notebooks)
-- [Developing applications on ADB: Guidelines for selecting clusters](#Developing-applications-on-ADB-Guidelines-for-selecting-clusters)
+- [Deploying Applications on ADB: Guidelines for Selecting, Sizing, and Optimizing Clusters Performance](#Developing-applications-on-ADB-Guidelines-for-selecting-clusters)
   * [Support Interactive analytics using shared High Concurrency clusters](#support-interactive-analytics-using-shared-high-concurrency-clusters)
    * [Support Batch ETL workloads with single user ephemeral Standard clusters](#support-batch-etl-workloads-with-single-user-ephemeral-standard-clusters)
    * [Favor Cluster Scoped Init scripts over Global and Named scripts](#favor-cluster-scoped-init-scripts-over-global-and-named-scripts)
@@ -33,7 +34,7 @@ Created by:
    * [Arrive at correct cluster size by iterative performance testing](#Arrive-at-correct-cluster-size-by-iterative-performance-testing)
    * [Tune shuffle for optimal performance](#Tune-shuffle-for-optimal-performance)
    * [Store Data In Parquet Partitions](#Store-Data-In-Parquet-Partitions)
-- [Monitoring](#Monitoring)
+- [Running ADB Applications Smoothly: Guidelines on Observability and Monitoring](#Monitoring)
   * [Collect resource utilization metrics across Azure Databricks cluster in a Log Analytics workspace](#Collect-resource-utilization-metrics-across-Azure-Databricks-cluster-in-a-Log-Analytics-workspace)
    + [Querying VM metrics in Log Analytics once you have started the collection using the above document](#Querying-VM-metrics-in-log-analytics-once-you-have-started-the-collection-using-the-above-document)
 - [Appendix A](#Appendix-A)
@@ -49,7 +50,7 @@ Created by:
 
     
     
-# Table of Figures
+# List of Figures
 
 - [Figure 1: Databricks user menu](#Figure-1-Databricks-user-menu)
 - [Figure 2: Business Unit Subscription Design Pattern](#Figure-2-Business-Unit-Subscription-Design-Pattern)
@@ -59,7 +60,7 @@ Created by:
 - [Figure 6: Ephemeral Job Cluster](#Figure-6-ephemeral-job-clusters)
 - [Figure 7: Shuffle vs. no-shuffle](#Figure-7-shuffle-vs.-no-shuffle)
 
-# Table of Tables
+# List of Tables
 - [Table 1: CIDR Ranges](#Table-1-CIDR-Ranges)
 - [Table 2: Cluster modes and their characteristics](#Table-2-Cluster-modes-and-their-characteristics)
 - [Table 3: Batch vs Interactive Workloads](#Table-3-Batch-vs-Interactive-Workloads)
@@ -222,7 +223,7 @@ With this info, we can quickly arrive at the table below, showing how many nodes
     
 ![Table 1: CIDR ranges](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Table1.PNG "Table 1: CIDR ranges")
 
-## Do not store any production data in default DBFS folders
+## Do not Store any Production Data in Default DBFS Folders
 *Impact: High*
 
 This recommendation is driven by security and data availability concerns. Every Workspace comes with a default DBFS, primarily designed to store libraries and other system-level configuration artifacts such as Init scripts. You should not store any production data in it, because:
