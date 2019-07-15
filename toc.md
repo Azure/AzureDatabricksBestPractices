@@ -33,7 +33,7 @@ Created by:
    * [Choose cluster VMs to match workload class](#Choose-cluster-VMs-to-match-workload-class)
    * [Arrive at correct cluster size by iterative performance testing](#Arrive-at-correct-cluster-size-by-iterative-performance-testing)
    * [Tune shuffle for optimal performance](#Tune-shuffle-for-optimal-performance)
-   * [Store Data In Parquet Partitions](#Store-Data-In-Parquet-Partitions)
+   * [Partition Your Data](#partition-your-data)
 - [Running ADB Applications Smoothly: Guidelines on Observability and Monitoring](#Monitoring)
   * [Collect resource utilization metrics across Azure Databricks cluster in a Log Analytics workspace](#Collect-resource-utilization-metrics-across-Azure-Databricks-cluster-in-a-Log-Analytics-workspace)
    + [Querying VM metrics in Log Analytics once you have started the collection using the above document](#Querying-VM-metrics-in-log-analytics-once-you-have-started-the-collection-using-the-above-document)
