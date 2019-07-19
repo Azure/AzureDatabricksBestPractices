@@ -48,22 +48,6 @@ Created by:
     + [References](#References)
     
 
-    
-    
-# List of Figures
-
-- [Figure 1: Databricks user menu](#Figure-1-Databricks-user-menu)
-- [Figure 2: Business Unit Subscription Design Pattern](#Figure-2-Business-Unit-Subscription-Design-Pattern)
-- [Figure 3: Azure Databricks Isolation Domains Workspace](#Figure-3-Azure-Databricks-Isolation-Domains-Workspace)
-- [Figure 4: Hub and Spoke Model](#Figure-4-hub-and-spoke-model)
-- [Figure 5: Interactive clusters](#Figure-5-interactive-clusters)
-- [Figure 6: Ephemeral Job Cluster](#Figure-6-ephemeral-job-clusters)
-- [Figure 7: Shuffle vs. no-shuffle](#Figure-7-shuffle-vs.-no-shuffle)
-
-# List of Tables
-- [Table 1: CIDR Ranges](#Table-1-CIDR-Ranges)
-- [Table 2: Cluster modes and their characteristics](#Table-2-Cluster-modes-and-their-characteristics)
-- [Table 3: Batch vs Interactive Workloads](#Table-3-Batch-vs-Interactive-Workloads)
 
 <!-- 
 # Table of x - save for later
@@ -126,37 +110,27 @@ Azure Databricks comes with its own user management interface. You can create us
 
 The first user to login and initialize the workspace is the workspace ***owner***, and they are automatically assigned to the Databricks admin group. This person can invite other users to the workspace, add them as admins, create groups, etc. The ADB logged in user’s identity is provided by AAD, and shows up under the user menu in Workspace:
 
-![Figure 1: Databricks user menu]
 <p align="left">
     <img width="158.5" height="138" src="https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure1.PNG">
 </p>
-
-
 *Figure 1: Databricks user menu*
 
 
-  <!--
-                     *Figure 1: Databricks user menu*
-<p align="center">
-    <img width="460" height="300" src="http://www.fillmurray.com/460/300">
-</p>
--->
-
+Multiple clusters can exist within a workspace, and there’s a one-to-many mapping between a Subscription to Workspaces, and further, from one Workspace to multiple Clusters. With this basic understanding let’s discuss how to plan a typical ADB deployment. We first grapple with the issue of how to divide workspaces and assign them to users and teams.
+  
 
 ![Figure 2: Azure Databricks Isolation Domains Workspace](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure3.PNG "Figure 3: Azure Databricks Isolation Domains Workspace")
 
 *Figure 2: Azure Databricks Isolation Domains Workspace*
 
-Multiple clusters can exist within a workspace, hence there’s a one-to-many mapping between a Subscription to Workspaces, and further, from one Workspace to multiple Clusters. With this basic understanding let’s discuss how to plan a typical ADB deployment. We first grapple with the issue of how to divide workspaces and assign them to users and teams.
-  
+With this basic understanding of ADB's terminology and internals, let's dive into the best practices around deployment. 
+
 ## Map Workspaces to Business Divisions
 *Impact: Very High*
 
 How many workspaces do you need to deploy? The answer to this question depends a lot on your organization’s structure. We recommend that you assign workspaces based on a related group of people working together collaboratively. This also helps in streamlining your access control matrix within your workspace (folders, notebooks etc.) and also across all your resources that the workspace interacts with (storage, related data stores like Azure SQL DB, Azure SQL DW etc.). This type of division scheme is also known as the [Business Unit Subscription](https://docs.microsoft.com/en-us/azure/architecture/cloud-adoption/appendix/azure-scaffold?wt.mc_id=itshowcase-codeapps#departments-and-accounts) design pattern and it aligns well with the Databricks chargeback model.
 
 
-
-![Figure 3: Business Unit Subscription Design Pattern]
 <p align="left">
     <img width="400" height="300" src="https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure2.PNG">
 </p>
@@ -202,7 +176,6 @@ While you can deploy more than one Workspace in a VNet by keeping the associated
 
 More information: [Azure Virtual Datacenter: a network perspective](https://docs.microsoft.com/en-us/azure/architecture/vdc/networking-virtual-datacenter#topology)
 
-![Figure 4: Hub and Spoke Model]
 <p align="left">
     <img width="400" height="300" src="https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure4.PNG">
 </p>
@@ -399,6 +372,10 @@ Performing these steps will help you to arrive at a baseline cluster size which 
 *Impact: High*
 
 A shuffle occurs when we need to move data from one node to another in order to complete a stage. Depending on the type of transformation you are doing you may cause a shuffle to occur. This happens when all the executors require seeing all of the data in order to accurately perform the action. If the Job requires a wide transformation, you can expect the job to execute slower because all of the partitions need to be shuffled around in order to complete the job. Eg: Group by, Distinct.
+
+<p align="left">
+    <img width="400" height="300" src="https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure7.PNG">
+</p>
 
 ![Figure 7: Ephemeral Job cluster](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure7.PNG "Figure 7: Ephemeral Job cluster")
 
