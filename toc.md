@@ -15,7 +15,7 @@ Created by:
 # Table of Contents
 
 - [Introduction](#Introduction)
-- [Scalable ADB Deployments: Guidelines for Networking, Security, and Capacity Planning](#scalable-ADB-Deployments:-Guidelines-for-Networking,-Security,-and-Capacity-Planning)
+- [Scalable ADB Deployments: Guidelines for Networking, Security, and Capacity Planning](#scalable-ADB-Deployments-Guidelines-for-Networking-Security-and-Capacity-Planning)
   * [Azure Databricks 101](#Azure-Databricks-101)
   * [Map Workspaces to Business Units](#Map-Workspaces-to-Business-Divisions)
   * [Deploy Workspaces in Multiple Subscriptions to Honor Azure Capacity Limits](#Deploy-Workspaces-in-Multiple-Subscriptions-to-Honor-Azure-Capacity-Limits)
@@ -25,7 +25,7 @@ Created by:
   * [Select the Largest Vnet CIDR](#Select-the-Largest-Vnet-CIDR)
   * [Do not Store any Production Data in Default DBFS Folders](#Do-not-Store-any-Production-Data-in-Default-DBFS-Folders)
   * [Always-Hide-Secrets-in-a-Key-Vault](#Always-Hide-Secrets-in-a-Key-Vault)
-- [Deploying Applications on ADB: Guidelines for Selecting, Sizing, and Optimizing Clusters Performance](#Deploying-Applications-on-ADB:-Guidelines-for-Selecting,-Sizing,-and-Optimizing-Clusters-Performance)
+- [Deploying Applications on ADB: Guidelines for Selecting, Sizing, and Optimizing Clusters Performance](#Deploying-Applications-on-ADB-Guidelines-for-Selecting-Sizing-and-Optimizing-Clusters-Performance)
   * [Support Interactive analytics using Shared High Concurrency Clusters](#support-interactive-analytics-using-shared-high-concurrency-clusters)
    * [Support Batch ETL Workloads with Single User Ephemeral Standard Clusters](#support-batch-etl-workloads-with-single-user-ephemeral-standard-clusters)
    * [Favor Cluster Scoped Init scripts over Global and Named scripts](#favor-cluster-scoped-init-scripts-over-global-and-named-scripts)
@@ -34,7 +34,7 @@ Created by:
    * [Arrive at Correct Cluster Size by Iterative Performance Testing](#Arrive-at-correct-cluster-size-by-iterative-performance-testing)
    * [Tune Shuffle for Optimal Performance](#Tune-shuffle-for-optimal-performance)
    * [Partition Your Data](#partition-your-data)
-- [Running ADB Applications Smoothly: Guidelines on Observability and Monitoring](#Running-ADB-Applications-Smoothly:-Guidelines-on-Observability-and-Monitoring)
+- [Running ADB Applications Smoothly: Guidelines on Observability and Monitoring](#Running-ADB-Applications-Smoothly-Guidelines-on-Observability-and-Monitoring)
   * [Collect resource utilization metrics across Azure Databricks cluster in a Log Analytics workspace](#Collect-resource-utilization-metrics-across-Azure-Databricks-cluster-in-a-Log-Analytics-workspace)
    + [Querying VM metrics in Log Analytics once you have started the collection using the above document](#Querying-VM-metrics-in-log-analytics-once-you-have-started-the-collection-using-the-above-document)
 - [Appendix A](#Appendix-A)
