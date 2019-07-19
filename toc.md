@@ -15,7 +15,7 @@ Created by:
 # Table of Contents
 
 - [Introduction](#Introduction)
-- [Scalable ADB Deployments: Guidelines for Networking, Security, and Capacity Planning](#Scalable-ADB-Deployments:-Guidelines-for-Networking,-Security,-and-Capacity-Planning)
+- [Scalable ADB Deployments: Guidelines for Networking, Security, and Capacity Planning](#scalable-ADB-Deployments:-Guidelines-for-Networking,-Security,-and-Capacity-Planning)
   * [Azure Databricks 101](#Azure-Databricks-101)
   * [Map Workspaces to Business Units](#Map-Workspaces-to-Business-Divisions)
   * [Deploy Workspaces in Multiple Subscriptions to Honor Azure Capacity Limits](#Deploy-Workspaces-in-Multiple-Subscriptions-to-Honor-Azure-Capacity-Limits)
@@ -77,6 +77,8 @@ This short guide summarizes these patterns into prescriptive and actionable best
 The audience of this guide are system architects, field engineers, and development teams of customers, Microsoft, and Databricks. Since the Azure Databricks product goes through fast iteration cycles, we have avoided recommendations based on roadmap or Private Preview features.
 
 Our recommendations should apply to a typical Fortune 500 enterprise with at least intermediate level of Azure and Databricks knowledge. We've also classified each recommendation according to its likely impact on solution's quality attributes. Using the **Impact** factor, you can weigh the recommendation against other competing choices. Example: if the impact is classified as “Very High”, the implications of not adopting the best practice can have a significant impact on your deployment.
+
+**Important Note**: This guide is intended to be used with the detailed [Azure Databricks Documentation](https://docs.azuredatabricks.net/index.html)
 
 ## Scalable ADB Deployments: Guidelines for Networking, Security, and Capacity Planning
 
@@ -332,10 +334,10 @@ You should treat Init scripts with *extreme* caution because they can easily lea
   1. ADB executes the script’s body in each cluster node. Thus, a successful cluster launch and subsequent operation is predicated on all nodal init scripts executing in a timely manner without any errors and reporting a zero exit code. This process is highly error prone, especially for scripts downloading artifacts from an external service over unreliable and/or misconfigured networks.
   2. Because Global and Cluster Named init scripts execute automatically due to their placement in a special DBFS location, it is easy to overlook that they could be causing a cluster to not launch. By specifying the Init script in the Configuration, there’s a higher chance that you’ll consider them while debugging launch failures.
  
- ## Use Cluster Log Delivery Feature to Send Logs to Your Own Blob Store Instead of Default DBFS 
+ ## Use Cluster Log Delivery Feature to Manage Logs 
 *Impact: Medium*
 
-By default, Cluster logs are sent to default DBFS but you should consider sending the logs to a blob store location under your control using the Cluster Log delivery feature. The Cluster Logs contain logs emitted by user code, as well as Spark framework’s Driver and Executor logs. Sending them to a blob store controlled by yourself is recommended over default DBFS location because:
+By default, Cluster logs are sent to default DBFS but you should consider sending the logs to a blob store location under your control using the [Cluster Log Delivery](https://docs.azuredatabricks.net/user-guide/clusters/log-delivery.html#cluster-log-delivery) feature. The Cluster Logs contain logs emitted by user code, as well as Spark framework’s Driver and Executor logs. Sending them to a blob store controlled by yourself is recommended over default DBFS location because:
   1. ADB’s automatic 30-day default DBFS log purging policy might be too short for certain compliance scenarios. A blob store loction in your subscription will be free from such policies.
   2. You can ship logs to other tools only if they are present in your storage account and a resource group governed by you. The root DBFS, although present in your subscription, is launched inside a Microsoft Azure managed resource group and is protected by a read lock. Because of this lock the logs are only accessible by privileged Azure Databricks framework code. However, constructing a pipeline to ship the logs to downstream log analytics tools requires logs to be in a lock-free location first.
 
