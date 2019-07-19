@@ -3,7 +3,7 @@
 
                      
 <p align="center">
-    <img width="250" height="150" src="https://github.com/Azure/AzureDatabricksBestPractices/blob/master/ADBicon.jpg">
+    <img width="500" height="300" src="https://github.com/Azure/AzureDatabricksBestPractices/blob/master/ADBicon.jpg">
 </p>
 
 # Azure Databricks Best Practices
@@ -15,26 +15,26 @@ Created by:
 # Table of Contents
 
 - [Introduction](#Introduction)
-- [Scalable ADB Deployments: Guidelines for Networking, Security, and Capacity Planning](#Provisioning-ADB-Guidelines-for-Networking-and-Security)
+- [Scalable ADB Deployments: Guidelines for Networking, Security, and Capacity Planning](#Scalable-ADB-Deployments:-Guidelines-for-Networking,-Security,-and-Capacity-Planning)
   * [Azure Databricks 101](#Azure-Databricks-101)
-  * [Map Workspaces to Business Units](#Map-Workspaces-To-Business-Units)
-  * [Deploy Workspaces in Multiple Subscriptions](#Deploy-Workspaces-in-Multiple-Subscriptions)
+  * [Map Workspaces to Business Units](#Map-Workspaces-to-Business-Divisions)
+  * [Deploy Workspaces in Multiple Subscriptions to Honor Azure Capacity Limits](#Deploy-Workspaces-in-Multiple-Subscriptions-to-Honor-Azure-Capacity-Limits)
     + [ADB Workspace Limits](#ADB-Workspace-Limits)
-    + [Azure Subscription Limits](#azure-subscription-limits)
+    + [Azure Subscription Limits](#Azure-Subscription-Limits)
   * [Consider Isolating Each Workspace in its own VNet](#Consider-Isolating-Each-Workspace-in-its-own-VNet)
-  * [Select the largest CIDR possible for a VNet](#Select-the-largest-CIDR-possible-for-a-VNet)
-  * [Do not store any production data in default DBFS folders](#Do-not-store-any-production-data-in-default-DBFS-folders)
-  * [Always hide secrets in Key Vault and do not expose them openly in Notebooks](#always-hide-secrets-in-a-key-vault-and-do-not-expose-them-openly-in-notebooks)
-- [Deploying Applications on ADB: Guidelines for Selecting, Sizing, and Optimizing Clusters Performance](#Developing-applications-on-ADB-Guidelines-for-selecting-clusters)
-  * [Support Interactive analytics using shared High Concurrency clusters](#support-interactive-analytics-using-shared-high-concurrency-clusters)
-   * [Support Batch ETL workloads with single user ephemeral Standard clusters](#support-batch-etl-workloads-with-single-user-ephemeral-standard-clusters)
+  * [Select the Largest Vnet CIDR](#Select-the-Largest-Vnet-CIDR)
+  * [Do not Store any Production Data in Default DBFS Folders](#Do-not-Store-any-Production-Data-in-Default-DBFS-Folders)
+  * [Always-Hide-Secrets-in-a-Key-Vault](#Always-Hide-Secrets-in-a-Key-Vault)
+- [Deploying Applications on ADB: Guidelines for Selecting, Sizing, and Optimizing Clusters Performance](#Deploying-Applications-on-ADB:-Guidelines-for-Selecting,-Sizing,-and-Optimizing-Clusters-Performance)
+  * [Support Interactive analytics using Shared High Concurrency Clusters](#support-interactive-analytics-using-shared-high-concurrency-clusters)
+   * [Support Batch ETL Workloads with Single User Ephemeral Standard Clusters](#support-batch-etl-workloads-with-single-user-ephemeral-standard-clusters)
    * [Favor Cluster Scoped Init scripts over Global and Named scripts](#favor-cluster-scoped-init-scripts-over-global-and-named-scripts)
-   * [Send logs to blob store instead of default DBFS using Cluster Log delivery](#send-logs-to-blob-store-instead-of-default-DBFS-using-Cluster-Log-delivery)
-   * [Choose cluster VMs to match workload class](#Choose-cluster-VMs-to-match-workload-class)
-   * [Arrive at correct cluster size by iterative performance testing](#Arrive-at-correct-cluster-size-by-iterative-performance-testing)
-   * [Tune shuffle for optimal performance](#Tune-shuffle-for-optimal-performance)
+   * [Use Cluster Log Delivery Feature to Manage Logs](#Use-Cluster-Log-Delivery-Feature-to-Manage-Logs)
+   * [Choose VMs to Match Workload](#Choose-VMs-to-Match-Workload)
+   * [Arrive at Correct Cluster Size by Iterative Performance Testing](#Arrive-at-correct-cluster-size-by-iterative-performance-testing)
+   * [Tune Shuffle for Optimal Performance](#Tune-shuffle-for-optimal-performance)
    * [Partition Your Data](#partition-your-data)
-- [Running ADB Applications Smoothly: Guidelines on Observability and Monitoring](#Monitoring)
+- [Running ADB Applications Smoothly: Guidelines on Observability and Monitoring](#Running-ADB-Applications-Smoothly:-Guidelines-on-Observability-and-Monitoring)
   * [Collect resource utilization metrics across Azure Databricks cluster in a Log Analytics workspace](#Collect-resource-utilization-metrics-across-Azure-Databricks-cluster-in-a-Log-Analytics-workspace)
    + [Querying VM metrics in Log Analytics once you have started the collection using the above document](#Querying-VM-metrics-in-log-analytics-once-you-have-started-the-collection-using-the-above-document)
 - [Appendix A](#Appendix-A)
@@ -76,11 +76,11 @@ Created by:
 
 <!-- toc -->
 
-___________
 
 > ***"A designer knows he has achieved perfection not when there is nothing left to add, but when there is nothing left to take away."***
+Antoine de Saint-Exupéry
 
-____________
+
 
 ## Introduction
 
@@ -126,9 +126,14 @@ Azure Databricks comes with its own user management interface. You can create us
 
 The first user to login and initialize the workspace is the workspace ***owner***, and they are automatically assigned to the Databricks admin group. This person can invite other users to the workspace, add them as admins, create groups, etc. The ADB logged in user’s identity is provided by AAD, and shows up under the user menu in Workspace:
 
-![Figure 1: Databricks user menu](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure1.PNG "Figure 1: Databricks user menu")
+![Figure 1: Databricks user menu]
+<p align="left">
+    <img width="158.5" height="138" src="https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure1.PNG">
+</p>
+
 
 *Figure 1: Databricks user menu*
+
 
   <!--
                      *Figure 1: Databricks user menu*
@@ -150,7 +155,11 @@ Multiple clusters can exist within a workspace, hence there’s a one-to-many ma
 How many workspaces do you need to deploy? The answer to this question depends a lot on your organization’s structure. We recommend that you assign workspaces based on a related group of people working together collaboratively. This also helps in streamlining your access control matrix within your workspace (folders, notebooks etc.) and also across all your resources that the workspace interacts with (storage, related data stores like Azure SQL DB, Azure SQL DW etc.). This type of division scheme is also known as the [Business Unit Subscription](https://docs.microsoft.com/en-us/azure/architecture/cloud-adoption/appendix/azure-scaffold?wt.mc_id=itshowcase-codeapps#departments-and-accounts) design pattern and it aligns well with the Databricks chargeback model.
 
 
-![Figure 3: Business Unit Subscription Design Pattern](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure2.PNG "Figure 2: Business Unit Subscription Design Pattern")
+
+![Figure 3: Business Unit Subscription Design Pattern]
+<p align="left">
+    <img width="400" height="300" src="https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure2.PNG">
+</p>
 
 *Figure 3: Business Unit Subscription Design Pattern*
 
@@ -169,36 +178,39 @@ Key workspace limits are:
   * There can be a maximum of **150 notebooks or execution contexts** attached to a cluster    
 
 ### Azure Subscription Limits
-Next, there are [Azure limits](https://docs.microsoft.com/en-us/azure/azure-subscription-service-limits) to consider since ADB deployments are built on top of the Azure infrastructure.
+Next, there are [Azure limits](https://docs.microsoft.com/en-us/azure/azure-subscription-service-limits) to consider since ADB deployments are built on top of the Azure infrastructure. 
 
 Key Azure limits are:
+  * Maximum number of resources of any type per resource group: **800**. This limit constrains the maximum number of VMs available per workspace to 400 because each Databricks node needs 2 NICs for security reasons.
   * Storage accounts per region per subscription: **250**
   * Maximum egress for general-purpose v2 and Blob storage accounts (all regions): **50 Gbps**
   * VMs per subscription per region: **25,000**
   * Resource groups per subscription: **980**
 
 
-These limits are at a point in time and might change going forward. For more information and help in understanding these limits, please contact Microsoft or Databricks technical architects.
-
-# Note:
+These limits are at this point in time and might change going forward. Some of them can also be increased if needed. For more help in understanding the impact of these limits or options of increasing them, please contact Microsoft or Databricks technical architects.
 
 > ***Due to scalability reasons, we highly recommend separating the production and dev/stage environments into separate subscriptions.***
 
 ## Consider Isolating Each Workspace in its own VNet
 *Impact: Low*
 
-While you can deploy more than one Workspace in a VNet by keeping the subnet pairs separate, we recommend that you follow [hub and spoke model](https://en.wikipedia.org/wiki/Spoke%E2%80%93hub_distribution_paradigm), place each workspace in its own spoke VNet, place all the common networking resources in a central hub Vnet, and join the spokes with the central hub using [Vnet Peering](https://docs.azuredatabricks.net/administration-guide/cloud-configurations/azure/vnet-peering.html)
+While you can deploy more than one Workspace in a VNet by keeping the associated subnet pairs separate from other workspaces, we recommend that you should only deploy one workspace in any Vnet. Doing this perfectly aligns with the ADB's Workspace level isolation model. Most often organizations consider putting multiple workspaces in the same Vnet so that they all can share some common networking resource, like DNS, also placed in the same Vnet because the private address space in a vnet is shared by all resources. You can easily achieve the same while keeping the Workspaces separate by following the [hub and spoke model](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke) and using Vnet Peering to extend the private IP space of the workspace Vnet. Here are the steps: 
+1. Deploy each Workspace in its own spoke VNet.
+2. Put all the common networking resources in a central hub Vnet, such as your custom DNS server.  
+3. Join the Workspace spokes with the central networking hub using [Vnet Peering](https://docs.azuredatabricks.net/administration-guide/cloud-configurations/azure/vnet-peering.html)
 
 More information: [Azure Virtual Datacenter: a network perspective](https://docs.microsoft.com/en-us/azure/architecture/vdc/networking-virtual-datacenter#topology)
 
-![Figure 4: Hub and Spoke Model](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure4.PNG "Figure 4: Hub and Spoke Model")
+![Figure 4: Hub and Spoke Model]
+<p align="left">
+    <img width="400" height="300" src="https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure4.PNG">
+</p>
 
 *Figure 4: Hub and Spoke Model*
 
-## Select the Largest CIDR Possible for a Workspace VNet
+## Select the Largest Vnet CIDR
 *Impact: Very High*
-
-# Note:
 
 > ***This recommendation only applies if you're using the Bring Your Own Vnet feature.***
 
@@ -230,9 +242,6 @@ This recommendation is driven by security and data availability concerns. Every 
 1. The lifecycle of default DBFS is tied to the Workspace. Deleting the workspace will also delete the default DBFS and permanently remove its contentents.
 2. One can't restrict access to this default folder and its contents.
 
-
-# Note:
-
 > ***This recommendation doesn't apply to Blob or ADLS folders explicitly mounted as DBFS by the end user*** 
 
 **More Information:**
@@ -256,6 +265,10 @@ If using Azure Key Vault, create separate AKV-backed secret scopes and correspon
 [Best practices for creating secret scopes](https://docs.azuredatabricks.net/user-guide/secrets/secret-acl.html)
 
 # Deploying Applications on ADB: Guidelines for Selecting, Sizing, and Optimizing Clusters Performance
+
+> ***"Any organization that designs a system will inevitably produce a design whose structure is a copy of the organization's communication structure."***
+Mead Conway
+
 
 After understanding how to provision the workspaces, best practices in networking, etc., let’s put on the developer’s hat and see the design choices typically faced by them:
 
@@ -287,13 +300,9 @@ When it comes to taxonomy, ADB clusters are divided along the notions of “type
 There are three steps for supporting Interactive workloads on ADB:
  1. Deploy a shared cluster instead of letting each user create their own cluster.
  2. Create the shared cluster in High Concurrency mode instead of Standard mode.
- 3. Configure security on the shared High Concurrency cluster, using one of the following options:
+ 3. Configure security on the shared High Concurrency cluster, using **one** of the following options:
      * Turn on [AAD Credential Passthrough](https://docs.azuredatabricks.net/administration-guide/cloud-configurations/azure/credential-passthrough.html#enabling-azure-ad-credential-passthrough-to-adls) if you’re using ADLS
      * Turn on Table Access Control for all other stores
-
-# Note:
-
-> ***If you’re using ADLS, we currently recommend that you select either Table Access Control or AAD Credential Passthrough. Do not combine them together.*** 
 
 To understand why, let’s quickly see how interactive workloads are different from batch workloads:
 
@@ -308,6 +317,7 @@ Because of these differences, supporting Interactive workloads entails minimizin
   
   3. **Security:** Table Access control feature is only available in High Concurrency mode and needs to be turned on so that users can limit access to their database objects (tables, views, functions...) created on the shared cluster. In case of ADLS, we recommend restricting access using the AAD Credential Passthrough feature instead of Table Access Controls.
 
+> ***If you’re using ADLS, we recommend AAD Credential Passthrough instead of Table Access Control for easy manageability.*** 
 
 ![Figure 5: Interactive clusters](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure5.PNG "Figure 5: Interactive clusters")
 
@@ -340,8 +350,8 @@ costlier and less secure alternative. To fix this, ADB is coming out with a new 
 
 [Init Scripts](https://docs.azuredatabricks.net/user-guide/clusters/init-scripts.html) provide a way to configure cluster’s nodes and can be used in the following modes:
 
-  1. **Global:** by placing the init script in /databricks/init folder, you force the script’s execution every time any cluster is created or restarted by users of the workspace.
-  2. **Cluster Named (deprecated):** you can limit the init script to run only on for a specific cluster’s creation and restarts by placing it in /databricks/init/<cluster_name> folder.
+  1. **Global:** by placing the init script in `/databricks/init` folder, you force the script’s execution every time any cluster is created or restarted by users of the workspace.
+  2. **Cluster Named (deprecated):** you can limit the init script to run only on for a specific cluster’s creation and restarts by placing it in `/databricks/init/<cluster_name>` folder.
   3. **Cluster Scoped:** in this mode the init script is not tied to any cluster by its name and its automatic execution is not a virtue of its dbfs location. Rather, you specify the script in cluster’s configuration by either writing it directly in the cluster configuration UI or storing it on DBFS and specifying the path in [Cluster Create API](https://docs.azuredatabricks.net/user-guide/clusters/init-scripts.html#cluster-scoped-init-script). Any location under DBFS `/databricks` folder except `/databricks/init` can be used for this purpose, such as: `/databricks/<my-directory>/set-env-var.sh`
  
 You should treat Init scripts with *extreme* caution because they can easily lead to intractable cluster launch failures. If you really need them, please use the Cluster Scoped execution mode as much as possible because:
@@ -374,18 +384,15 @@ used → extrapolate that to the rest of the data.
 
 It is impossible to predict the correct cluster size without developing the application because Spark and Azure Databricks use numerous techniques to improve cluster utilization. The broad approach you should follow for sizing is:
 
-  1. Develop on a medium sized cluster of 2-8 nodes, with VMs matched to workload class as explained earlier.
-  
-  2. After meeting functional requirements, run end to end test on larger representative data while measuring CPU, memory and I/O used by the cluster at an aggregate level.
-  
-  3. Optimize cluster to remove bottlenecks found in step 2:
-         a. CPU bound: add more cores by adding more nodes
-         b. Network bound: use fewer, bigger SSD backed machines to reduce             network size and improve remote read performance
-         c. Disk I/O bound: if jobs are spilling to disk, use VMs with                 more memory.
-         
-   4. Repeat steps 2 and 3 by adding nodes and/or evaluating different VMs until all obvious bottlenecks have been addressed.
-   
-   
+1. Develop on a medium sized cluster of 2-8 nodes, with VMs matched to workload class as explained earlier.
+2. After meeting functional requirements, run end to end test on larger representative data while measuring CPU, memory and I/O used by the cluster at an aggregate level.
+3. Optimize cluster to remove bottlenecks found in step 2
+    - **CPU bound**: add more cores by adding more nodes
+    - **Network bound**: use fewer, bigger SSD backed machines to reduce network size and improve remote read performance
+    - **Disk I/O bound**: if jobs are spilling to disk, use VMs with more memory.
+
+Repeat steps 2 and 3 by adding nodes and/or evaluating different VMs until all obvious bottlenecks have been addressed. 
+
 Performing these steps will help you to arrive at a baseline cluster size which can meet SLA on a subset of data. In theory, Spark jobs, like jobs on other Data Intensive frameworks (Hadoop) exhibit linear scaling. For example, if it takes 5 nodes to meet SLA on a 100TB dataset, and the production data is around 1PB, then prod cluster is likely going to be around 50 nodes in size. You can use this back of the envelope calculation as a first guess to do capacity planning. However, there are scenarios where Spark jobs don’t scale linearly. In some cases this is due to large amounts of shuffle adding an exponential synchronization cost (explained next), but there could be other reasons as well. Hence, to refine the first estimate and arrive at a more accurate node count we recommend repeating this process 3-4 times on increasingly larger data set sizes, say 5%, 10%, 15%, 30%, etc. The overall accuracy of the process depends on how closely the test data matches the live workload both in type and size.
 
 ## Tune Shuffle for Optimal Performance
@@ -418,6 +425,9 @@ on a date field but you should choose your partitioning field based on the predi
    
 
 # Running ADB Applications Smoothly: Guidelines on Observability and Monitoring
+
+> ***“Every program attempts to expand until it can read mail. Those programs which cannot so expand are replaced by ones which can.”***
+Jamie Zawinski
 
 By now we have covered planning for ADB deployments, provisioning Workspaces, selecting clusters, and deploying your applications on them. Now, let's talk about how to to monitor your Azure Databricks apps. These apps are rarely executed in isolation and need to be monitored
 along with a set of other services. Monitoring falls into four broad areas:
