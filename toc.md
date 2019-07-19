@@ -377,8 +377,6 @@ A shuffle occurs when we need to move data from one node to another in order to 
     <img width="400" height="300" src="https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure7.PNG">
 </p>
 
-![Figure 7: Ephemeral Job cluster](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure7.PNG "Figure 7: Ephemeral Job cluster")
-
 *Figure 7: Shuffle vs. no-shuffle*
 
 
