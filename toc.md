@@ -24,7 +24,7 @@ Created by:
   * [Consider Isolating Each Workspace in its own VNet](#Consider-Isolating-Each-Workspace-in-its-own-VNet)
   * [Select the Largest Vnet CIDR](#Select-the-Largest-Vnet-CIDR)
   * [Do not Store any Production Data in Default DBFS Folders](#Do-not-Store-any-Production-Data-in-Default-DBFS-Folders)
-  * [Always-Hide-Secrets-in-a-Key-Vault](#Always-Hide-Secrets-in-a-Key-Vault)
+  * [Always Hide Secrets in a Key Vault](#Always-Hide-Secrets-in-a-Key-Vault)
 - [Deploying Applications on ADB: Guidelines for Selecting, Sizing, and Optimizing Clusters Performance](#Deploying-Applications-on-ADB-Guidelines-for-Selecting-Sizing-and-Optimizing-Clusters-Performance)
   * [Support Interactive analytics using Shared High Concurrency Clusters](#support-interactive-analytics-using-shared-high-concurrency-clusters)
    * [Support Batch ETL Workloads with Single User Ephemeral Standard Clusters](#support-batch-etl-workloads-with-single-user-ephemeral-standard-clusters)
@@ -115,17 +115,17 @@ The first user to login and initialize the workspace is the workspace ***owner**
 <p align="left">
     <img width="158.5" height="138" src="https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure1.PNG">
 </p>
-*Figure 1: Databricks user menu*
+Figure 1: Databricks user menu
 
 
-Multiple clusters can exist within a workspace, and there’s a one-to-many mapping between a Subscription to Workspaces, and further, from one Workspace to multiple Clusters. With this basic understanding let’s discuss how to plan a typical ADB deployment. We first grapple with the issue of how to divide workspaces and assign them to users and teams.
-  
+Multiple clusters can exist within a workspace, and there’s a one-to-many mapping between a Subscription to Workspaces, and further, from one Workspace to multiple Clusters. 
 
 ![Figure 2: Azure Databricks Isolation Domains Workspace](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure3.PNG "Figure 3: Azure Databricks Isolation Domains Workspace")
 
-*Figure 2: Azure Databricks Isolation Domains Workspace*
+*Figure 2: Relationship Between AAD, Workspace, Resource Groups, and Clusters
 
-With this basic understanding of ADB's terminology and internals, let's dive into the best practices around deployment. 
+With this basic understanding let’s discuss how to plan a typical ADB deployment. We first grapple with the issue of how to divide workspaces and assign them to users and teams.
+  
 
 ## Map Workspaces to Business Divisions
 *Impact: Very High*
