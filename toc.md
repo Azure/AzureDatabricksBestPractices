@@ -157,7 +157,6 @@ Key workspace limits are:
 Next, there are [Azure limits](https://docs.microsoft.com/en-us/azure/azure-subscription-service-limits) to consider since ADB deployments are built on top of the Azure infrastructure. 
 
 Key Azure limits are:
-  * Maximum number of resources of any type per resource group: **800**. This limit constrains the maximum number of VMs available per workspace to 400 because each Databricks node needs 2 NICs for security reasons.
   * Storage accounts per region per subscription: **250**
   * Maximum egress for general-purpose v2 and Blob storage accounts (all regions): **50 Gbps**
   * VMs per subscription per region: **25,000**
