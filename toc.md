@@ -476,7 +476,7 @@ The other VNet is fully disconnected and is not routable to the rest of the envi
 * Azure Data Factory (ADF) is deployed on this routable VNet
     * Azure Data Factory components require a compute infrastructure to run on and this is referred to as Integration Runtime. In the mentioned scenario, moving data from on-premises data sources to Azure Data Services (accessible via Private Endpoint), it is required a Self-Hosted Integration Runtime.
     * The Self-Hosted Integration Runtime needs to be installed on an Azure Virtual Machine inside the routable VNET in order to allow Azure Data Factory to communicate with the source data and destination data.
-    * Considering this, Azure Data Factory only requires 1 IP address (and maximum up to 4 IP addresses) in the VNet (via the integration runtime).
+    * Considering this, Azure Data Factory only requires 1 IP address (and maximum up to 4 IP addresses) in the VNet (via the integration runtime). 
 
 
 
