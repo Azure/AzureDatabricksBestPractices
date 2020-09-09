@@ -448,10 +448,13 @@ As the smallest Azure Databricks deployment requires a /24 VNet, such customers 
 A recommended Azure Databricks implementation, which would ensure minimal RFC1918 addresses are used, while at the same time, would allow the business users to deploy as many Azure Databricks clusters as they want and as small or large as they need them, consist on the following environments within the same Azure subscription as depicted in the picture below:
 
 <p align="center">
-    <img width="500" height="400" src="https://github.com/xigyenge/AzureDatabricksBestPractices/blob/xigyenge-patch-1/Figure8.png">
+    <img width="900" height="400" src="https://github.com/xigyenge/AzureDatabricksBestPractices/blob/xigyenge-patch-1/Figure8.png">
+
 </p>
 
-*Figure8: Environments Diagram*
+
+  *Figure 8: Network Topology*
+
 
 As the diagram depicts, the business application subscription where Azure Databricks will be deployed, has two VNets, one that is routable to on-premises and the rest of the Azure environment (this can be a small VNet such as /26), and includes the following Azure data resources: Azure Data Factory and ADLS Gen2 (via Private Endpoint). 
 > ***Note: While we use Azure Data Factory on this implementation, any other service that can perform similar functionality could be used.***
@@ -491,8 +494,8 @@ The other VNet is fully disconnected and is not routable to the rest of the envi
 * Azure Firewall (or another network security NVA) is deployed on this disconnected VNet to secure internet outbound traffic.
 * NSGs are used to lockdown traffic across subnets.
 * 2x Private Endpoints are created on this disconnected VNet to make the ADLS Gen2 storage accessible for the Databricks cluster:
-    * 1x private endpoint having the target sub-resource blob
-    * 1x private endpoint having the target sub-resource dfs
+    * 1x private endpoint having the target sub-resource *blob*
+    * 1x private endpoint having the target sub-resource *dfs*
 * Databricks integrates with ADLS Gen2 storage for data ingestion
 
 
