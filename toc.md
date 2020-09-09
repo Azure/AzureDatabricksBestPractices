@@ -448,7 +448,7 @@ As the smallest Azure Databricks deployment requires a /24 VNet, such customers 
 A recommended Azure Databricks implementation, which would ensure minimal RFC1918 addresses are used, while at the same time, would allow the business users to deploy as many Azure Databricks clusters as they want and as small or large as they need them, consist on the following environments within the same Azure subscription as depicted in the picture below:
 
 <p align="center">
-    <img width="900" height="400" src="https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure8.PNG">
+    <img width="900" height="400" src="https://github.com/xigyenge/AzureDatabricksBestPractices/blob/xigyenge-patch-1/Figure8.png">
 
 </p>
 
