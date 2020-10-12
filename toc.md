@@ -210,6 +210,69 @@ With this info, we can quickly arrive at the table below, showing how many nodes
     
 ![Table 1: CIDR ranges](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Table1.PNG "Table 1: CIDR ranges")
 
+# Azure Databricks Deployment with limited private IP addresses 
+*Impact: High*
+
+Many multi-national enterprise organizations are building platforms in Azure, based on the hub and spoke network architecture, which is a model that maps to the recommended Azure Databricks deployments, which is to deploy only one workspace in any VNet by implementing the hub and spoke network architecture. Workspaces are deployed on the spokes, while shared networking and security resources such as ExpressRoute connectivity or DNS infrastructure is deployed in the hub.
+Customer who have exhausted (or are near to exhaust) RFC1918 IP address ranges, have to optimize address space for spoke VNets, and may only be able to provide small VNets for most cases (/25 or smaller), and only in exceptional cases they may provide a larger VNet (such as a /24).
+
+As the smallest Azure Databricks deployment requires a /24 VNet, such customers require an alternative solution, so that the business can deploy one or multiple Azure Databricks clusters across multiple VNets (as required by the business), but also, they should be able to create larger clusters, which would require larger VNet address space. 
+
+A recommended Azure Databricks implementation, which would ensure minimal RFC1918 addresses are used, while at the same time, would allow the business users to deploy as many Azure Databricks clusters as they want and as small or large as they need them, consist on the following environments within the same Azure subscription as depicted in the picture below:
+
+<p align="center">
+    <img width="900" height="400" src="./Figure8.png">
+
+</p>
+
+
+  *Figure 8: Network Topology*
+
+
+As the diagram depicts, the business application subscription where Azure Databricks will be deployed, has two VNets, one that is routable to on-premises and the rest of the Azure environment (this can be a small VNet such as /26), and includes the following Azure data resources: Azure Data Factory and ADLS Gen2 (via Private Endpoint). 
+> ***Note: While we use Azure Data Factory on this implementation, any other service that can perform similar functionality could be used.***
+
+
+
+The other VNet is fully disconnected and is not routable to the rest of the environment, and on this VNet Databricks and optionally Azure Bastion (to be able to perform management via jumpboxes) is deployed, as well as a Private Endpoint to the ADLS Gen2 storage, so that Databricks can retrieve data for ingestion. This setup is described in further details below:
+
+
+
+**Connected (routable environment)**
+* In a business application subscription, deploy a VNet with RFC1918 addresses which is fully routable in Azure and cross-premises via ExpressRoute. This VNet can be a small VNet, such as /26 or /27.
+* This VNet, is connected to a central hub VNet via VNet peering to have connectivity across Azure and on-premises via ExpressRoute or VPN.
+* UDR with default route (0.0.0.0/0) points to a central NVA (for example, Azure Firewall) for internet outbound traffic.
+* NSGs are configured to block inbound traffic from the internet.
+* Azure Data Lake (ADLS) Gen2 is deployed in the business application subscription.
+* A Private Endpoint is created on the VNet to make ADLS Gen 2 storage accessible from on-premises and from Azure VNets via a private IP address.
+* Azure Data Factory will be responsible for the process of moving data from the source locations (other spoke VNets or on-premises) into the ADLS Gen2 store (accessible via Private Endpoint).
+* Azure Data Factory (ADF) is deployed on this routable VNet
+    * Azure Data Factory components require a compute infrastructure to run on and this is referred to as Integration Runtime. In the mentioned scenario, moving data from on-premises data sources to Azure Data Services (accessible via Private Endpoint), it is required a Self-Hosted Integration Runtime.
+    * The Self-Hosted Integration Runtime needs to be installed on an Azure Virtual Machine inside the routable VNET in order to allow Azure Data Factory to communicate with the source data and destination data.
+    * Considering this, Azure Data Factory only requires 1 IP address (and maximum up to 4 IP addresses) in the VNet (via the integration runtime). 
+
+
+
+**Disconnected (non-routable environment)**
+* In the same business application subscription, deploy a VNet with any RFC1918 address space that is desired by the application team (for example, 10.0.0.0/16)
+* This VNet is not going to be connected to the rest of the environment. In other words, this will be a disconnected and fully isolated VNet.
+* This VNet includes 3 required and 3 optional subnets:
+    * 2x of them dedicated exclusively to the Azure Databricks Workspace (private-subnet and public-subnet)
+    * 1x which will be used for the private link to the ADLS Gen2 
+    * (Optional) 1x for Azure Bastion
+    * (Optional) 1x for jumpboxes
+    * (Optional but recommended) 1x for Azure Firewall (or other network security NVA). 
+* Azure Databricks is deployed on this disconnected VNet.
+* Azure Bastion is deployed on this disconnected VNet, to allow Azure Databricks administration via jumpboxes.
+* Azure Firewall (or another network security NVA) is deployed on this disconnected VNet to secure internet outbound traffic.
+* NSGs are used to lockdown traffic across subnets.
+* 2x Private Endpoints are created on this disconnected VNet to make the ADLS Gen2 storage accessible for the Databricks cluster:
+    * 1x private endpoint having the target sub-resource *blob*
+    * 1x private endpoint having the target sub-resource *dfs*
+* Databricks integrates with ADLS Gen2 storage for data ingestion
+
+
+
 ## Do not Store any Production Data in Default DBFS Folders
 *Impact: High*
 
@@ -436,67 +499,6 @@ You can use Log analytics directly to query the Perf data. Here is an example of
 You can also use Grafana to visualize your data from Log Analytics.
 
 
-
-# Azure Databricks Deployment with limited private IP addresses 
-*Impact: High*
-
-Many multi-national enterprise organizations are building platforms in Azure, based on the hub and spoke network architecture, which is a model that maps to the recommended Azure Databricks deployments, which is to deploy only one workspace in any VNet by implementing the hub and spoke network architecture. Workspaces are deployed on the spokes, while shared networking and security resources such as ExpressRoute connectivity or DNS infrastructure is deployed in the hub.
-Customer who have exhausted (or are near to exhaust) RFC1918 IP address ranges, have to optimize address space for spoke VNets, and may only be able to provide small VNets for most cases (/25 or smaller), and only in exceptional cases they may provide a larger VNet (such as a /24).
-
-As the smallest Azure Databricks deployment requires a /24 VNet, such customers require an alternative solution, so that the business can deploy one or multiple Azure Databricks clusters across multiple VNets (as required by the business), but also, they should be able to create larger clusters, which would require larger VNet address space. 
-
-A recommended Azure Databricks implementation, which would ensure minimal RFC1918 addresses are used, while at the same time, would allow the business users to deploy as many Azure Databricks clusters as they want and as small or large as they need them, consist on the following environments within the same Azure subscription as depicted in the picture below:
-
-<p align="center">
-    <img width="900" height="400" src="./Figure8.png">
-
-</p>
-
-
-  *Figure 8: Network Topology*
-
-
-As the diagram depicts, the business application subscription where Azure Databricks will be deployed, has two VNets, one that is routable to on-premises and the rest of the Azure environment (this can be a small VNet such as /26), and includes the following Azure data resources: Azure Data Factory and ADLS Gen2 (via Private Endpoint). 
-> ***Note: While we use Azure Data Factory on this implementation, any other service that can perform similar functionality could be used.***
-
-
-
-The other VNet is fully disconnected and is not routable to the rest of the environment, and on this VNet Databricks and optionally Azure Bastion (to be able to perform management via jumpboxes) is deployed, as well as a Private Endpoint to the ADLS Gen2 storage, so that Databricks can retrieve data for ingestion. This setup is described in further details below:
-
-
-
-**Connected (routable environment)**
-* In a business application subscription, deploy a VNet with RFC1918 addresses which is fully routable in Azure and cross-premises via ExpressRoute. This VNet can be a small VNet, such as /26 or /27.
-* This VNet, is connected to a central hub VNet via VNet peering to have connectivity across Azure and on-premises via ExpressRoute or VPN.
-* UDR with default route (0.0.0.0/0) points to a central NVA (for example, Azure Firewall) for internet outbound traffic.
-* NSGs are configured to block inbound traffic from the internet.
-* Azure Data Lake (ADLS) Gen2 is deployed in the business application subscription.
-* A Private Endpoint is created on the VNet to make ADLS Gen 2 storage accessible from on-premises and from Azure VNets via a private IP address.
-* Azure Data Factory will be responsible for the process of moving data from the source locations (other spoke VNets or on-premises) into the ADLS Gen2 store (accessible via Private Endpoint).
-* Azure Data Factory (ADF) is deployed on this routable VNet
-    * Azure Data Factory components require a compute infrastructure to run on and this is referred to as Integration Runtime. In the mentioned scenario, moving data from on-premises data sources to Azure Data Services (accessible via Private Endpoint), it is required a Self-Hosted Integration Runtime.
-    * The Self-Hosted Integration Runtime needs to be installed on an Azure Virtual Machine inside the routable VNET in order to allow Azure Data Factory to communicate with the source data and destination data.
-    * Considering this, Azure Data Factory only requires 1 IP address (and maximum up to 4 IP addresses) in the VNet (via the integration runtime). 
-
-
-
-**Disconnected (non-routable environment)**
-* In the same business application subscription, deploy a VNet with any RFC1918 address space that is desired by the application team (for example, 10.0.0.0/16)
-* This VNet is not going to be connected to the rest of the environment. In other words, this will be a disconnected and fully isolated VNet.
-* This VNet includes 3 required and 3 optional subnets:
-    * 2x of them dedicated exclusively to the Azure Databricks Workspace (private-subnet and public-subnet)
-    * 1x which will be used for the private link to the ADLS Gen2 
-    * (Optional) 1x for Azure Bastion
-    * (Optional) 1x for jumpboxes
-    * (Optional but recommended) 1x for Azure Firewall (or other network security NVA). 
-* Azure Databricks is deployed on this disconnected VNet.
-* Azure Bastion is deployed on this disconnected VNet, to allow Azure Databricks administration via jumpboxes.
-* Azure Firewall (or another network security NVA) is deployed on this disconnected VNet to secure internet outbound traffic.
-* NSGs are used to lockdown traffic across subnets.
-* 2x Private Endpoints are created on this disconnected VNet to make the ADLS Gen2 storage accessible for the Databricks cluster:
-    * 1x private endpoint having the target sub-resource *blob*
-    * 1x private endpoint having the target sub-resource *dfs*
-* Databricks integrates with ADLS Gen2 storage for data ingestion
 
 
 
