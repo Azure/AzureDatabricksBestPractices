@@ -187,7 +187,7 @@ More information: [Azure Virtual Datacenter: a network perspective](https://docs
 ## Select the Largest Vnet CIDR
 *Impact: Very High*
 
-> ***This recommendation only applies if you're using the Bring Your Own Vnet feature.***
+> ***This recommendation only applies if you're using the Bring Your Own Vnet feature.***  
 
 Recall the each Workspace can have multiple clusters. The total capacity of clusters in each workspace is a function of the masks used for the workspace's enclosing Vnet and the pair of subnets associated with each cluster in the workspace. The masks can be changed if you use the [Bring Your Own Vnet](https://docs.azuredatabricks.net/administration-guide/cloud-configurations/azure/vnet-inject.html#vnet-inject) feature as it gives you more control over the networking layout.  It is important to understand this relationship for accurate capacity planning.   
 
