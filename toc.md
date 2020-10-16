@@ -213,6 +213,9 @@ With this info, we can quickly arrive at the table below, showing how many nodes
 # Azure Databricks Deployment with limited private IP addresses 
 *Impact: High*
 
+Depending where data sources are located, Azure Databricks can be deployed in a connected or disconnected scenario. In a connected scenario, Azure Databricks must be able to reach directly data sources located in Azure VNets or on-premises locations. In a disconnected scenario, data can be copied to a storage platform (such as an Azure Data Lake Storage account), to which Azure Databricks can be connected to using mount points. 
+***This section will cover a scenario to deploy Azure Databricks when there are limited private IP addresses and Azure Databricks can be configured to access data using mount points (disconnected scenario).***
+
 Many multi-national enterprise organizations are building platforms in Azure, based on the hub and spoke network architecture, which is a model that maps to the recommended Azure Databricks deployments, which is to deploy only one workspace in any VNet by implementing the hub and spoke network architecture. Workspaces are deployed on the spokes, while shared networking and security resources such as ExpressRoute connectivity or DNS infrastructure is deployed in the hub.
 Customer who have exhausted (or are near to exhaust) RFC1918 IP address ranges, have to optimize address space for spoke VNets, and may only be able to provide small VNets for most cases (/25 or smaller), and only in exceptional cases they may provide a larger VNet (such as a /24).
 
