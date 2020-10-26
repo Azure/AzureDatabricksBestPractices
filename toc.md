@@ -8,9 +8,10 @@
 
 # Azure Databricks Best Practices
 
-Created by: 
+Authors: 
 * Dhruv Kumar, Senior Solutions Architect, Databricks 
 * Premal Shah, Azure Databricks PM, Microsoft
+* Bhanu Prakash, Azure Databricks PM, Microsoft
 
 Written by: Priya Aswani, WW Data Engineering & AI Technical Lead 
 
