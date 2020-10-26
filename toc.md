@@ -12,6 +12,8 @@ Created by:
 * Dhruv Kumar, Senior Solutions Architect, Databricks 
 * Premal Shah, Azure Databricks PM, Microsoft
 
+Written by: Priya Aswani, WW Data Engineering & AI Technical Lead 
+
 # Table of Contents
 
 - [Introduction](#Introduction)
