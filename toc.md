@@ -638,18 +638,18 @@ The Cost Analysis report is available under Cost Management within Azure Portal.
 
 Below example is aimed at giving a quick start to get you going to do cost analysis for Azure Databricks. Below are the steps:
   
-  1. In Azure Portal, click on Cost Management + Billing
-  2. In Cost Management, click on Cost Analysis Tab 
+  1.  In Azure Portal, click on Cost Management + Billing
+  2.  In Cost Management, click on Cost Analysis Tab 
 
-     ![Cost Management config](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20config.png "Cost Management config")
+      ![Cost Management config](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20config.png "Cost Management config")
 
-  3. Choose the right billing scope that want report for and make sure the user has Cost Management Reader permission for the that scope. 
-  4. Once selected, then you will see cost reports for all the Azure resources at that scope.
-  5. Post that you can create different reports by using the different options on the chart. For example, one of the reports you can create is 
+  3.  Choose the right billing scope that want report for and make sure the user has Cost Management Reader permission for the that scope. 
+  4.  Once selected, then you will see cost reports for all the Azure resources at that scope.
+  5.  Post that you can create different reports by using the different options on the chart. For example, one of the reports you can create is 
    
-   * Chart option as Column (stacked)
-   * Granularity – Daily
-   * Group by – Tag – Choose clustername or clustered
+     * Chart option as Column (stacked)
+     * Granularity – Daily
+     * Group by – Tag – Choose clustername or clustered
 
 You will see something like below where it will show the distribution of cost on a daily basis for different clusters in your subscription or the scope that you chose in Step 3. You also have option to save this report and share it with your team.
 
