@@ -40,7 +40,7 @@ Written by: Priya Aswani, WW Data Engineering & AI Technical Lead
 - [Running ADB Applications Smoothly: Guidelines on Observability and Monitoring](#Running-ADB-Applications-Smoothly-Guidelines-on-Observability-and-Monitoring)
   * [Collect resource utilization metrics across Azure Databricks cluster in a Log Analytics workspace](#Collect-resource-utilization-metrics-across-Azure-Databricks-cluster-in-a-Log-Analytics-workspace)
    + [Querying VM metrics in Log Analytics once you have started the collection using the above document](#Querying-VM-metrics-in-log-analytics-once-you-have-started-the-collection-using-the-above-document)
-- [Cost Management, Chargeback and Analysis](#Cost-Management,-Chargeback-and-Analysis)
+- [Cost Management, Chargeback and Analysis](#Cost-Management-Chargeback-and-Analysis)
 - [Appendix A](#Appendix-A)
   * [Installation for being able to capture VM metrics in Log Analytics](#Installation-for-being-able-to-capture-VM-metrics-in-Log-Analytics)
     + [Overview](#Overview)
