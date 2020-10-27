@@ -641,7 +641,7 @@ Below example is aimed at giving a quick start to get you going to do cost analy
   1. In Azure Portal, click on Cost Management + Billing
   2. In Cost Management, click on Cost Analysis Tab 
 
-   ![Cost Management config](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20config.png "Cost Management config")
+     ![Cost Management config](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20config.png "Cost Management config")
 
   3. Choose the right billing scope that want report for and make sure the user has Cost Management Reader permission for the that scope. 
   4. Once selected, then you will see cost reports for all the Azure resources at that scope.
