@@ -580,12 +580,12 @@ Accordingly, the pricing will be dependent on below components
 4.	Region
 5.	Duration
 
-Example 1: If you run Premium tier cluster for 100 hours in East US 2 with 10 DS13v2 instances, the billing would be the following for All-purpose Compute:
+#### Example 1: If you run Premium tier cluster for 100 hours in East US 2 with 10 DS13v2 instances, the billing would be the following for All-purpose Compute:
  * VM cost for 10 DS13v2 instances —100 hours x 10 instances x $0.598/hour = $598
  * DBU cost for All-purpose Compute workload for 10 DS13v2 instances —100 hours x 10 instances x 2 DBU per node x $0.55/DBU = $1,100
  * The total cost would therefore be $598 (VM Cost) + $1,100 (DBU Cost) = $1,698.
 
-Example 2: If you run Premium tier cluster for 100 hours in East US 2 with 10 DS13v2 instances, the billing would be the following for Jobs Compute workload:
+#### Example 2: If you run Premium tier cluster for 100 hours in East US 2 with 10 DS13v2 instances, the billing would be the following for Jobs Compute workload:
   * VM cost for 10 DS13v2 instances —100 hours x 10 instances x $0.598/hour = $598
   * DBU cost for Jobs Compute workload for 10 DS13v2 instances —100 hours x 10 instances x 2 DBU per node x $0.30/DBU = $600
   * The total cost would therefore be $598 (VM Cost) + $600 (DBU Cost) = $1,198.
@@ -638,17 +638,14 @@ The Cost Analysis report is available under Cost Management within Azure Portal.
 
 Below example is aimed at giving a quick start to get you going to do cost analysis for Azure Databricks. Below are the steps:
   
-  1.In Azure Portal, click on Cost Management + Billing
-  
-  2.In Cost Management, click on Cost Analysis Tab 
+  1. In Azure Portal, click on Cost Management + Billing
+  2. In Cost Management, click on Cost Analysis Tab 
 
 ![Cost Management config](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20config.png "Cost Management config")
 
-  3.Choose the right billing scope that want report for and make sure the user has Cost Management Reader permission for the that scope. 
-  
-  4.Once selected, then you will see cost reports for all the Azure resources at that scope.
-  
-  5.Post that you can create different reports by using the different options on the chart. For example, one of the reports you can create is 
+  3. Choose the right billing scope that want report for and make sure the user has Cost Management Reader permission for the that scope. 
+  4. Once selected, then you will see cost reports for all the Azure resources at that scope.
+  5. Post that you can create different reports by using the different options on the chart. For example, one of the reports you can create is 
    
    * Chart option as Column (stacked)
    * Granularity – Daily
@@ -666,11 +663,9 @@ You also have option to consume this data from CSV or a native Power BI connecto
 
 1. To download this data to CSV, you can set export from Cost Management + Billing -> Usage + Charges and choose Usage Details Version 2 on the right. Refer this for more details. Once downloaded, you can view the cost usage data and filter based on tags to chargeback. In the CSV, you can refer the Meter Name to get the Databricks workload consumed. In addition, this is how the other fields are represented for meters related to Azure Databricks.
 
-  a.Quantity = Number of Virtual Machines x Number of hours x DBU count
-  
-  b.Effective Price = DBU price based on the SKU
-  
-  c.Cost = Quantity x Effective Price
+  * Quantity = Number of Virtual Machines x Number of hours x DBU count
+  * Effective Price = DBU price based on the SKU
+  * Cost = Quantity x Effective Price
   
 ![Cost Management export](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20export.png "Cost Management export")
 
