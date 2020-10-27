@@ -683,10 +683,9 @@ Tip: To filter on tags, you will need to parse the json in Power BI. To do that,
     ![Cost Management config](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20config.png "Cost Management config")
  
 4.	From the menu bar go to "Add column" -> "Add custom column" 
-5.	Name the column and enter the following text in the query 
-= "{"& [Tags] & "}"
+5.	Name the column and enter the following text in the query = "{"& [Tags] & "}"
  
-   ![Cost Management config2](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20config2.jpg "Cost Management config2")
+    ![Cost Management config2](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20config2.jpg "Cost Management config2")
  
 6.	This will create a new column of "tags" in the json format. 
 7.	Now user can transform it as expand it. You can then use the different tags as columns that you can use in a report. 
@@ -694,16 +693,16 @@ Tip: To filter on tags, you will need to parse the json in Power BI. To do that,
 Please see some of the common views created easily using this connector. 
 
 * Cost Report breakdown by Resource Group, Tags, MeterName
-   ![Cost Management report1](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report%201.png "Cost Management report1")
+     ![Cost Management report1](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report%201.png "Cost Management report1")
  
  * Cost Report breakdown by Cluster, and custom tags
-   ![Cost Management report2](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report2.PNG "Cost Management report2")
- 
+    ![Cost Management report2](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report2.PNG "Cost Management report2")
+  
  * Cost Report breakdown by Cluster and Metername in pie chart
-   ![Cost Management report3](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report3.PNG "Cost Management report3")
+    ![Cost Management report3](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report3.PNG "Cost Management report3")
  
  * Cost Report breakdown by with resource group and cluster including quantity
-   ![Cost Management report4](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report4.PNG "Cost Management report4")
+    ![Cost Management report4](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report4.PNG "Cost Management report4")
 
 ### Pricing difference for Regions
 
