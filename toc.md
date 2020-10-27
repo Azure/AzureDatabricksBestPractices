@@ -451,14 +451,12 @@ Azure Databricks Billing:
 First, it is important to understand the different workloads and tiers available with Azure Databricks. Azure Databricks is available in 2 tiers – Standard and Premium. Premium Tier offers additional features on top of what is available in Standard tier. These include Role-based access control for notebooks, jobs, and tables, Audit logs, Azure AD conditional pass-through, conditional authentication and many more. Please refer to https://azure.microsoft.com/en-us/pricing/details/databricks/ for the complete list. 
 
 Both Premium and Standard tier come with 3 types of workload:
-
 1. Jobs Compute (previously called Data Engineering)
 2. Jobs Light Compute (previously called Data Engineering Light)
 3. All-purpose Compute (previously called Data Analytics)
 The Jobs Compute and Jobs Light Compute make it easy for data engineers to build and execute jobs, and All-purpose make it easy for data scientists to explore, visualize, manipulate, and share data and insights interactively. Depending upon the use-case, one can also use All-purpose Compute for data engineering or automated scenarios especially if the incoming job rate is higher. 
 
 When you create an Azure Databricks workspace and spin up a cluster, below resources are consumed: 
-
 1. DBUs – A DBU is a unit of processing capability, billed on a per-second usage
 2. Virtual Machines – These represent your Databricks clusters that run the Databricks Runtime
 3. Public IP Addresses – These represent the IP Addresses consumed by the Virtual Machines when the cluster is running
@@ -467,12 +465,12 @@ When you create an Azure Databricks workspace and spin up a cluster, below resou
 6. Bandwidth – Bandwidth charges for any data transfer
 
 Service/Resource Pricing" 
-DBUs	https://azure.microsoft.com/en-us/pricing/details/databricks/
-VMs	https://azure.microsoft.com/en-us/pricing/details/databricks/
-Public IP Addresses	https://azure.microsoft.com/en-us/pricing/details/ip-addresses/
-Blob Storage	https://azure.microsoft.com/en-us/pricing/details/storage/
-Managed Disk	https://azure.microsoft.com/en-us/pricing/details/managed-disks/
-Bandwidth	https://azure.microsoft.com/en-us/pricing/details/bandwidth/
+* DBUs	https://azure.microsoft.com/en-us/pricing/details/databricks/
+* VMs	https://azure.microsoft.com/en-us/pricing/details/databricks/
+* Public IP Addresses	https://azure.microsoft.com/en-us/pricing/details/ip-addresses/
+* Blob Storage	https://azure.microsoft.com/en-us/pricing/details/storage/
+* Managed Disk	https://azure.microsoft.com/en-us/pricing/details/managed-disks/
+* Bandwidth	https://azure.microsoft.com/en-us/pricing/details/bandwidth/
 
 In addition, if you use additional services as part of your end-2-end solution, such as Azure CosmosDB, or Azure Event Hub, then they are charged per their pricing plan. 
 Per the details in Azure Databricks pricing page, there are 2 options:
@@ -510,13 +508,13 @@ Chargeback scenarios:
 There are 2 broad scenarios we have seen with respect to chargeback internal teams for sharing Databricks resources
 1.	Chargeback across a single Azure Databricks workspace: In this case, a single workspace is shared across multiple teams and user would like to chargeback the individual teams. Individual teams would use their own Databricks cluster and can be charged back at cluster level.
 2.	Chargeback across multiple Databricks workspace: In this case, teams use their own workspace and would like to chargeback at workspace level. 
-To support these scenarios, Azure Databricks leverages Azure Tags so that the users can view the cost/usage for resources with tags. There are default tags that comes with the. Please see below the default tags that are available with the resources:
+To support these scenarios, Azure Databricks leverages Azure Tags so that the users can view the cost/usage for resources with tags. There are default tags that comes with the. 
+
+Please see below the default tags that are available with the resources:
 Resources	Default Tags
 All-purpose Compute	Vendor, Creator, ClusterName, ClusterId
 Jobs Compute/ Jobs Light Compute 	Vendor, Creator, ClusterName, ClusterId, RunName, JobId
-
 Pool	Vendor, DatabricksInstancePoolId,DatabricksInstancePoolCreatorId
-
 Resources created during workspace creation (Storage, Worker VNet, NSG)	
 application, databricks-environment
 
@@ -538,36 +536,31 @@ These tags (default and custom) propagate to Cost Analysis Reports that you can 
 Cost/Usage Analysis
 The Cost Analysis report is available under Cost Management within Azure Portal. Please refer to Cost Management section to get a detailed overview on how to use Cost Management.  
  
-Below example is aimed at giving a quick start to get you going to do cost analysis for Azure Databricks. Below are the steps
+Below example is aimed at giving a quick start to get you going to do cost analysis for Azure Databricks. Below are the steps:
 1.	In Azure Portal, click on Cost Management + Billing
 2.	In Cost Management, click on Cost Analysis Tab 
-
- 
-
 3.	Choose the right billing scope that want report for and make sure the user has Cost Management Reader permission for the that scope. 
 4.	Once selected, then you will see cost reports for all the Azure resources at that scope.
 5.	Post that you can create different reports by using the different options on the chart. For example, one of the reports you can create is 
-a.	Chart option as Column (stacked)
-b.	Granularity – Daily
-c.	Group by – Tag – Choose clustername or clustered
+  a.	Chart option as Column (stacked)
+  b.	Granularity – Daily
+  c.	Group by – Tag – Choose clustername or clustered
+
 You will see something like below where it will show the distribution of cost on a daily basis for different clusters in your subscription or the scope that you chose in Step 3. You also have option to save this report and share it with your team.
  
 To chargeback, you can filter this report by using the tag option. For example, you can use default tag: Creator or can use own custom tag – Cost Center and chargeback based on that. 
  
-You also have option to consume this data from CSV or a native Power BI connector for Cost Management. Please see below
+You also have option to consume this data from CSV or a native Power BI connector for Cost Management. Please see below:
 1.	To download this data to CSV, you can set export from Cost Management + Billing -> Usage + Charges and choose Usage Details Version 2 on the right. Refer this for more details. Once downloaded, you can view the cost usage data and filter based on tags to chargeback. In the CSV, you can refer the Meter Name to get the Databricks workload consumed. In addition, this is how the other fields are represented for meters related to Azure Databricks
-a.	Quantity = Number of Virtual Machines x Number of hours x DBU count
-b.	Effective Price = DBU price based on the SKU
-c.	Cost = Quantity x Effective Price
-
- 
-
+  a.	Quantity = Number of Virtual Machines x Number of hours x DBU count
+  b.	Effective Price = DBU price based on the SKU
+  c.	Cost = Quantity x Effective Price
 2.	There is a native Cost Management Connector in Power BI that allows one to make powerful, customized visualization and cost/usage reports. 
  
 
 Once you connect, you can create various rich reports easily like below by choosing the right fields from the table.
 
-Tip: To filter on tags, you will need to parse the json in Power BI. To do that, follow these steps
+Tip: To filter on tags, you will need to parse the json in Power BI. To do that, follow these steps:
 1.	Go to "Query Editor" 
 2.	Select the "Usage Details" table 
 3.	On the right side the "Properties" tab shows the steps as 
@@ -582,16 +575,18 @@ Tip: To filter on tags, you will need to parse the json in Power BI. To do that,
  
 Please see <here> some of the common views created easily using this connector. 
 
-How Does Cost Management and Report work for Pre-purchase Plan
+
+**How Does Cost Management and Report work for Pre-purchase Plan**
 Following are the key things to note about pre-purchase plan
 1.	Pricing/Discount: Pre-purchase plan for DBUs with discount is available in the pricing page.
 2.	To view the overall consumption for pre-purchase, you can find it in Azure Portal by going to Reservations page. If you have multiple Reservations, you can find all of them in under Reservations in Azure Portal. This will allow one to track to-date usage of different reservations separately. Please see Reservations page on how to access this information from various tools including REST API, PowerShell, and CLI. 
- 
 3.	To get the detailed utilized and reports (like Pay as you go), the same Cost Management section above would apply with few below changes
   a.	Use the field Amortized Cost instead of Actual Cost in Azure Portal 
-  b.	For EA, and Modern customers, the Meter Name would reflect the exact DBU workload and tier in the cost reports. The report would also show the exact tier of reservation – as 1 year or 3 year. One would still need to download the same Usage Details Version 2 report as mentioned here or use the Power BI Cost Management connector. For Web, and Direct customers, the product and meter name would show as Azure Databricks Reservations-DBU and DBU respectively. To identify the workload SKU, you can find the MeterID under “additionalinfo” as consumption meter. 
+  b.	For EA, and Modern customers, the Meter Name would reflect the exact DBU workload and tier in the cost reports. 
+  The report would also show the exact tier of reservation – as 1 year or 3 year. One would still need to download the same Usage Details Version 2 report as mentioned here or use the Power BI Cost Management connector. For Web, and Direct customers, the product and meter name would show as Azure Databricks Reservations-DBU and DBU respectively. To identify the workload SKU, you can find the MeterID under “additionalinfo” as consumption meter. 
 4.	For Web and Direct customers, one can calculate the normalized consumption for DBCUs using the below steps:
   a.	Refer to this table to get the Cost Management Ratio
+
 Key Things to Note:
 1. Cost is shown as 0 for the reservation. That is because the reservation is pre-paid. To calculate cost, one needs to start by looking at "consumedquantity"
 2. meterid changes from the SKU-based IDs, to a reservation specific meterid
@@ -605,14 +600,14 @@ Key Things to Note:
 In this example, the customer uses 334 Premium All Purpose Compute DBUs. To understand how many DBCUs are deducted from the reservation, we need to multiply 334 by the conversion factor ("instance size flexibility ratio) of 1.818 for that particular PAYG SKU. This results in a DBCU SKU of 183 units.
  
 
-Pricing difference for Regions
+**Pricing difference for Regions**
 
 Please refer to Azure Databricks pricing page to get the pricing for DBU SKU and pricing discount based on Reservations. There are certain differences to consider
 1.	The DBU prices are different for Azure public cloud and other regions such as Azure Gov
 2.	The pre-purchase plan prices are different for Azure public cloud and Azure Gov 
 
 
-Known Issues/Limitation
+**Known Issues/Limitations**
 
 1.	Tag change propagation at workspace level takes up to ~1 hour to apply to resources under Managed resource group. 
 2.	Tag change propagation at workspace level requires cluster restart for existing running cluster, or pool expansion
