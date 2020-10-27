@@ -625,7 +625,7 @@ Please see below on how tags propagate for DBUs and VMs
  * DBU Tag = Workspace Tag + Pool Tag + Cluster Tag
  * VM Tag = Workspace Tag + Pool Tag
  
-2.Clusters not from Pools
+2. Clusters not from Pools
  * DBU Tag = Workspace Tag + Cluster Tag
  * VM Tag = Workspace Tag + Cluster Tag 
 
@@ -634,14 +634,14 @@ These tags (default and custom) propagate to [Cost Analysis Reports](https://doc
 ### Cost/Usage Analysis
 The Cost Analysis report is available under Cost Management within Azure Portal. Please refer to [Cost Management](https://docs.microsoft.com/en-us/azure/cost-management-billing/costs/quick-acm-cost-analysis)section to get a detailed overview on how to use Cost Management.  
 
-![Cost Management](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management.png "Cost Management")
+   ![Cost Management](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management.png "Cost Management")
 
 Below example is aimed at giving a quick start to get you going to do cost analysis for Azure Databricks. Below are the steps:
   
   1. In Azure Portal, click on Cost Management + Billing
   2. In Cost Management, click on Cost Analysis Tab 
 
-![Cost Management config](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20config.png "Cost Management config")
+   ![Cost Management config](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20config.png "Cost Management config")
 
   3. Choose the right billing scope that want report for and make sure the user has Cost Management Reader permission for the that scope. 
   4. Once selected, then you will see cost reports for all the Azure resources at that scope.
@@ -653,25 +653,25 @@ Below example is aimed at giving a quick start to get you going to do cost analy
 
 You will see something like below where it will show the distribution of cost on a daily basis for different clusters in your subscription or the scope that you chose in Step 3. You also have option to save this report and share it with your team.
 
-![Cost Management config](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20Report.png "Cost Management report")
+   ![Cost Management config](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20Report.png "Cost Management report")
  
 To chargeback, you can filter this report by using the tag option. For example, you can use default tag: Creator or can use own custom tag – Cost Center and chargeback based on that. 
 
-![Cost Management filter](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20filter.png "Cost Management filter")
+   ![Cost Management filter](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20filter.png "Cost Management filter")
  
 You also have option to consume this data from CSV or a native Power BI connector for Cost Management. Please see below:
 
-1. To download this data to CSV, you can set export from Cost Management + Billing -> Usage + Charges and choose Usage Details Version 2 on the right. Refer this for more details. Once downloaded, you can view the cost usage data and filter based on tags to chargeback. In the CSV, you can refer the Meter Name to get the Databricks workload consumed. In addition, this is how the other fields are represented for meters related to Azure Databricks.
+1. To download this data to CSV, you can set export from Cost Management + Billing -> Usage + Charges and choose Usage Details Version 2 on the right. Refer [this](https://docs.microsoft.com/en-us/azure/cost-management-billing/reservations/understand-reserved-instance-usage-ea#download-the-usage-csv-file-with-new-data) for more details. Once downloaded, you can view the cost usage data and filter based on tags to chargeback. In the CSV, you can refer the Meter Name to get the Databricks workload consumed. In addition, this is how the other fields are represented for meters related to Azure Databricks.
 
-  * Quantity = Number of Virtual Machines x Number of hours x DBU count
-  * Effective Price = DBU price based on the SKU
-  * Cost = Quantity x Effective Price
+   * Quantity = Number of Virtual Machines x Number of hours x DBU count
+   * Effective Price = DBU price based on the SKU
+   * Cost = Quantity x Effective Price
   
-![Cost Management export](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20export.png "Cost Management export")
+    ![Cost Management export](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20export.png "Cost Management export")
 
 2. There is a native [Cost Management Connector](https://docs.microsoft.com/en-us/power-bi/connect-data/desktop-connect-azure-cost-management) in Power BI that allows one to make powerful, customized visualization and cost/usage reports. 
 
-![Cost Management connector](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20connector.png "Cost Management connector")
+    ![Cost Management connector](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20connector.png "Cost Management connector")
   
 Once you connect, you can create various rich reports easily like below by choosing the right fields from the table.
 
@@ -680,13 +680,13 @@ Tip: To filter on tags, you will need to parse the json in Power BI. To do that,
 2.	Select the "Usage Details" table 
 3.	On the right side the "Properties" tab shows the steps as 
 
-![Cost Management config](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20config.png "Cost Management config")
+    ![Cost Management config](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20config.png "Cost Management config")
  
 4.	From the menu bar go to "Add column" -> "Add custom column" 
 5.	Name the column and enter the following text in the query 
 = "{"& [Tags] & "}"
  
- ![Cost Management config2](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20config2.jpg "Cost Management config2")
+   ![Cost Management config2](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20config2.jpg "Cost Management config2")
  
 6.	This will create a new column of "tags" in the json format. 
 7.	Now user can transform it as expand it. You can then use the different tags as columns that you can use in a report. 
@@ -694,16 +694,16 @@ Tip: To filter on tags, you will need to parse the json in Power BI. To do that,
 Please see some of the common views created easily using this connector. 
 
 * Cost Report breakdown by Resource Group, Tags, MeterName
- ![Cost Management report1](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report%201.png "Cost Management report1")
+   ![Cost Management report1](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report%201.png "Cost Management report1")
  
  * Cost Report breakdown by Cluster, and custom tags
- ![Cost Management report2](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report2.PNG "Cost Management report2")
+   ![Cost Management report2](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report2.PNG "Cost Management report2")
  
  * Cost Report breakdown by Cluster and Metername in pie chart
- ![Cost Management report3](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report3.PNG "Cost Management report3")
+   ![Cost Management report3](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report3.PNG "Cost Management report3")
  
  * Cost Report breakdown by with resource group and cluster including quantity
- ![Cost Management report4](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report4.PNG "Cost Management report4")
+   ![Cost Management report4](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report4.PNG "Cost Management report4")
 
 ### Pricing difference for Regions
 
