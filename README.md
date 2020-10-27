@@ -2,10 +2,13 @@
 
 ![Azure Databricks](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/ADBicon.jpg "Azure Databricks")
 
-Created by: 
-Dhruv Kumar, Databricks Senior Solutions Architect 
-and 
+
+Authors:
+Dhruv Kumar, Senior Solutions Architect, Databricks
 Premal Shah, Azure Databricks PM, Microsoft
+Bhanu Prakash, Azure Databricks PM, Microsoft
+
+Written by: Priya Aswani, WW Data Engineering & AI Technical Lead
 
 
 Published: June 22, 2019
