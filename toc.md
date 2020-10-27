@@ -526,11 +526,17 @@ In addition to the default tags, customers can add custom tags to the resources 
 
 Please see below on how tags propagate for DBUs and VMs:
 1.	Clusters created from pools
+
   a.	DBU Tag = Workspace Tag + Pool Tag + Cluster Tag
+  
   b.	VM Tag = Workspace Tag + Pool Tag
+  
 2.	Clusters not from Pools
+
   a.	DBU Tag = Workspace Tag + Cluster Tag
+  
   b.	VM Tag = Workspace Tag + Cluster Tag 
+  
 These tags (default and custom) propagate to Cost Analysis Reports that you can access in the Azure Portal. The below section will explain how to do cost/usage analysis using these tags.
 
 Cost/Usage Analysis
@@ -542,9 +548,13 @@ Below example is aimed at giving a quick start to get you going to do cost analy
 3.	Choose the right billing scope that want report for and make sure the user has Cost Management Reader permission for the that scope. 
 4.	Once selected, then you will see cost reports for all the Azure resources at that scope.
 5.	Post that you can create different reports by using the different options on the chart. For example, one of the reports you can create is 
+
   a.	Chart option as Column (stacked)
+  
   b.	Granularity – Daily
+  
   c.	Group by – Tag – Choose clustername or clustered
+  
 
 You will see something like below where it will show the distribution of cost on a daily basis for different clusters in your subscription or the scope that you chose in Step 3. You also have option to save this report and share it with your team.
  
@@ -552,9 +562,13 @@ To chargeback, you can filter this report by using the tag option. For example, 
  
 You also have option to consume this data from CSV or a native Power BI connector for Cost Management. Please see below:
 1.	To download this data to CSV, you can set export from Cost Management + Billing -> Usage + Charges and choose Usage Details Version 2 on the right. Refer this for more details. Once downloaded, you can view the cost usage data and filter based on tags to chargeback. In the CSV, you can refer the Meter Name to get the Databricks workload consumed. In addition, this is how the other fields are represented for meters related to Azure Databricks
+
    a.	Quantity = Number of Virtual Machines x Number of hours x DBU count
+   
    b.	Effective Price = DBU price based on the SKU
+   
    c.	Cost = Quantity x Effective Price
+   
 2.	There is a native Cost Management Connector in Power BI that allows one to make powerful, customized visualization and cost/usage reports. 
  
 
@@ -581,10 +595,14 @@ Following are the key things to note about pre-purchase plan
 1.	Pricing/Discount: Pre-purchase plan for DBUs with discount is available in the pricing page.
 2.	To view the overall consumption for pre-purchase, you can find it in Azure Portal by going to Reservations page. If you have multiple Reservations, you can find all of them in under Reservations in Azure Portal. This will allow one to track to-date usage of different reservations separately. Please see Reservations page on how to access this information from various tools including REST API, PowerShell, and CLI. 
 3.	To get the detailed utilized and reports (like Pay as you go), the same Cost Management section above would apply with few below changes
+
   a.	Use the field Amortized Cost instead of Actual Cost in Azure Portal 
+  
   b.	For EA, and Modern customers, the Meter Name would reflect the exact DBU workload and tier in the cost reports. 
+  
   The report would also show the exact tier of reservation – as 1 year or 3 year. One would still need to download the same Usage Details Version 2 report as mentioned here or use the Power BI Cost Management connector. For Web, and Direct customers, the product and meter name would show as Azure Databricks Reservations-DBU and DBU respectively. To identify the workload SKU, you can find the MeterID under “additionalinfo” as consumption meter. 
 4.	For Web and Direct customers, one can calculate the normalized consumption for DBCUs using the below steps:
+
   a.	Refer to this table to get the Cost Management Ratio
 
 Key Things to Note:
