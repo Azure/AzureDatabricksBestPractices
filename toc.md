@@ -226,7 +226,7 @@ This recommendation is driven by security and data availability concerns. Every 
 > ***This recommendation doesn't apply to Blob or ADLS folders explicitly mounted as DBFS by the end user*** 
 
 **More Information:**
-[Databricks File System](https://docs.databricks.com/user-guide/dbfs-databricks-file-system.html) 
+[Databricks File System](https://docs.azuredatabricks.net/user-guide/dbfs-databricks-file-system.html)
 
 
 ## Always Hide Secrets in a Key Vault 
@@ -269,7 +269,9 @@ like notebook commands, SQL queries, Java jar jobs, etc. to this primordial app 
 
 Under the covers Databricks clusters use the lightweight Spark Standalone resource allocator. 
 
-When it comes to taxonomy, ADB clusters are divided along the notions of “type” and “mode”. There are two ***types*** of ADB clusters, according to how they are created. Clusters created using UI and [Clusters API](https://docs.databricks.com/api/latest/clusters.html)  are called Interactive Clusters, whereas those created using [Jobs API](https://docs.databricks.com/api/latest/jobs.html) are called Jobs Clusters. Further, each cluster can be of two ***modes***: Standard and High Concurrency. Regardless of types or mode, all clusters in Azure Databricks can automatically scale to match the workload, using a feature known as [Autoscaling](https://docs.azuredatabricks.net/user-guide/clusters/sizing.html#cluster-size-and-autoscaling).
+
+When it comes to taxonomy, ADB clusters are divided along the notions of “type”, and “mode.” There are two ***types*** of ADB clusters, according to how they are created. Clusters created using UI and [Clusters API](https://docs.azuredatabricks.net/api/latest/clusters.html)  are called Interactive Clusters, whereas those created using [Jobs API](https://docs.azuredatabricks.net/api/latest/jobs.html) are called Jobs Clusters. Further, each cluster can be of two ***modes***: Standard and High Concurrency. Regardless of types or mode, all clusters in Azure Databricks can automatically scale to match the workload, using a feature known as [Autoscaling](https://docs.azuredatabricks.net/user-guide/clusters/sizing.html#cluster-size-and-autoscaling).
+
 
 *Table 2: Cluster modes and their characteristics*
 
