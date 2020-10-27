@@ -196,7 +196,7 @@ More information: [Azure Virtual Datacenter: a network perspective](https://docs
 Recall the each Workspace can have multiple clusters. The total capacity of clusters in each workspace is a function of the masks used for the workspace's enclosing Vnet and the pair of subnets associated with each cluster in the workspace. The masks can be changed if you use the [Bring Your Own Vnet](https://docs.azuredatabricks.net/administration-guide/cloud-configurations/azure/vnet-inject.html#vnet-inject) feature as it gives you more control over the networking layout.  It is important to understand this relationship for accurate capacity planning.   
 
   * Each cluster node requires 1 Public IP and 2 Private IPs
-  * These IPs and are logically grouped into 2 subnets named “public” and “private”
+  * These IPs are logically grouped into 2 subnets named “public” and “private”
   * For a desired cluster size of X: number of Public IPs = X, number of Private IPs = 4X
   * The 4X requirement for Private IPs is due to the fact that for each deployment:
     + Half of address space is reserved for future use
@@ -267,7 +267,7 @@ like notebook commands, SQL queries, Java jar jobs, etc. to this primordial app 
 
 Under the covers Databricks clusters use the lightweight Spark Standalone resource allocator. 
 
-When it comes to taxonomy, ADB clusters are divided along the notions of “type”, and “mode.” There are two ***types*** of ADB clusters, according to how they are created. Clusters created using UI and [Clusters API](https://docs.databricks.com/api/latest/clusters.html)  are called Interactive Clusters, whereas those created using [Jobs API](https://docs.databricks.com/api/latest/jobs.html) are called Jobs Clusters. Further, each cluster can be of two ***modes***: Standard and High Concurrency. Regardless of types or mode, all clusters in Azure Databricks can automatically scale to match the workload, using a feature known as [Autoscaling](https://docs.azuredatabricks.net/user-guide/clusters/sizing.html#cluster-size-and-autoscaling).
+When it comes to taxonomy, ADB clusters are divided along the notions of “type” and “mode”. There are two ***types*** of ADB clusters, according to how they are created. Clusters created using UI and [Clusters API](https://docs.databricks.com/api/latest/clusters.html)  are called Interactive Clusters, whereas those created using [Jobs API](https://docs.databricks.com/api/latest/jobs.html) are called Jobs Clusters. Further, each cluster can be of two ***modes***: Standard and High Concurrency. Regardless of types or mode, all clusters in Azure Databricks can automatically scale to match the workload, using a feature known as [Autoscaling](https://docs.azuredatabricks.net/user-guide/clusters/sizing.html#cluster-size-and-autoscaling).
 
 *Table 2: Cluster modes and their characteristics*
 
@@ -294,7 +294,7 @@ Because of these differences, supporting Interactive workloads entails minimizin
   
   2. **Optimizing for Latency:** Only High Concurrency clusters have features which allow queries from different users share cluster resources in a fair, secure manner. HC clusters come with Query Watchdog, a process which keeps disruptive queries in check by automatically pre-empting rogue queries, limiting the maximum size of output rows returned, etc.
   
-  3. **Security:** Table Access control feature is only available in High Concurrency mode and needs to be turned on so that users can limit access to their database objects (tables, views, functions...) created on the shared cluster. In case of ADLS, we recommend restricting access using the AAD Credential Passthrough feature instead of Table Access Controls.
+  3. **Security:** Table Access control feature is only available in High Concurrency mode and needs to be turned on so that users can limit access to their database objects (tables, views, functions, etc.) created on the shared cluster. In case of ADLS, we recommend restricting access using the AAD Credential Passthrough feature instead of Table Access Controls.
 
 > ***If you’re using ADLS, we recommend AAD Credential Passthrough instead of Table Access Control for easy manageability.*** 
 
@@ -348,7 +348,7 @@ By default, Cluster logs are sent to default DBFS but you should consider sendin
 ## Choose Cluster VMs to Match Workload Class
 *Impact: High*
 
-To allocate the right amount and type of cluster resresource for a job, we need to understand how different types of jobs demand different types of cluster resources.
+To allocate the right amount and type of cluster resource for a job, we need to understand how different types of jobs demand different types of cluster resources.
 
    * **Machine Learning** - To train machine learning models it’s usually required cache all of the data in memory. Consider using memory optimized VMs so that the cluster can take advantage of the RAM cache. You can also use storage optimized instances for very large datasets. To size the cluster, take a % of the data set → cache it → see how much memory it
 used → extrapolate that to the rest of the data. 
