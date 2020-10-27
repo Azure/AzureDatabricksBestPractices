@@ -539,14 +539,6 @@ When you create an Azure Databricks workspace and spin up a cluster, below resou
 5. Managed Disk
 6. Bandwidth – Bandwidth charges for any data transfer
 
-Service/Resource Pricing" 
-* DBUs	https://azure.microsoft.com/en-us/pricing/details/databricks/
-* VMs	https://azure.microsoft.com/en-us/pricing/details/databricks/
-* Public IP Addresses	https://azure.microsoft.com/en-us/pricing/details/ip-addresses/
-* Blob Storage	https://azure.microsoft.com/en-us/pricing/details/storage/
-* Managed Disk	https://azure.microsoft.com/en-us/pricing/details/managed-disks/
-* Bandwidth	https://azure.microsoft.com/en-us/pricing/details/bandwidth/
-
 When you create an Azure Databricks workspace and spin up a cluster, below resources are consumed 
  * DBUs – A DBU is a unit of processing capability, billed on a per-second usage
  * Virtual Machines – These represent your Databricks clusters that run the Databricks Runtime
@@ -565,7 +557,6 @@ When you create an Azure Databricks workspace and spin up a cluster, below resou
 | Bandwidth |[Bandwidth pricing](https://azure.microsoft.com/en-us/pricing/details/bandwidth/) |
  
 In addition, if you use additional services as part of your end-2-end solution, such as Azure CosmosDB, or Azure Event Hub, then they are charged per their pricing plan. 
-
 
 There are 2 pricing plans for Azure Databricks DBUs:
 
@@ -586,7 +577,6 @@ Accordingly, the pricing will be dependent on below components
 3.	DBU Count – Each VM SKU has an associated DBU count. Example – D3v2 has DBU count of 0.75
 4.	Region
 5.	Duration
-
 
 Example 1:If you run Premium tier cluster for 100 hours in East US 2 with 10 DS13v2 instances, the billing would be the following for All-purpose Compute:
  * VM cost for 10 DS13v2 instances —100 hours x 10 instances x $0.598/hour = $598
@@ -625,10 +615,10 @@ In addition to the default tags, customers can add custom tags to the resources 
 
 Please see below on how tags propagate for DBUs and VMs
 
-1.	Clusters created from pools
+1.Clusters created from pools
  * DBU Tag = Workspace Tag + Pool Tag + Cluster Tag
  * VM Tag = Workspace Tag + Pool Tag
-2.	Clusters not from Pools
+2.Clusters not from Pools
  * DBU Tag = Workspace Tag + Cluster Tag
  * VM Tag = Workspace Tag + Cluster Tag 
 
@@ -637,85 +627,82 @@ These tags (default and custom) propagate to [Cost Analysis Reports](https://doc
 ### Cost/Usage Analysis
 The Cost Analysis report is available under Cost Management within Azure Portal. Please refer to [Cost Management](https://docs.microsoft.com/en-us/azure/cost-management-billing/costs/quick-acm-cost-analysis)section to get a detailed overview on how to use Cost Management.  
 
-1.Cluster Tags: You can create custom tags as key-value pairs when you create a cluster, and Azure Databricks applies these tags to underlying cluster resources – VMs, DBUs, Public IP Addresses, Disks. 
-2.Pool Tags: You can create custom tags as key-value pairs when you create a pool, and Azure Databricks applies these tags to underlying pool resources – VMs, Public IP Addresses, Disks. Pool-backed clusters inherit default and custom tags from the pool configuration. 
-3.Workspace Tags: You can create custom tags as key-value pairs when you create an Azure Databricks workspaces. These tags apply to underlying resources within the workspace – VMs, DBUs, and others. 
- 
+![Cost Management](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management.png "Cost Management")
+
 Below example is aimed at giving a quick start to get you going to do cost analysis for Azure Databricks. Below are the steps:
-1.	In Azure Portal, click on Cost Management + Billing
-2.	In Cost Management, click on Cost Analysis Tab 
+  1.In Azure Portal, click on Cost Management + Billing
+  2.In Cost Management, click on Cost Analysis Tab 
 
+![Cost Management config](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20config.png "Cost Management config")
 
-
-3.	Choose the right billing scope that want report for and make sure the user has Cost Management Reader permission for the that scope. 
-4.	Once selected, then you will see cost reports for all the Azure resources at that scope.
-5.	Post that you can create different reports by using the different options on the chart. For example, one of the reports you can create is 
-a.	Chart option as Column (stacked)
-b.	Granularity – Daily
-c.	Group by – Tag – Choose clustername or clustered
-
-3.	Choose the right billing scope that want report for and make sure the user has Cost Management Reader permission for the that scope. 
-4.	Once selected, then you will see cost reports for all the Azure resources at that scope.
-5.	Post that you can create different reports by using the different options on the chart. For example, one of the reports you can create is 
-
-  a.	Chart option as Column (stacked)
-  
-  b.	Granularity – Daily
-  
-  c.	Group by – Tag – Choose clustername or clustered
-  
-
+  3.Choose the right billing scope that want report for and make sure the user has Cost Management Reader permission for the that scope. 
+  4.Once selected, then you will see cost reports for all the Azure resources at that scope.
+  5.Post that you can create different reports by using the different options on the chart. For example, one of the reports you can create is 
+   *Chart option as Column (stacked)
+   *Granularity – Daily
+   *Group by – Tag – Choose clustername or clustered
 
 You will see something like below where it will show the distribution of cost on a daily basis for different clusters in your subscription or the scope that you chose in Step 3. You also have option to save this report and share it with your team.
+
+![Cost Management config](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20Report.png "Cost Management report")
  
 To chargeback, you can filter this report by using the tag option. For example, you can use default tag: Creator or can use own custom tag – Cost Center and chargeback based on that. 
+
+![Cost Management filter](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20filter.png "Cost Management filter")
  
 You also have option to consume this data from CSV or a native Power BI connector for Cost Management. Please see below:
-1.	To download this data to CSV, you can set export from Cost Management + Billing -> Usage + Charges and choose Usage Details Version 2 on the right. Refer this for more details. Once downloaded, you can view the cost usage data and filter based on tags to chargeback. In the CSV, you can refer the Meter Name to get the Databricks workload consumed. In addition, this is how the other fields are represented for meters related to Azure Databricks
 
-a.	Quantity = Number of Virtual Machines x Number of hours x DBU count
-b.	Effective Price = DBU price based on the SKU
-c.	Cost = Quantity x Effective Price
+1.To download this data to CSV, you can set export from Cost Management + Billing -> Usage + Charges and choose Usage Details Version 2 on the right. Refer this for more details. Once downloaded, you can view the cost usage data and filter based on tags to chargeback. In the CSV, you can refer the Meter Name to get the Databricks workload consumed. In addition, this is how the other fields are represented for meters related to Azure Databricks
 
- 2.	There is a native Cost Management Connector in Power BI that allows one to make powerful, customized visualization and cost/usage reports. 
- 
+  a.Quantity = Number of Virtual Machines x Number of hours x DBU count
+  b.Effective Price = DBU price based on the SKU
+  c.Cost = Quantity x Effective Price
+  
+![Cost Management export](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20export.png "Cost Management export")
 
+ 2.There is a native [Cost Management Connector](https://docs.microsoft.com/en-us/power-bi/connect-data/desktop-connect-azure-cost-management) in Power BI that allows one to make powerful, customized visualization and cost/usage reports. 
 
-   a.	Quantity = Number of Virtual Machines x Number of hours x DBU count
-   
-   b.	Effective Price = DBU price based on the SKU
-   
-   c.	Cost = Quantity x Effective Price
-   
-2.	There is a native Cost Management Connector in Power BI that allows one to make powerful, customized visualization and cost/usage reports. 
- 
-
-
+![Cost Management connector](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20connector.png "Cost Management connector")
+  
 Once you connect, you can create various rich reports easily like below by choosing the right fields from the table.
 
 Tip: To filter on tags, you will need to parse the json in Power BI. To do that, follow these steps:
 1.	Go to "Query Editor" 
 2.	Select the "Usage Details" table 
 3.	On the right side the "Properties" tab shows the steps as 
+
+![Cost Management config](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20config.png "Cost Management config")
  
 4.	From the menu bar go to "Add column" -> "Add custom column" 
 5.	Name the column and enter the following text in the query 
 = "{"& [Tags] & "}"
  
+ ![Cost Management config2](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20config2.jpg "Cost Management config2")
+ 
 6.	This will create a new column of "tags" in the json format. 
 7.	Now user can transform it as expand it. You can then use the different tags as columns that you can use in a report. 
 
-Please see <here> some of the common views created easily using this connector. 
+Please see some of the common views created easily using this connector. 
+
+* Cost Report breakdown by Resource Group, Tags, MeterName
+ ![Cost Management report1](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report%201.png "Cost Management report1")
+ 
+ * Cost Report breakdown by Cluster, and custom tags
+ ![Cost Management report2](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report2.PNG "Cost Management report2")
+ 
+ * Cost Report breakdown by Cluster and Metername in pie chart
+ ![Cost Management report3](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report3.PNG "Cost Management report3")
+ 
+ * Cost Report breakdown by with resource group and cluster including quantity
+ ![Cost Management report4](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report4.PNG "Cost Management report4")
 
 ### Pricing difference for Regions
 
-**Pricing difference for Regions**
-
-Please refer to Azure Databricks pricing page to get the pricing for DBU SKU and pricing discount based on Reservations. There are certain differences to consider
+Please refer to [Azure Databricks pricing page](https://azure.microsoft.com/en-us/pricing/details/databricks/) to get the pricing for DBU SKU and pricing discount based on Reservations. There are certain differences to consider
 1.The DBU prices are different for Azure public cloud and other regions such as Azure Gov
 2.The pre-purchase plan prices are different for Azure public cloud and Azure Gov 
 
-**Known Issues/Limitations**
+### Known Issues/Limitations
 
 1.	Tag change propagation at workspace level takes up to ~1 hour to apply to resources under Managed resource group. 
 2.	Tag change propagation at workspace level requires cluster restart for existing running cluster, or pool expansion
