@@ -436,8 +436,16 @@ startup time by a few minutes.
 
 You can use Log analytics directly to query the Perf data. Here is an example of a query which charts out CPU for the VM’s in question for a specific cluster ID. See log analytics overview for further documentation on log analytics and query syntax.
 
+```python
+%python
+script = """
+sed -i "s/^exit 101$/exit 0/" /usr/sbin/policy-rc.d 
+wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w $YOUR_ID -s $YOUR_KEY -d opinsights.azure.com
+"""
 
-![Perfsnippet](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/PerfSnippet.PNG "PerfSnippet")
+#save script to databricks file system so it can be loaded by VMs
+dbutils.fs.put("/databricks/log_init_scripts/configure-omsagent.sh", script, True)
+```
 
 ![Grafana](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Grafana.PNG "Grafana")
 
@@ -667,10 +675,7 @@ See [this](https://docs.microsoft.com/en-us/azure/azure-monitor/learn/quick-coll
    * https://docs.microsoft.com/en-us/azure/azure-monitor/learn/quick-collect-linux-computer
    * https://github.com/Microsoft/OMS-Agent-for-Linux/blob/master/docs/OMS-Agent-for-Linux.md
    * https://github.com/Microsoft/OMS-Agent-for-Linux/blob/master/docs/Troubleshooting.md
-   
+
 ## Access patterns with Azure Data Lake Storage Gen2
 To understand the various access patterns and approaches to securing data in ADLS see the [following guidance](https://github.com/hurtn/datalake-ADLS-access-patterns-with-Databricks/blob/master/readme.md). 
-   
-
-
 
