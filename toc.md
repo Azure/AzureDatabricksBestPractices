@@ -533,7 +533,7 @@ These tags (default and custom) propagate to [Cost Analysis Reports](https://doc
 
 ### Cost/Usage Analysis
 The Cost Analysis report is available under Cost Management within Azure Portal. Please refer to [Cost Management](https://docs.microsoft.com/en-us/azure/cost-management-billing/costs/quick-acm-cost-analysis)section to get a detailed overview on how to use Cost Management.  
- 
+
 Below example is aimed at giving a quick start to get you going to do cost analysis for Azure Databricks. Below are the steps
 1.	In Azure Portal, click on Cost Management + Billing
 2.	In Cost Management, click on Cost Analysis Tab 
