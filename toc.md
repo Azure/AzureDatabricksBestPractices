@@ -157,7 +157,8 @@ Key workspace limits are:
 
   * The maximum number of jobs that a workspace can create in an hour is **1000**
   * At any time, you cannot have more than **150 jobs** simultaneously running in a workspace
-  * There can be a maximum of **150 notebooks or execution contexts** attached to a cluster    
+  * There can be a maximum of **150 notebooks or execution contexts** attached to a cluster
+  * The maximum number secret scopes per workspace is 100
 
 ### Azure Subscription Limits
 Next, there are [Azure limits](https://docs.microsoft.com/en-us/azure/azure-subscription-service-limits) to consider since ADB deployments are built on top of the Azure infrastructure. 
