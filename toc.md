@@ -50,6 +50,7 @@ Written by: Priya Aswani, WW Data Engineering & AI Technical Lead
     + [Step 4 - Configure the Init Script](#Step-4---Configure-the-Init-script) 
     + [Step 5 - View Collected Data via Azure Portal](#Step-5---View-Collected-Data-via-Azure-Portal)
     + [References](#References)
+  * [Access patterns with Azure Data Lake Storage Gen2](#Access-patterns-with-Azure-Data-Lake-Storage-Gen2)
     
 
 
@@ -636,7 +637,8 @@ See [this](https://docs.microsoft.com/en-us/azure/azure-monitor/learn/quick-coll
    * https://github.com/Microsoft/OMS-Agent-for-Linux/blob/master/docs/OMS-Agent-for-Linux.md
    * https://github.com/Microsoft/OMS-Agent-for-Linux/blob/master/docs/Troubleshooting.md
    
-   
+## Access patterns with Azure Data Lake Storage Gen2
+To understand the various access patterns and approaches to securing data in ADLS see the [following guidance](https://github.com/hurtn/datalake-ADLS-access-patterns-with-Databricks/blob/master/readme.md). 
    
 
 
