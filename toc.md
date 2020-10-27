@@ -675,20 +675,24 @@ You also have option to consume this data from CSV or a native Power BI connecto
   
 Once you connect, you can create various rich reports easily like below by choosing the right fields from the table.
 
-Tip: To filter on tags, you will need to parse the json in Power BI. To do that, follow these steps:
-1. Go to "Query Editor" 
-2. Select the "Usage Details" table 
-3. On the right side the "Properties" tab shows the steps as 
+  3. Choose the right billing scope that want report for and make sure the user has Cost Management Reader permission for the that scope. 
+  4. Once selected, then you will see cost reports for all the Azure resources at that scope.
 
-    ![Cost Management config](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20config.png "Cost Management config")
+Tip: To filter on tags, you will need to parse the json in Power BI. To do that, follow these steps:
+
+  1. Go to "Query Editor" 
+  2. Select the "Usage Details" table 
+  3. On the right side the "Properties" tab shows the steps as 
+
+   ![Cost Management config](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20config.png "Cost Management config")
  
-4. From the menu bar go to "Add column" -> "Add custom column" 
-5. Name the column and enter the following text in the query = "{"& [Tags] & "}"
+ 4. From the menu bar go to "Add column" -> "Add custom column" 
+ 5. Name the column and enter the following text in the query = "{"& [Tags] & "}"
  
     ![Cost Management config2](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20config2.jpg "Cost Management config2")
  
-6. This will create a new column of "tags" in the json format. 
-7. Now user can transform it as expand it. You can then use the different tags as columns that you can use in a report. 
+ 6. This will create a new column of "tags" in the json format. 
+ 7. Now user can transform it as expand it. You can then use the different tags as columns that you can use in a report. 
 
 Please see some of the common views created easily using this connector. 
 
