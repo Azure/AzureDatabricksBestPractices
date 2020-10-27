@@ -134,7 +134,7 @@ With this basic understanding let’s discuss how to plan a typical ADB deployme
 ## Map Workspaces to Business Divisions
 *Impact: Very High*
 
-How many workspaces do you need to deploy? The answer to this question depends a lot on your organization’s structure. We recommend that you assign workspaces based on a related group of people working together collaboratively. This also helps in streamlining your access control matrix within your workspace (folders, notebooks etc.) and also across all your resources that the workspace interacts with (storage, related data stores like Azure SQL DB, Azure SQL DW etc.). This type of division scheme is also known as the [Business Unit Subscription](https://docs.microsoft.com/en-us/azure/architecture/cloud-adoption/appendix/azure-scaffold?wt.mc_id=itshowcase-codeapps#departments-and-accounts) design pattern and it aligns well with the Databricks chargeback model.
+How many workspaces do you need to deploy? The answer to this question depends a lot on your organization’s structure. We recommend that you assign workspaces based on a related group of people working together collaboratively. This also helps in streamlining your access control matrix within your workspace (folders, notebooks etc.) and also across all your resources that the workspace interacts with (storage, related data stores like Azure SQL DB, Azure SQL DW etc.). This type of division scheme is also known as the [Business Unit Subscription](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/decision-guides/subscriptions/) design pattern and it aligns well with the Databricks chargeback model.
 
 
 <p align="left">
