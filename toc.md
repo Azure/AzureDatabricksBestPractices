@@ -552,9 +552,9 @@ To chargeback, you can filter this report by using the tag option. For example, 
  
 You also have option to consume this data from CSV or a native Power BI connector for Cost Management. Please see below:
 1.	To download this data to CSV, you can set export from Cost Management + Billing -> Usage + Charges and choose Usage Details Version 2 on the right. Refer this for more details. Once downloaded, you can view the cost usage data and filter based on tags to chargeback. In the CSV, you can refer the Meter Name to get the Databricks workload consumed. In addition, this is how the other fields are represented for meters related to Azure Databricks
-  a.	Quantity = Number of Virtual Machines x Number of hours x DBU count
-  b.	Effective Price = DBU price based on the SKU
-  c.	Cost = Quantity x Effective Price
+   a.	Quantity = Number of Virtual Machines x Number of hours x DBU count
+   b.	Effective Price = DBU price based on the SKU
+   c.	Cost = Quantity x Effective Price
 2.	There is a native Cost Management Connector in Power BI that allows one to make powerful, customized visualization and cost/usage reports. 
  
 
