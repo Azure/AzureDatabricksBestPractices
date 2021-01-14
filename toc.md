@@ -25,7 +25,7 @@ Written by: Priya Aswani, WW Data Engineering & AI Technical Lead
     + [ADB Workspace Limits](#ADB-Workspace-Limits)
     + [Azure Subscription Limits](#Azure-Subscription-Limits)
   * [Consider Isolating Each Workspace in its own VNet](#Consider-Isolating-Each-Workspace-in-its-own-VNet)
-  * [Select the Largest Vnet CIDR](#Select-the-Largest-Vnet-CIDR)
+  * [Select the Largest VNet CIDR](#Select-the-Largest-VNet-CIDR)
   * [Azure Databricks Deployment with limited private IP addresses](#Azure-Databricks-Deployment-with-limited-private-IP-addresses)
   * [Do not Store any Production Data in Default DBFS Folders](#Do-not-Store-any-Production-Data-in-Default-DBFS-Folders)
   * [Always Hide Secrets in a Key Vault](#Always-Hide-Secrets-in-a-Key-Vault)
@@ -78,13 +78,13 @@ Planning, deploying, and running Azure Databricks (ADB) at scale requires one to
 
 While each ADB deployment is unique to an organization's needs we have found that some patterns are common across most successful ADB projects. Unsurprisingly, these patterns are also in-line with modern Cloud-centric development best practices.
 
-This short guide summarizes these patterns into prescriptive and actionable best practices for Azure Databricks. We follow a logical path of planning the infrastructure, provisioning the workspaces,developing Azure Databricks applications, and finally, running Azure Databricks in production.
+This short guide summarizes these patterns into prescriptive and actionable best practices for Azure Databricks. We follow a logical path of planning the infrastructure, provisioning the workspaces, developing Azure Databricks applications, and finally, running Azure Databricks in production.
 
 The audience of this guide are system architects, field engineers, and development teams of customers, Microsoft, and Databricks. Since the Azure Databricks product goes through fast iteration cycles, we have avoided recommendations based on roadmap or Private Preview features.
 
 Our recommendations should apply to a typical Fortune 500 enterprise with at least intermediate level of Azure and Databricks knowledge. We've also classified each recommendation according to its likely impact on solution's quality attributes. Using the **Impact** factor, you can weigh the recommendation against other competing choices. Example: if the impact is classified as “Very High”, the implications of not adopting the best practice can have a significant impact on your deployment.
 
-**Important Note**: This guide is intended to be used with the detailed [Azure Databricks Documentation](https://docs.azuredatabricks.net/index.html)
+**Important Note**: This guide is intended to be used with the detailed [Azure Databricks Documentation](https://docs.microsoft.com/en-us/azure/databricks/)
 
 ## Scalable ADB Deployments: Guidelines for Networking, Security, and Capacity Planning
 
@@ -104,18 +104,18 @@ Let’s start with a short Azure Databricks 101 and then discuss some best pract
 
 ADB is a Big Data analytics service. Being a Cloud Optimized managed [PaaS](https://azure.microsoft.com/en-us/overview/what-is-paas/)  offering, it is designed to hide the underlying distributed systems and networking complexity as much as possible from the end user. It is backed by a team of support staff who monitor its health, debug tickets filed via Azure, etc. This allows ADB users to focus on developing value generating apps rather than stressing over infrastructure management.
 
-You can deploy ADB using Azure Portal or using [ARM templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#template-deployment). One successful ADB deployment produces exactly one Workspace, a space where users can log in and author analytics apps. It comprises the file browser, notebooks, tables, clusters, [DBFS](https://docs.azuredatabricks.net/user-guide/dbfs-databricks-file-system.html#dbfs) storage, etc. More importantly, Workspace is a fundamental isolation unit in Databricks. All workspaces are completely isolated from each other.
+You can deploy ADB using Azure Portal or using [ARM templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#template-deployment). One successful ADB deployment produces exactly one Workspace, a space where users can log in and author analytics apps. It comprises the file browser, notebooks, tables, clusters, [DBFS](https://docs.microsoft.com/en-us/azure/databricks/data/databricks-file-system#dbfs) storage, etc. More importantly, Workspace is a fundamental isolation unit in Databricks. All workspaces are completely isolated from each other.
 
 Each workspace is identified by a globally unique 53-bit number, called ***Workspace ID or Organization ID***. The URL that a customer sees after logging in always uniquely identifies the workspace they are using:
 
-*https://regionName.azuredatabricks.net/?o=workspaceId*
+*https://adb-workspaceId.azuredatabricks.net/?o=workspaceId*
 
-Example: *https://eastus2.azuredatabricks.net/?o=12345*
+Example: *https://adb-12345.azuredatabricks.net/?o=12345*
 
 Azure Databricks uses [Azure Active Directory (AAD)](https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-whatis) as the exclusive Identity Provider and there’s a seamless out of the box integration between them. This makes ADB tightly integrated with Azure just like its other core services. Any AAD member assigned to the Owner or Contributor role can deploy Databricks and is automatically added to the ADB members list upon first login. If a user is not a member or guest of the Active Directory tenant, they can’t login to the workspace.
 Granting access to a user in another tenant (for example, if contoso.com wants to collaborate with adventure-works.com users) does work because those external users are added as guests to the tenant hosting Azure Databricks.
 
-Azure Databricks comes with its own user management interface. You can create users and groups in a workspace, assign them certain privileges, etc. While users in AAD are equivalent to Databricks users, by default AAD roles have no relationship with groups created inside ADB, unless you use [SCIM](https://docs.azuredatabricks.net/administration-guide/admin-settings/scim/aad.html) for provisioning users and groups. With SCIM, you can import both groups and users from AAD into Azure Databricks, and the synchronization is automatic after the initial import. ADB also has a special group called ***Admins***, not to be confused with AAD’s role Admin.
+Azure Databricks comes with its own user management interface. You can create users and groups in a workspace, assign them certain privileges, etc. While users in AAD are equivalent to Databricks users, by default AAD roles have no relationship with groups created inside ADB, unless you use [SCIM](https://docs.microsoft.com/en-us/azure/databricks/administration-guide/users-groups/scim/aad) for provisioning users and groups. With SCIM, you can import both groups and users from AAD into Azure Databricks, and the synchronization is automatic after the initial import. ADB also has a special group called ***Admins***, not to be confused with AAD’s role Admin.
 
 The first user to login and initialize the workspace is the workspace ***owner***, and they are automatically assigned to the Databricks admin group. This person can invite other users to the workspace, add them as admins, create groups, etc. The ADB logged in user’s identity is provided by AAD, and shows up under the user menu in Workspace:
 
@@ -178,10 +178,10 @@ These limits are at this point in time and might change going forward. Some of t
 ## Consider Isolating Each Workspace in its own VNet
 *Impact: Low*
 
-While you can deploy more than one Workspace in a VNet by keeping the associated subnet pairs separate from other workspaces, we recommend that you should only deploy one workspace in any Vnet. Doing this perfectly aligns with the ADB's Workspace level isolation model. Most often organizations consider putting multiple workspaces in the same Vnet so that they all can share some common networking resource, like DNS, also placed in the same Vnet because the private address space in a vnet is shared by all resources. You can easily achieve the same while keeping the Workspaces separate by following the [hub and spoke model](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke) and using Vnet Peering to extend the private IP space of the workspace Vnet. Here are the steps: 
+While you can deploy more than one Workspace in a VNet by keeping the associated subnet pairs separate from other workspaces, we recommend that you should only deploy one workspace in any VNet. Doing this perfectly aligns with the ADB's Workspace level isolation model. Most often organizations consider putting multiple workspaces in the same VNet so that they all can share some common networking resource, like DNS, also placed in the same VNet because the private address space in a VNet is shared by all resources. You can easily achieve the same while keeping the Workspaces separate by following the [hub and spoke model](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke) and using VNet Peering to extend the private IP space of the workspace VNet. Here are the steps: 
 1. Deploy each Workspace in its own spoke VNet.
-2. Put all the common networking resources in a central hub Vnet, such as your custom DNS server.  
-3. Join the Workspace spokes with the central networking hub using [Vnet Peering](https://docs.azuredatabricks.net/administration-guide/cloud-configurations/azure/vnet-peering.html)
+2. Put all the common networking resources in a central hub VNet, such as your custom DNS server.  
+3. Join the Workspace spokes with the central networking hub using [VNet Peering](https://docs.microsoft.com/en-us/azure/databricks/administration-guide/cloud-configurations/azure/vnet-peering)
 
 More information: [Azure Virtual Datacenter: a network perspective](https://docs.microsoft.com/en-us/azure/architecture/vdc/networking-virtual-datacenter#topology)
 
@@ -191,12 +191,12 @@ More information: [Azure Virtual Datacenter: a network perspective](https://docs
 
 *Figure 4: Hub and Spoke Model*
 
-## Select the Largest Vnet CIDR
+## Select the Largest VNet CIDR
 *Impact: Very High*
 
-> ***This recommendation only applies if you're using the Bring Your Own Vnet feature.***  
+> ***This recommendation only applies if you're using the Bring Your Own VNet feature.***  
 
-Recall the each Workspace can have multiple clusters. The total capacity of clusters in each workspace is a function of the masks used for the workspace's enclosing Vnet and the pair of subnets associated with each cluster in the workspace. The masks can be changed if you use the [Bring Your Own Vnet](https://docs.azuredatabricks.net/administration-guide/cloud-configurations/azure/vnet-inject.html#vnet-inject) feature as it gives you more control over the networking layout.  It is important to understand this relationship for accurate capacity planning.   
+Recall the each Workspace can have multiple clusters. The total capacity of clusters in each workspace is a function of the masks used for the workspace's enclosing Vnet and the pair of subnets associated with each cluster in the workspace. The masks can be changed if you use the [Bring Your Own Vnet](https://docs.microsoft.com/en-us/azure/databricks/administration-guide/cloud-configurations/azure/vnet-inject#vnet-inject) feature as it gives you more control over the networking layout.  It is important to understand this relationship for accurate capacity planning.   
 
   * Each cluster node requires 1 Public IP and 2 Private IPs
   * These IPs are logically grouped into 2 subnets named “public” and “private”
@@ -204,7 +204,7 @@ Recall the each Workspace can have multiple clusters. The total capacity of clus
   * The 4X requirement for Private IPs is due to the fact that for each deployment:
     + Half of address space is reserved for future use
     + The other half is equally divided into the two subnets: private and public
-  * The size of private and public subnets thur determines total number of VMs available for clusters 
+  * The size of private and public subnets thus determines total number of VMs available for clusters 
     + /22 mask is larger than /23, so setting private and public to /22 will have more VMs available for creating clusters, than say /23 or below
    * But, because of the address space allocation scheme, the size of private and public subnets is constrained by the VNet’s CIDR
    * The allowed values for the enclosing VNet CIDR are from /16 through /24
@@ -254,11 +254,11 @@ The other VNet is fully disconnected and is not routable to the rest of the envi
 * UDR with default route (0.0.0.0/0) points to a central NVA (for example, Azure Firewall) for internet outbound traffic.
 * NSGs are configured to block inbound traffic from the internet.
 * Azure Data Lake (ADLS) Gen2 is deployed in the business application subscription.
-* A Private Endpoint is created on the VNet to make ADLS Gen 2 storage accessible from on-premises and from Azure VNets via a private IP address.
+* A Private Endpoint is created on the VNet to make ADLS Gen2 storage accessible from on-premises and from Azure VNets via a private IP address.
 * Azure Data Factory will be responsible for the process of moving data from the source locations (other spoke VNets or on-premises) into the ADLS Gen2 store (accessible via Private Endpoint).
 * Azure Data Factory (ADF) is deployed on this routable VNet
     * Azure Data Factory components require a compute infrastructure to run on and this is referred to as Integration Runtime. In the mentioned scenario, moving data from on-premises data sources to Azure Data Services (accessible via Private Endpoint), it is required a Self-Hosted Integration Runtime.
-    * The Self-Hosted Integration Runtime needs to be installed on an Azure Virtual Machine inside the routable VNET in order to allow Azure Data Factory to communicate with the source data and destination data.
+    * The Self-Hosted Integration Runtime needs to be installed on an Azure Virtual Machine inside the routable VNet in order to allow Azure Data Factory to communicate with the source data and destination data.
     * Considering this, Azure Data Factory only requires 1 IP address (and maximum up to 4 IP addresses) in the VNet (via the integration runtime). 
 
 
@@ -293,7 +293,7 @@ This recommendation is driven by security and data availability concerns. Every 
 > ***This recommendation doesn't apply to Blob or ADLS folders explicitly mounted as DBFS by the end user*** 
 
 **More Information:**
-[Databricks File System](https://docs.azuredatabricks.net/user-guide/dbfs-databricks-file-system.html)
+[Databricks File System](https://docs.microsoft.com/en-us/azure/databricks/data/databricks-file-system)
 
 
 ## Always Hide Secrets in a Key Vault 
@@ -306,11 +306,11 @@ If using Azure Key Vault, create separate AKV-backed secret scopes and correspon
 
 **More Information:**
 
-[Create an Azure Key Vault-backed secret scope](https://docs.azuredatabricks.net/user-guide/secrets/secret-scopes.html)
+[Create an Azure Key Vault-backed secret scope](https://docs.microsoft.com/en-us/azure/databricks/security/secrets/secret-scopes)
 
-[Example of using secret in a notebook](https://docs.azuredatabricks.net/user-guide/secrets/example-secret-workflow.html)
+[Example of using secret in a notebook](https://docs.microsoft.com/en-us/azure/databricks/security/secrets/example-secret-workflow)
 
-[Best practices for creating secret scopes](https://docs.azuredatabricks.net/user-guide/secrets/secret-acl.html)
+[Best practices for creating secret scopes](https://docs.microsoft.com/en-us/azure/databricks/security/access-control/secret-acl)
 
 # Deploying Applications on ADB: Guidelines for Selecting, Sizing, and Optimizing Clusters Performance
 
@@ -337,7 +337,7 @@ like notebook commands, SQL queries, Java jar jobs, etc. to this primordial app 
 Under the covers Databricks clusters use the lightweight Spark Standalone resource allocator. 
 
 
-When it comes to taxonomy, ADB clusters are divided along the notions of “type”, and “mode.” There are two ***types*** of ADB clusters, according to how they are created. Clusters created using UI and [Clusters API](https://docs.azuredatabricks.net/api/latest/clusters.html)  are called Interactive Clusters, whereas those created using [Jobs API](https://docs.azuredatabricks.net/api/latest/jobs.html) are called Jobs Clusters. Further, each cluster can be of two ***modes***: Standard and High Concurrency. Regardless of types or mode, all clusters in Azure Databricks can automatically scale to match the workload, using a feature known as [Autoscaling](https://docs.azuredatabricks.net/user-guide/clusters/sizing.html#cluster-size-and-autoscaling).
+When it comes to taxonomy, ADB clusters are divided along the notions of “type”, and “mode.” There are two ***types*** of ADB clusters, according to how they are created. Clusters created using UI and [Clusters API](https://docs.microsoft.com/en-us/azure/databricks/dev-tools/api/latest/clusters)  are called Interactive Clusters, whereas those created using [Jobs API](https://docs.microsoft.com/en-us/azure/databricks/dev-tools/api/latest/jobs) are called Jobs Clusters. Further, each cluster can be of two ***modes***: Standard and High Concurrency. Regardless of types or mode, all clusters in Azure Databricks can automatically scale to match the workload, using a feature known as [Autoscaling](https://docs.microsoft.com/en-us/azure/databricks/clusters/configure#autoscaling).
 
 
 *Table 2: Cluster modes and their characteristics*
@@ -351,7 +351,7 @@ There are three steps for supporting Interactive workloads on ADB:
  1. Deploy a shared cluster instead of letting each user create their own cluster.
  2. Create the shared cluster in High Concurrency mode instead of Standard mode.
  3. Configure security on the shared High Concurrency cluster, using **one** of the following options:
-     * Turn on [AAD Credential Passthrough](https://docs.azuredatabricks.net/administration-guide/cloud-configurations/azure/credential-passthrough.html#enabling-azure-ad-credential-passthrough-to-adls) if you’re using ADLS
+     * Turn on [AAD Credential Passthrough](https://docs.microsoft.com/en-us/azure/databricks/security/credential-passthrough/adls-passthrough#enabling-azure-ad-credential-passthrough-to-adls) if you’re using ADLS
      * Turn on Table Access Control for all other stores
 
 To understand why, let’s quickly see how interactive workloads are different from batch workloads:
@@ -379,7 +379,7 @@ Because of these differences, supporting Interactive workloads entails minimizin
 Unlike Interactive workloads, logic in batch Jobs is well defined and their cluster resource requirements are known *a priori*. Hence to minimize cost, there’s no reason to follow the shared cluster model and we
 recommend letting each job create a separate cluster for its execution. Thus, instead of submitting batch ETL jobs to a cluster already created from ADB’s UI, submit them using the Jobs APIs. These APIs automatically create new clusters to run Jobs and also terminate them after running it. We call this the **Ephemeral Job Cluster** pattern for running jobs because the clusters short life is tied to the job lifecycle.
 
-Azure Data Factory uses this pattern as well - each job ends up creating a separate cluster since the underlying call is made using the [Runs-Submit Jobs API](https://docs.azuredatabricks.net/api/latest/jobs.html#runs-submit).
+Azure Data Factory uses this pattern as well - each job ends up creating a separate cluster since the underlying call is made using the [Runs-Submit Jobs API](https://docs.microsoft.com/en-us/azure/databricks/dev-tools/api/latest/jobs#runs-submit).
 
 
 ![Figure 6: Ephemeral Job cluster](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure6.PNG "Figure 6: Ephemeral Job cluster")
@@ -398,11 +398,11 @@ costlier and less secure alternative. To fix this, ADB is coming out with a new 
 ## Favor Cluster Scoped Init Scripts over Global and Named scripts
 *Impact: High*
 
-[Init Scripts](https://docs.azuredatabricks.net/user-guide/clusters/init-scripts.html) provide a way to configure cluster’s nodes and can be used in the following modes:
+[Init Scripts](https://docs.microsoft.com/en-us/azure/databricks/clusters/init-scripts) provide a way to configure cluster’s nodes and can be used in the following modes:
 
   1. **Global:** by placing the init script in `/databricks/init` folder, you force the script’s execution every time any cluster is created or restarted by users of the workspace.
   2. **Cluster Named (deprecated):** you can limit the init script to run only on for a specific cluster’s creation and restarts by placing it in `/databricks/init/<cluster_name>` folder.
-  3. **Cluster Scoped:** in this mode the init script is not tied to any cluster by its name and its automatic execution is not a virtue of its dbfs location. Rather, you specify the script in cluster’s configuration by either writing it directly in the cluster configuration UI or storing it on DBFS and specifying the path in [Cluster Create API](https://docs.azuredatabricks.net/user-guide/clusters/init-scripts.html#cluster-scoped-init-script). Any location under DBFS `/databricks` folder except `/databricks/init` can be used for this purpose, such as: `/databricks/<my-directory>/set-env-var.sh`
+  3. **Cluster Scoped:** in this mode the init script is not tied to any cluster by its name and its automatic execution is not a virtue of its dbfs location. Rather, you specify the script in cluster’s configuration by either writing it directly in the cluster configuration UI or storing it on DBFS and specifying the path in [Cluster Create API](https://docs.microsoft.com/en-us/azure/databricks/clusters/init-scripts#cluster-scoped-init-script). Any location under DBFS `/databricks` folder except `/databricks/init` can be used for this purpose, such as: `/databricks/<my-directory>/set-env-var.sh`
  
 You should treat Init scripts with *extreme* caution because they can easily lead to intractable cluster launch failures. If you really need them, please use the Cluster Scoped execution mode as much as possible because:
 
@@ -412,7 +412,7 @@ You should treat Init scripts with *extreme* caution because they can easily lea
  ## Use Cluster Log Delivery Feature to Manage Logs 
 *Impact: Medium*
 
-By default, Cluster logs are sent to default DBFS but you should consider sending the logs to a blob store location under your control using the [Cluster Log Delivery](https://docs.azuredatabricks.net/user-guide/clusters/log-delivery.html#cluster-log-delivery) feature. The Cluster Logs contain logs emitted by user code, as well as Spark framework’s Driver and Executor logs. Sending them to a blob store controlled by yourself is recommended over default DBFS location because:
+By default, Cluster logs are sent to default DBFS but you should consider sending the logs to a blob store location under your control using the [Cluster Log Delivery](https://docs.microsoft.com/en-us/azure/databricks/clusters/clusters-manage#cluster-log-delivery) feature. The Cluster Logs contain logs emitted by user code, as well as Spark framework’s Driver and Executor logs. Sending them to a blob store controlled by yourself is recommended over default DBFS location because:
   1. ADB’s automatic 30-day default DBFS log purging policy might be too short for certain compliance scenarios. A blob store loction in your subscription will be free from such policies.
   2. You can ship logs to other tools only if they are present in your storage account and a resource group governed by you. The root DBFS, although present in your subscription, is launched inside a Microsoft Azure managed resource group and is protected by a read lock. Because of this lock the logs are only accessible by privileged Azure Databricks framework code. However, constructing a pipeline to ship the logs to downstream log analytics tools requires logs to be in a lock-free location first.
 
@@ -427,7 +427,7 @@ used → extrapolate that to the rest of the data.
   * **Streaming** - You need to make sure that the processing rate is just above the input rate at peak times of the day. Depending peak input rate times, consider compute optimized VMs for the cluster to make sure processing rate is higher than your input rate.
   
   * **ETL** - In this case, data size and deciding how fast a job needs to be will be a leading indicator. Spark doesn’t always require data to be loaded into memory in order to execute transformations, but you’ll at the very least need to see how large the task sizes are on shuffles and compare that to the task throughput you’d like. To analyze the performance of these jobs start with basics and check if the job is by CPU, network, or local I/O, and go from there. Consider using a general purpose VM for these jobs.
-  * **Interactive / Development Workloads** - The ability for a cluster to auto scale is most important for these types of jobs. In this case taking advantage of the [Autoscaling feature](https://docs.azuredatabricks.net/user-guide/clusters/sizing.html#cluster-size-and-autoscaling) will be your best friend in managing the cost of the infrastructure.
+  * **Interactive / Development Workloads** - The ability for a cluster to auto scale is most important for these types of jobs. In this case taking advantage of the [Autoscaling feature](https://docs.microsoft.com/en-us/azure/databricks/clusters/configure#autoscaling) will be your best friend in managing the cost of the infrastructure.
 
 ## Arrive at Correct Cluster Size by Iterative Performance Testing
 *Impact: High*
@@ -525,27 +525,22 @@ This section will focus on Azure Databricks billing, tools to manage and analyze
 ### Azure Databricks Billing
 First, it is important to understand the different workloads and tiers available with Azure Databricks. Azure Databricks is available in 2 tiers – Standard and Premium. Premium Tier offers additional features on top of what is available in Standard tier. These include Role-based access control for notebooks, jobs, and tables, Audit logs, Azure AD conditional pass-through, conditional authentication and many more. Please refer to [Azure Databricks pricing](https://azure.microsoft.com/en-us/pricing/details/databricks/) for the complete list. 
 
-Both Premium and Standard tier come with 3 types of workload
- * Jobs Compute (previously called Data Engineering)
- * Jobs Light Compute (previously called Data Engineering Light)
- * All-purpose Compute (previously called Data Analytics)
-The Jobs Compute and Jobs Light Compute make it easy for data engineers to build and execute jobs, and All-purpose make it easy for data scientists to explore, visualize, manipulate, and share data and insights interactively. Depending upon the use-case, one can also use All-purpose Compute for data engineering or automated scenarios especially if the incoming job rate is higher. 
+Both Premium and Standard tiers have 3 types of workloads:
 
-When you create an Azure Databricks workspace and spin up a cluster, below resources are consumed: 
+* Jobs Compute (previously called Data Engineering)
+* Jobs Light Compute (previously called Data Engineering Light)
+* All-purpose Compute (previously called Data Analytics)
+ 
+The Jobs Compute and Jobs Light Compute make it easy for data engineers to build and execute jobs, and All-purpose Compute make it easy for data scientists to explore, visualize, manipulate, and share data and insights interactively. Depending upon the use-case, one can also use All-purpose Compute for data engineering or automated scenarios especially if the incoming job rate is higher. 
+
+When you create an Azure Databricks workspace and spin up a cluster, the following resources are consumed:
+
 1. DBUs – A DBU is a unit of processing capability, billed on a per-second usage
 2. Virtual Machines – These represent your Databricks clusters that run the Databricks Runtime
 3. Public IP Addresses – These represent the IP Addresses consumed by the Virtual Machines when the cluster is running
 4. Blob Storage – Each workspace comes with a default storage
 5. Managed Disk
 6. Bandwidth – Bandwidth charges for any data transfer
-
-When you create an Azure Databricks workspace and spin up a cluster, below resources are consumed 
- * DBUs – A DBU is a unit of processing capability, billed on a per-second usage
- * Virtual Machines – These represent your Databricks clusters that run the Databricks Runtime
- * Public IP Addresses – These represent the IP Addresses consumed by the Virtual Machines when the cluster is running
- * Blob Storage – Each workspace comes with a default storage
- * Managed Disk
- * Bandwidth – Bandwidth charges for any data transfer
  
 | Service or Resource | Pricing |
 | --- | --- |
@@ -573,7 +568,8 @@ Please see few examples of a billing for Azure Databricks with Pay as you go:
 
 Depending on the type of workload your cluster runs, you will either be charged for Jobs Compute, Jobs Light Compute, or All-purpose Compute workload. For example, if the cluster runs workloads triggered by the Databricks jobs scheduler, you will be charged for the Jobs Compute workload. If your cluster runs interactive features such as ad-hoc commands, you will be billed for All-purpose Compute workload.
 
-Accordingly, the pricing will be dependent on below components
+Accordingly, the pricing will be dependent on below components:
+
 1.	DBU SKU – DBU price based on the workload and tier
 2.	VM SKU – VM price based on the VM SKU
 3.	DBU Count – Each VM SKU has an associated DBU count. Example – D3v2 has DBU count of 0.75
@@ -581,18 +577,21 @@ Accordingly, the pricing will be dependent on below components
 5.	Duration
 
 #### Example 1: If you run Premium tier cluster for 100 hours in East US 2 with 10 DS13v2 instances, the billing would be the following for All-purpose Compute:
- * VM cost for 10 DS13v2 instances —100 hours x 10 instances x $0.598/hour = $598
- * DBU cost for All-purpose Compute workload for 10 DS13v2 instances —100 hours x 10 instances x 2 DBU per node x $0.55/DBU = $1,100
- * The total cost would therefore be $598 (VM Cost) + $1,100 (DBU Cost) = $1,698.
+
+* VM cost for 10 DS13v2 instances —100 hours x 10 instances x $0.598/hour = $598
+* DBU cost for All-purpose Compute workload for 10 DS13v2 instances —100 hours x 10 instances x 2 DBU per node x $0.55/DBU = $1,100
+* The total cost would therefore be $598 (VM Cost) + $1,100 (DBU Cost) = $1,698.
 
 #### Example 2: If you run Premium tier cluster for 100 hours in East US 2 with 10 DS13v2 instances, the billing would be the following for Jobs Compute workload:
-  * VM cost for 10 DS13v2 instances —100 hours x 10 instances x $0.598/hour = $598
-  * DBU cost for Jobs Compute workload for 10 DS13v2 instances —100 hours x 10 instances x 2 DBU per node x $0.30/DBU = $600
-  * The total cost would therefore be $598 (VM Cost) + $600 (DBU Cost) = $1,198.
+
+* VM cost for 10 DS13v2 instances —100 hours x 10 instances x $0.598/hour = $598
+* DBU cost for Jobs Compute workload for 10 DS13v2 instances —100 hours x 10 instances x 2 DBU per node x $0.30/DBU = $600
+* The total cost would therefore be $598 (VM Cost) + $600 (DBU Cost) = $1,198.
   
 In addition to VM and DBU charges, there will be additional charges for managed disks, public IP address, bandwidth, or any other resource such as Azure Storage, Azure Cosmos DB depending on your application.
 
 #### Azure Databricks Trial
+
 If you are new to Azure Databricks, you can also use a Trial SKU that gives you free DBUs for Premium tier for 14 days. You will still need to pay for other resources like VM, Storage etc. that are consumed during this period. After the trial is over, you will need to start paying for the DBUs. 
 
 ### Chargeback Scenarios
@@ -604,6 +603,7 @@ There are 2 broad scenarios we have seen with respect to chargeback internal tea
 To support these scenarios, Azure Databricks leverages Azure Tags so that the users can view the cost/usage for resources with tags. There are default tags that comes with the. 
 
 Please see below the default tags that are available with the resources:
+
 | Resources | Default Tags |
 | --- | --- |
 | All-purpose Compute |Vendor, Creator, ClusterName, ClusterId|
@@ -632,20 +632,21 @@ Please see below on how tags propagate for DBUs and VMs
 These tags (default and custom) propagate to [Cost Analysis Reports](https://docs.microsoft.com/en-us/azure/cost-management-billing/costs/quick-acm-cost-analysis) that you can access in the Azure Portal. The below section will explain how to do cost/usage analysis using these tags.
 
 ### Cost/Usage Analysis
+
 The Cost Analysis report is available under Cost Management within Azure Portal. Please refer to [Cost Management](https://docs.microsoft.com/en-us/azure/cost-management-billing/costs/quick-acm-cost-analysis)section to get a detailed overview on how to use Cost Management.  
 
    ![Cost Management](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management.png "Cost Management")
 
-Below example is aimed at giving a quick start to get you going to do cost analysis for Azure Databricks. Below are the steps:
+The following example is aimed at giving a quick start to get you going to do cost analysis for Azure Databricks. Below are the steps:
   
-  1.  In Azure Portal, click on Cost Management + Billing
-  2.  In Cost Management, click on Cost Analysis Tab 
+1.  In Azure Portal, click on Cost Management + Billing
+2.  In Cost Management, click on Cost Analysis Tab 
 
       ![Cost Management config](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20config.png "Cost Management config")
 
-  3.  Choose the right billing scope that want report for and make sure the user has Cost Management Reader permission for the that scope. 
-  4.  Once selected, then you will see cost reports for all the Azure resources at that scope.
-  5.  Post that you can create different reports by using the different options on the chart. For example, one of the reports you can create is 
+3.  Choose the right billing scope that want report for and make sure the user has Cost Management Reader permission for the that scope. 
+4.  Once selected, then you will see cost reports for all the Azure resources at that scope.
+5.  Post that you can create different reports by using the different options on the chart. For example, one of the reports you can create is:
    
      * Chart option as Column (stacked)
      * Granularity – Daily
@@ -742,7 +743,17 @@ Please follow the instructions [here.](https://docs.microsoft.com/en-us/azure/az
 #### Step 4 - Configure the Init Script
 Replace the *LOG_ANALYTICS_WORKSPACE_ID* and *LOG_ANALYTICS_WORKSPACE_KEY* with your own info.
 
-![PythonSnippet](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Python%20Snippet.PNG "PythonSnippet")
+```python
+%python
+script = """
+sed -i "s/^exit 101$/exit 0/" /usr/sbin/policy-rc.d 
+wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh && sh onboard_agent.sh -w <LOG_ANALYTICS_WORKSPACE_ID> -s <LOG_ANALYTICS_WORKSPACE_KEY>
+sudo su omsagent -c 'python /opt/microsoft/omsconfig/Scripts/PerformRequiredConfigurationChecks.py'
+/opt/microsoft/omsagent/bin/service_control restart $YOUR_OMS_WORKSPACE_ID
+"""
+#save script to databricks file system so it can be loaded by VMs
+dbutils.fs.put("/databricks/my_init_scripts/configure-omsagent.sh", script, True)
+```
 
 Now it could be used as a global script with all clusters (change the path to /databricks/init in that case), or as a cluster-scoped script with specific ones. We recommend using cluster scoped scripts as explained in this doc earlier.
 
