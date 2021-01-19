@@ -157,7 +157,7 @@ Azure Databricks is a multitenant service and to provide fair resource sharing t
 Key workspace limits are:
 
   * The maximum number of jobs that a workspace can create in an hour is **1000**
-  * At any time, you cannot have more than **150 jobs** simultaneously running in a workspace
+  * At any time, you cannot have more than **1000 jobs** simultaneously running in a workspace
   * There can be a maximum of **150 notebooks or execution contexts** attached to a cluster
   * The maximum number secret scopes per workspace is 100
 
