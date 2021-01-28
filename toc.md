@@ -106,11 +106,11 @@ ADB is a Big Data analytics service. Being a Cloud Optimized managed [PaaS](http
 
 You can deploy ADB using Azure Portal or using [ARM templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#template-deployment). One successful ADB deployment produces exactly one Workspace, a space where users can log in and author analytics apps. It comprises the file browser, notebooks, tables, clusters, [DBFS](https://docs.azuredatabricks.net/user-guide/dbfs-databricks-file-system.html#dbfs) storage, etc. More importantly, Workspace is a fundamental isolation unit in Databricks. All workspaces are completely isolated from each other.
 
-Each workspace is identified by a globally unique 53-bit number, called ***Workspace ID or Organization ID***. The URL that a customer sees after logging in always uniquely identifies the workspace they are using:
+Each workspace is identified by a globally unique 53-bit number, called ***Workspace ID or Organization ID***. The URL that a customer sees after logging in always uniquely identifies the workspace they are using.
 
-*https://regionName.azuredatabricks.net/?o=workspaceId*
+*https://adb-workspaceId.azuredatabricks.net/?o=workspaceId*
 
-Example: *https://eastus2.azuredatabricks.net/?o=12345*
+Example: *https://adb-12345.eastus2.azuredatabricks.net/?o=12345*
 
 Azure Databricks uses [Azure Active Directory (AAD)](https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-whatis) as the exclusive Identity Provider and there’s a seamless out of the box integration between them. This makes ADB tightly integrated with Azure just like its other core services. Any AAD member assigned to the Owner or Contributor role can deploy Databricks and is automatically added to the ADB members list upon first login. If a user is not a member or guest of the Active Directory tenant, they can’t login to the workspace.
 Granting access to a user in another tenant (for example, if contoso.com wants to collaborate with adventure-works.com users) does work because those external users are added as guests to the tenant hosting Azure Databricks.
@@ -152,28 +152,20 @@ How many workspaces do you need to deploy? The answer to this question depends a
 Customers commonly partition workspaces based on teams or departments and arrive at that division naturally. But it is also important to partition keeping Azure Subscription and ADB Workspace limits in mind.
 
 ### Databricks Workspace Limits
-Azure Databricks is a multitenant service and to provide fair resource sharing to all regional customers, it imposes limits on API calls. These limits are expressed at the Workspace level and are due to internal ADB components. For instance, you can only run up to 150 concurrent jobs in a workspace. Beyond that, ADB will deny your job submissions. There are also other limits such as max hourly job submissions, max notebooks, etc.
+Azure Databricks is a multitenant service and to provide fair resource sharing to all regional customers, it imposes limits on API calls. These limits are expressed at the Workspace level and are due to internal ADB components. For instance, you can only run up to 1000 concurrent jobs in a workspace. Beyond that, ADB will deny your job submissions. There are also other limits such as max hourly job submissions, max notebooks, etc.
     
 Key workspace limits are:
 
-  * The maximum number of jobs that a workspace can create in an hour is **1000**
-  * At any time, you cannot have more than **150 jobs** simultaneously running in a workspace
-  * There can be a maximum of **150 notebooks or execution contexts** attached to a cluster
-  * The maximum number secret scopes per workspace is 100
+  * The maximum number of jobs that a workspace can create in an hour is **5000**
+  * At any time, you cannot have more than **1000 jobs** simultaneously running in a workspace
+  * There can be a maximum of **145 notebooks** attached to a cluster
 
 ### Azure Subscription Limits
 Next, there are [Azure limits](https://docs.microsoft.com/en-us/azure/azure-subscription-service-limits) to consider since ADB deployments are built on top of the Azure infrastructure. 
 
-Key Azure limits are:
-  * Storage accounts per region per subscription: **250**
-  * Maximum egress for general-purpose v2 and Blob storage accounts (all regions): **50 Gbps**
-  * VMs per subscription per region: **25,000**
-  * Resource groups per subscription: **980**
+For more help in understanding the impact of these limits or options of increasing them, please contact Microsoft or Databricks technical architects.
 
-
-These limits are at this point in time and might change going forward. Some of them can also be increased if needed. For more help in understanding the impact of these limits or options of increasing them, please contact Microsoft or Databricks technical architects.
-
-> ***Due to scalability reasons, we highly recommend separating the production and dev/stage environments into separate subscriptions.***
+> ***We highly recommend separating workspaces into production and dev, and deploying them into separate subscriptions.***
 
 ## Consider Isolating Each Workspace in its own VNet
 *Impact: Low*
@@ -200,22 +192,30 @@ Recall the each Workspace can have multiple clusters. The total capacity of clus
 
   * Each cluster node requires 1 Public IP and 2 Private IPs
   * These IPs are logically grouped into 2 subnets named “public” and “private”
-  * For a desired cluster size of X: number of Public IPs = X, number of Private IPs = 4X
-  * The 4X requirement for Private IPs is due to the fact that for each deployment:
-    + Half of address space is reserved for future use
-    + The other half is equally divided into the two subnets: private and public
-  * The size of private and public subnets thur determines total number of VMs available for clusters 
+  * For a desired cluster size of X: number of Public IPs = X, number of Private IPs = 2X
+  * The size of private and public subnets thus determines total number of VMs available for clusters 
     + /22 mask is larger than /23, so setting private and public to /22 will have more VMs available for creating clusters, than say /23 or below
    * But, because of the address space allocation scheme, the size of private and public subnets is constrained by the VNet’s CIDR
    * The allowed values for the enclosing VNet CIDR are from /16 through /24
    * The private and public subnet masks must be:
      + Equal
-     + At least two steps down from enclosing VNet CIDR mask
      + Must be greater than /26
     
 With this info, we can quickly arrive at the table below, showing how many nodes one can use across all clusters for a given VNet CIDR. It is clear that selection of VNet CIDR has far reaching implications in terms of maximum cluster size.   
+
+| Enclosing Vnet CIDR’s Mask where ADB Workspace is deployed | Allowed Masks on Private and Public Subnets (should be equal) | Max number of nodes across all clusters in the Workspace, assuming higher subnet mask is chosen |
+|:------------------------------------------------------------:|:---------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------:|
+| /16                                                        | /17 through /25                                               | 32766                                                                                           |
+| /17                                                        | /18 through /25                                               | 16382                                                                                           |
+| /18                                                        | /19 through /25                                               | 8190                                                                                            |
+| /19                                                        | /20 through /25                                               | 4094                                                                                            |
+| /20                                                        | /21 through /25                                               | 2046                                                                                            |
+| /21                                                        | /22 through /25                                               | 1022                                                                                            |
+| /22                                                        | /23 through /25                                               | 510                                                                                             |
+| /23                                                        | /24 through /25                                               | 254                                                                                             |
+| /24                                                        | /25                                                           | 126                                                                                             |
     
-![Table 1: CIDR ranges](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Table1.PNG "Table 1: CIDR ranges")
+
 
 # Azure Databricks Deployment with limited private IP addresses 
 *Impact: High*
@@ -530,14 +530,6 @@ Both Premium and Standard tier come with 3 types of workload
  * Jobs Light Compute (previously called Data Engineering Light)
  * All-purpose Compute (previously called Data Analytics)
 The Jobs Compute and Jobs Light Compute make it easy for data engineers to build and execute jobs, and All-purpose make it easy for data scientists to explore, visualize, manipulate, and share data and insights interactively. Depending upon the use-case, one can also use All-purpose Compute for data engineering or automated scenarios especially if the incoming job rate is higher. 
-
-When you create an Azure Databricks workspace and spin up a cluster, below resources are consumed: 
-1. DBUs – A DBU is a unit of processing capability, billed on a per-second usage
-2. Virtual Machines – These represent your Databricks clusters that run the Databricks Runtime
-3. Public IP Addresses – These represent the IP Addresses consumed by the Virtual Machines when the cluster is running
-4. Blob Storage – Each workspace comes with a default storage
-5. Managed Disk
-6. Bandwidth – Bandwidth charges for any data transfer
 
 When you create an Azure Databricks workspace and spin up a cluster, below resources are consumed 
  * DBUs – A DBU is a unit of processing capability, billed on a per-second usage
