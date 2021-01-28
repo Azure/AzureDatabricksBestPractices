@@ -205,15 +205,15 @@ With this info, we can quickly arrive at the table below, showing how many nodes
 
 | Enclosing Vnet CIDR’s Mask where ADB Workspace is deployed | Allowed Masks on Private and Public Subnets (should be equal) | Max number of nodes across all clusters in the Workspace, assuming higher subnet mask is chosen |
 |:------------------------------------------------------------:|:---------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------:|
-| /16                                                        | /17 through /25                                               | 32766                                                                                           |
-| /17                                                        | /18 through /25                                               | 16382                                                                                           |
-| /18                                                        | /19 through /25                                               | 8190                                                                                            |
-| /19                                                        | /20 through /25                                               | 4094                                                                                            |
-| /20                                                        | /21 through /25                                               | 2046                                                                                            |
-| /21                                                        | /22 through /25                                               | 1022                                                                                            |
-| /22                                                        | /23 through /25                                               | 510                                                                                             |
-| /23                                                        | /24 through /25                                               | 254                                                                                             |
-| /24                                                        | /25                                                           | 126                                                                                             |
+| /16                                                        | /17 through /26                                               | 32766                                                                                           |
+| /17                                                        | /18 through /26                                               | 16382                                                                                           |
+| /18                                                        | /19 through /26                                               | 8190                                                                                            |
+| /19                                                        | /20 through /26                                               | 4094                                                                                            |
+| /20                                                        | /21 through /26                                               | 2046                                                                                            |
+| /21                                                        | /22 through /26                                               | 1022                                                                                            |
+| /22                                                        | /23 through /26                                               | 510                                                                                             |
+| /23                                                        | /24 through /26                                               | 254                                                                                             |
+| /24                                                        | /25 or /26                                                           | 126                                                                                             |
     
 
 
