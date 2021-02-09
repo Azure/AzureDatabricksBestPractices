@@ -84,7 +84,7 @@ ADB is a Big Data analytics service. Being a Cloud Optimized managed [PaaS](http
 
 You can deploy ADB using Azure Portal or using [ARM templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#template-deployment). One successful ADB deployment produces exactly one [Workspace](https://docs.microsoft.com/en-us/azure/databricks/workspace/), a space where users can log in and author analytics apps. It comprises of [Notebooks](https://docs.microsoft.com/en-us/azure/databricks/notebooks/), [Tables](https://docs.microsoft.com/en-us/azure/databricks/data/tables), [Clusters](https://docs.microsoft.com/en-us/azure/databricks/clusters/), [DBFS storage](https://docs.microsoft.com/en-us/azure/databricks/data/databricks-file-system), etc. More importantly, Workspace is a fundamental isolation unit in Databricks. All workspaces are completely isolated from each other.
 
-Each workspace is identified by a globally unique 53-bit number, called ***Workspace ID*** or ***Organization ID***. The URL that a customer sees after logging in always uniquely identifies the workspace they are using. It takes the following form: 
+Each Workspace is identified by a globally unique 53-bit number, called ***Workspace ID*** or ***Organization ID***. The URL that a customer sees after logging in always uniquely identifies the Workspace they are using. It takes the following form: 
 
 *https://adb-WorkspaceId.RandomNumber.azuredatabricks.net*
 
@@ -194,15 +194,15 @@ With this info, we can quickly arrive at the table below, showing how many nodes
 
 | Enclosing VNet CIDR's mask where ADB Workspace is deployed | Allowed masks on private and public subnets (should be equal)| Max number of nodes across all Clusters in a Workspace, assuming higher subnet mask is chosen|
 | ---| ---| ---|
-| /16| /18 through /26| 16000|
-| /17| /19 through /26| 8000|
-| /18| /20 through /26| 4000|
-| /19| /21 through /26| 2000|
-| /20| /22 through /26| 1024|
-| /21| /23 through /26| 512|
-| /22| /24 through /26| 256|
-| /23| /25 through /26| 128|
-| /24| /26 only| 64|
+| /16| /17 through /26| 32766|
+| /17| /18 through /26| 16382|
+| /18| /19 through /26| 8190|
+| /19| /20 through /26| 4094|
+| /20| /21 through /26| 2046|
+| /21| /22 through /26| 1022|
+| /22| /23 through /26| 510|
+| /23| /24 through /26| 254|
+| /24| /25 or /26| 126|
 
 *Table 1: VNet size implications for Cluster size*
 
