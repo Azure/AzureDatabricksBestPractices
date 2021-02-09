@@ -1,6 +1,8 @@
 # Azure Databricks Best Practices
 
-![Azure Databricks](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/ADBicon.jpg "Azure Databricks")
+<p align="center">
+    <img width="500" height="300" src="media/ADBicon.jpg">
+</p>
 
 
 Authors:
@@ -12,9 +14,9 @@ Written by: Priya Aswani, WW Data Engineering & AI Technical Lead
 
 
 Published: June 22, 2019
+Revised: February 9, 2021
 
-
-Version: 1.0
+Version: 1.1
 
 
 [Click here for the Best Practices](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/toc.md)
