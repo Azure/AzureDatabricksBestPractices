@@ -3,7 +3,7 @@
 
                      
 <p align="center">
-    <img width="500" height="300" src="https://github.com/Azure/AzureDatabricksBestPractices/blob/master/ADBicon.jpg">
+    <img width="500" height="300" src="https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/ADBicon.jpg">
 </p>
 
 # Azure Databricks Best Practices
@@ -12,6 +12,9 @@ Authors:
 * Dhruv Kumar, Senior Solutions Architect, Databricks 
 * Premal Shah, Azure Databricks PM, Microsoft
 * Bhanu Prakash, Azure Databricks PM, Microsoft
+
+Contributors:
+* Alex Taylor-Barreto, Resident Solutions Architect
 
 Written by: Priya Aswani, WW Data Engineering & AI Technical Lead 
 
@@ -120,14 +123,14 @@ Azure Databricks comes with its own user management interface. You can create us
 The first user to login and initialize the workspace is the workspace ***owner***, and they are automatically assigned to the Databricks admin group. This person can invite other users to the workspace, add them as admins, create groups, etc. The ADB logged in user’s identity is provided by AAD, and shows up under the user menu in Workspace:
 
 <p align="left">
-    <img width="158.5" height="138" src="https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure1.PNG">
+    <img width="158.5" height="138" src="https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/Figure1.PNG">
 </p>
 Figure 1: Databricks user menu
 
 
 Multiple clusters can exist within a workspace, and there’s a one-to-many mapping between a Subscription to Workspaces, and further, from one Workspace to multiple Clusters. 
 
-![Figure 2: Azure Databricks Isolation Domains Workspace](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure3.PNG "Figure 3: Azure Databricks Isolation Domains Workspace")
+![Figure 2: Azure Databricks Isolation Domains Workspace](https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/Figure3.PNG "Figure 3: Azure Databricks Isolation Domains Workspace")
 
 *Figure 2: Relationship Between AAD, Workspace, Resource Groups, and Clusters
 
@@ -141,7 +144,7 @@ How many workspaces do you need to deploy? The answer to this question depends a
 
 
 <p align="left">
-    <img width="400" height="300" src="https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure2.PNG">
+    <img width="400" height="300" src="https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/Figure2.PNG">
 </p>
 
 *Figure 3: Business Unit Subscription Design Pattern*
@@ -178,7 +181,7 @@ While you can deploy more than one Workspace in a VNet by keeping the associated
 More information: [Azure Virtual Datacenter: a network perspective](https://docs.microsoft.com/en-us/azure/architecture/vdc/networking-virtual-datacenter#topology)
 
 <p align="left">
-    <img width="400" height="300" src="https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure4.PNG">
+    <img width="400" height="300" src="https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/Figure4.PNG">
 </p>
 
 *Figure 4: Hub and Spoke Model*
@@ -342,7 +345,7 @@ When it comes to taxonomy, ADB clusters are divided along the notions of “type
 
 *Table 2: Cluster modes and their characteristics*
 
-![Table 2: Cluster modes and their characteristics](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Table2.PNG "Table 2: Cluster modes and their characteristics")
+![Table 2: Cluster modes and their characteristics](https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/Table2.PNG "Table 2: Cluster modes and their characteristics")
 
 ## Support Interactive Analytics Using Shared High Concurrency Clusters
 *Impact: Medium*
@@ -357,7 +360,7 @@ There are three steps for supporting Interactive workloads on ADB:
 To understand why, let’s quickly see how interactive workloads are different from batch workloads:
 
 *Table 3: Batch vs. Interactive workloads*
-![Table 3: Batch vs. Interactive workloads](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Table3.PNG "Table 3: Batch vs. Interactive workloads")
+![Table 3: Batch vs. Interactive workloads](https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/Table3.PNG "Table 3: Batch vs. Interactive workloads")
 
 Because of these differences, supporting Interactive workloads entails minimizing cost variability and optimizing for latency over throughput, while providing a secure environment. These goals are satisfied by shared High Concurrency clusters with Table access controls or AAD Passthrough turned on (in case of ADLS):
 
@@ -369,7 +372,7 @@ Because of these differences, supporting Interactive workloads entails minimizin
 
 > ***If you’re using ADLS, we recommend AAD Credential Passthrough instead of Table Access Control for easy manageability.*** 
 
-![Figure 5: Interactive clusters](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure5.PNG "Figure 5: Interactive clusters")
+![Figure 5: Interactive clusters](https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/Figure5.PNG "Figure 5: Interactive clusters")
 
 *Figure 5: Interactive clusters*
 
@@ -382,7 +385,7 @@ recommend letting each job create a separate cluster for its execution. Thus, in
 Azure Data Factory uses this pattern as well - each job ends up creating a separate cluster since the underlying call is made using the [Runs-Submit Jobs API](https://docs.azuredatabricks.net/api/latest/jobs.html#runs-submit).
 
 
-![Figure 6: Ephemeral Job cluster](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure6.PNG "Figure 6: Ephemeral Job cluster")
+![Figure 6: Ephemeral Job cluster](https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/Figure6.PNG "Figure 6: Ephemeral Job cluster")
 
 *Figure 6: Ephemeral Job cluster*
 
@@ -451,7 +454,7 @@ Performing these steps will help you to arrive at a baseline cluster size which 
 A shuffle occurs when we need to move data from one node to another in order to complete a stage. Depending on the type of transformation you are doing you may cause a shuffle to occur. This happens when all the executors require seeing all of the data in order to accurately perform the action. If the Job requires a wide transformation, you can expect the job to execute slower because all of the partitions need to be shuffled around in order to complete the job. Eg: Group by, Distinct.
 
 <p align="left">
-    <img width="400" height="300" src="https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure7.PNG">
+    <img width="400" height="300" src="https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/Figure7.PNG">
 </p>
 
 *Figure 7: Shuffle vs. no-shuffle*
@@ -459,7 +462,7 @@ A shuffle occurs when we need to move data from one node to another in order to 
 
 You’ve got two control knobs of a shuffle you can use to optimize
   * The number of partitions being shuffled:
-  ![SparkSnippet](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/SparkSnippet.PNG "SparkSnippet")
+  ![SparkSnippet](https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/SparkSnippet.PNG "SparkSnippet")
   * The amount of partitions that you can compute in parallel.
         + This is equal to the number of cores in a cluster.
 
@@ -514,7 +517,7 @@ wget https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/inst
 dbutils.fs.put("/databricks/log_init_scripts/configure-omsagent.sh", script, True)
 ```
 
-![Grafana](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Grafana.PNG "Grafana")
+![Grafana](https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/Grafana.PNG "Grafana")
 
 You can also use Grafana to visualize your data from Log Analytics.
 
@@ -626,14 +629,14 @@ These tags (default and custom) propagate to [Cost Analysis Reports](https://doc
 ### Cost/Usage Analysis
 The Cost Analysis report is available under Cost Management within Azure Portal. Please refer to [Cost Management](https://docs.microsoft.com/en-us/azure/cost-management-billing/costs/quick-acm-cost-analysis)section to get a detailed overview on how to use Cost Management.  
 
-   ![Cost Management](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management.png "Cost Management")
+   ![Cost Management](https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/Cost%20Management.png "Cost Management")
 
 Below example is aimed at giving a quick start to get you going to do cost analysis for Azure Databricks. Below are the steps:
   
   1.  In Azure Portal, click on Cost Management + Billing
   2.  In Cost Management, click on Cost Analysis Tab 
 
-      ![Cost Management config](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20config.png "Cost Management config")
+      ![Cost Management config](https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/Cost%20Management%20config.png "Cost Management config")
 
   3.  Choose the right billing scope that want report for and make sure the user has Cost Management Reader permission for the that scope. 
   4.  Once selected, then you will see cost reports for all the Azure resources at that scope.
@@ -645,11 +648,11 @@ Below example is aimed at giving a quick start to get you going to do cost analy
 
 You will see something like below where it will show the distribution of cost on a daily basis for different clusters in your subscription or the scope that you chose in Step 3. You also have option to save this report and share it with your team.
 
-   ![Cost Management config](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20Report.png "Cost Management report")
+   ![Cost Management config](https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/Cost%20Management%20Report.png "Cost Management report")
  
 To chargeback, you can filter this report by using the tag option. For example, you can use default tag: Creator or can use own custom tag – Cost Center and chargeback based on that. 
 
-   ![Cost Management filter](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20filter.png "Cost Management filter")
+   ![Cost Management filter](https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/Cost%20Management%20filter.png "Cost Management filter")
  
 You also have option to consume this data from CSV or a native Power BI connector for Cost Management. Please see below:
 
@@ -659,11 +662,11 @@ You also have option to consume this data from CSV or a native Power BI connecto
    * Effective Price = DBU price based on the SKU
    * Cost = Quantity x Effective Price
   
-    ![Cost Management export](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20export.png "Cost Management export")
+    ![Cost Management export](https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/Cost%20Management%20export.png "Cost Management export")
 
 2. There is a native [Cost Management Connector](https://docs.microsoft.com/en-us/power-bi/connect-data/desktop-connect-azure-cost-management) in Power BI that allows one to make powerful, customized visualization and cost/usage reports. 
 
-    ![Cost Management connector](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20connector.png "Cost Management connector")
+    ![Cost Management connector](https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/Cost%20Management%20connector.png "Cost Management connector")
   
 Once you connect, you can create various rich reports easily like below by choosing the right fields from the table.
 
@@ -673,12 +676,12 @@ Tip: To filter on tags, you will need to parse the json in Power BI. To do that,
   2. Select the "Usage Details" table 
   3. On the right side the "Properties" tab shows the steps as 
     
-     ![Cost Management config](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20config.png "Cost Management config")
+     ![Cost Management config](https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20config.png "Cost Management config")
  
   4. From the menu bar go to "Add column" -> "Add custom column" 
   5. Name the column and enter the following text in the query = "{"& [Tags] & "}"
  
-     ![Cost Management config2](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20config2.jpg "Cost Management config2")
+     ![Cost Management config2](https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20config2.jpg "Cost Management config2")
  
   6. This will create a new column of "tags" in the json format. 
   7. Now user can transform it as expand it. You can then use the different tags as columns that you can use in a report. 
@@ -686,16 +689,16 @@ Tip: To filter on tags, you will need to parse the json in Power BI. To do that,
 Please see some of the common views created easily using this connector. 
 
 * Cost Report breakdown by Resource Group, Tags, MeterName
-     ![Cost Management report1](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report%201.png "Cost Management report1")
+     ![Cost Management report1](https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report%201.png "Cost Management report1")
  
  * Cost Report breakdown by Cluster, and custom tags
-    ![Cost Management report2](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report2.PNG "Cost Management report2")
+    ![Cost Management report2](https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report2.PNG "Cost Management report2")
   
  * Cost Report breakdown by Cluster and Metername in pie chart
-    ![Cost Management report3](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report3.PNG "Cost Management report3")
+    ![Cost Management report3](https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report3.PNG "Cost Management report3")
  
  * Cost Report breakdown by with resource group and cluster including quantity
-    ![Cost Management report4](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report4.PNG "Cost Management report4")
+    ![Cost Management report4](https://github.com/a0x8o/AzureDatabricksBestPractices/blob/master/Cost%20Management%20PBI%20report4.PNG "Cost Management report4")
 
 ### Pricing difference for Regions
 
@@ -734,7 +737,8 @@ Please follow the instructions [here.](https://docs.microsoft.com/en-us/azure/az
 #### Step 4 - Configure the Init Script
 Replace the *LOG_ANALYTICS_WORKSPACE_ID* and *LOG_ANALYTICS_WORKSPACE_KEY* with your own info.
 
-![PythonSnippet](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Python%20Snippet.PNG "PythonSnippet")
+![PythonSnippet](https://github.com/a0x8o/
+DatabricksBestPractices/blob/master/Python%20Snippet.PNG "PythonSnippet")
 
 Now it could be used as a global script with all clusters (change the path to /databricks/init in that case), or as a cluster-scoped script with specific ones. We recommend using cluster scoped scripts as explained in this doc earlier.
 
@@ -747,5 +751,5 @@ See [this](https://docs.microsoft.com/en-us/azure/azure-monitor/learn/quick-coll
    * https://github.com/Microsoft/OMS-Agent-for-Linux/blob/master/docs/Troubleshooting.md
 
 ## Access patterns with Azure Data Lake Storage Gen2
-To understand the various access patterns and approaches to securing data in ADLS see the [following guidance](https://github.com/hurtn/datalake-ADLS-access-patterns-with-Databricks/blob/master/readme.md). 
+To understand the various access patterns and approaches to securing data in ADLS see the [following guidance](https://github.com/a0x8o/datalake-ADLS-access-patterns-with-Databricks/blob/master/readme.md). 
 
