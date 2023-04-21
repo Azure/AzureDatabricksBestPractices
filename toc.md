@@ -104,7 +104,7 @@ Let’s start with a short Azure Databricks 101 and then discuss some best pract
 
 ADB is a Big Data analytics service. Being a Cloud Optimized managed [PaaS](https://azure.microsoft.com/en-us/overview/what-is-paas/)  offering, it is designed to hide the underlying distributed systems and networking complexity as much as possible from the end user. It is backed by a team of support staff who monitor its health, debug tickets filed via Azure, etc. This allows ADB users to focus on developing value generating apps rather than stressing over infrastructure management.
 
-You can deploy ADB using Azure Portal or using [ARM templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#template-deployment). One successful ADB deployment produces exactly one Workspace, a space where users can log in and author analytics apps. It comprises the file browser, notebooks, tables, clusters, [DBFS](https://learn.microsoft.com/en-us/azure/databricks/dbfs) storage, etc. More importantly, Workspace is a fundamental isolation unit in Databricks. All workspaces are completely isolated from each other.
+You can deploy ADB using Azure Portal or using [ARM templates](https://learn.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#template-deployment). One successful ADB deployment produces exactly one Workspace, a space where users can log in and author analytics apps. It comprises the file browser, notebooks, tables, clusters, [DBFS](https://learn.microsoft.com/en-us/azure/databricks/dbfs) storage, etc. More importantly, Workspace is a fundamental isolation unit in Databricks. All workspaces are completely isolated from each other.
 
 Each workspace is identified by a globally unique 53-bit number, called ***Workspace ID or Organization ID***. The URL that a customer sees after logging in always uniquely identifies the workspace they are using.
 
@@ -112,7 +112,7 @@ Each workspace is identified by a globally unique 53-bit number, called ***Works
 
 Example: *https://adb-12345.eastus2.azuredatabricks.net/?o=12345*
 
-Azure Databricks uses [Azure Active Directory (AAD)](https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-whatis) as the exclusive Identity Provider and there’s a seamless out of the box integration between them. This makes ADB tightly integrated with Azure just like its other core services. Any AAD member assigned to the Owner or Contributor role can deploy Databricks and is automatically added to the ADB members list upon first login. If a user is not a member or guest of the Active Directory tenant, they can’t login to the workspace.
+Azure Databricks uses [Azure Active Directory (AAD)](https://learn.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-whatis) as the exclusive Identity Provider and there’s a seamless out of the box integration between them. This makes ADB tightly integrated with Azure just like its other core services. Any AAD member assigned to the Owner or Contributor role can deploy Databricks and is automatically added to the ADB members list upon first login. If a user is not a member or guest of the Active Directory tenant, they can’t login to the workspace.
 Granting access to a user in another tenant (for example, if contoso.com wants to collaborate with adventure-works.com users) does work because those external users are added as guests to the tenant hosting Azure Databricks.
 
 Azure Databricks comes with its own user management interface. You can create users and groups in a workspace, assign them certain privileges, etc. While users in AAD are equivalent to Databricks users, by default AAD roles have no relationship with groups created inside ADB, unless you use [SCIM](https://learn.microsoft.com/en-us/azure/databricks/administration-guide/users-groups/scim/aad) for provisioning users and groups. With SCIM, you can import both groups and users from AAD into Azure Databricks, and the synchronization is automatic after the initial import. ADB also has a special group called ***Admins***, not to be confused with AAD’s role Admin.
@@ -137,7 +137,7 @@ With this basic understanding let’s discuss how to plan a typical ADB deployme
 ## Map Workspaces to Business Divisions
 *Impact: Very High*
 
-How many workspaces do you need to deploy? The answer to this question depends a lot on your organization’s structure. We recommend that you assign workspaces based on a related group of people working together collaboratively. This also helps in streamlining your access control matrix within your workspace (folders, notebooks etc.) and also across all your resources that the workspace interacts with (storage, related data stores like Azure SQL DB, Azure SQL DW etc.). This type of division scheme is also known as the [Business Unit Subscription](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/decision-guides/subscriptions/) design pattern and it aligns well with the Databricks chargeback model.
+How many workspaces do you need to deploy? The answer to this question depends a lot on your organization’s structure. We recommend that you assign workspaces based on a related group of people working together collaboratively. This also helps in streamlining your access control matrix within your workspace (folders, notebooks etc.) and also across all your resources that the workspace interacts with (storage, related data stores like Azure SQL DB, Azure SQL DW etc.). This type of division scheme is also known as the [Business Unit Subscription](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/decision-guides/subscriptions/) design pattern and it aligns well with the Databricks chargeback model.
 
 
 <p align="left">
@@ -161,7 +161,7 @@ Key workspace limits are:
   * There can be a maximum of **145 notebooks** attached to a cluster
 
 ### Azure Subscription Limits
-Next, there are [Azure limits](https://docs.microsoft.com/en-us/azure/azure-subscription-service-limits) to consider since ADB deployments are built on top of the Azure infrastructure. 
+Next, there are [Azure limits](https://learn.microsoft.com/en-us/azure/azure-subscription-service-limits) to consider since ADB deployments are built on top of the Azure infrastructure. 
 
 For more help in understanding the impact of these limits or options of increasing them, please contact Microsoft or Databricks technical architects.
 
@@ -170,12 +170,12 @@ For more help in understanding the impact of these limits or options of increasi
 ## Consider Isolating Each Workspace in its own VNet
 *Impact: Low*
 
-While you can deploy more than one Workspace in a VNet by keeping the associated subnet pairs separate from other workspaces, we recommend that you should only deploy one workspace in any Vnet. Doing this perfectly aligns with the ADB's Workspace level isolation model. Most often organizations consider putting multiple workspaces in the same Vnet so that they all can share some common networking resource, like DNS, also placed in the same Vnet because the private address space in a vnet is shared by all resources. You can easily achieve the same while keeping the Workspaces separate by following the [hub and spoke model](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke) and using Vnet Peering to extend the private IP space of the workspace Vnet. Here are the steps: 
+While you can deploy more than one Workspace in a VNet by keeping the associated subnet pairs separate from other workspaces, we recommend that you should only deploy one workspace in any Vnet. Doing this perfectly aligns with the ADB's Workspace level isolation model. Most often organizations consider putting multiple workspaces in the same Vnet so that they all can share some common networking resource, like DNS, also placed in the same Vnet because the private address space in a vnet is shared by all resources. You can easily achieve the same while keeping the Workspaces separate by following the [hub and spoke model](https://learn.microsoft.com/en-us/azure/architecture/reference-architectures/hybrid-networking/hub-spoke) and using Vnet Peering to extend the private IP space of the workspace Vnet. Here are the steps: 
 1. Deploy each Workspace in its own spoke VNet.
 2. Put all the common networking resources in a central hub Vnet, such as your custom DNS server.  
 3. Join the Workspace spokes with the central networking hub using [Vnet Peering](https://learn.microsoft.com/en-us/azure/databricks/administration-guide/cloud-configurations/azure/vnet-peering)
 
-More information: [Azure Virtual Datacenter: a network perspective](https://docs.microsoft.com/en-us/azure/architecture/vdc/networking-virtual-datacenter#topology)
+More information: [Azure Virtual Datacenter: a network perspective](https://learn.microsoft.com/en-us/azure/architecture/vdc/networking-virtual-datacenter#topology)
 
 <p align="left">
     <img width="400" height="300" src="https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Figure4.PNG">
@@ -605,11 +605,11 @@ Please see below the default tags that are available with the resources:
 
 In addition to the default tags, customers can add custom tags to the resources based on how they want to charge back. Both default and custom tags are displayed on Azure bills that allows one to chargeback by filtering resource usage based on tags. 
 
-1. [Cluster Tags](https://docs.microsoft.com/en-us/azure/databricks/clusters/configure#cluster-tags): You can create custom tags as key-value pairs when you create a cluster, and Azure Databricks applies these tags to underlying cluster resources – VMs, DBUs, Public IP Addresses, Disks. 
+1. [Cluster Tags](https://learn.microsoft.com/en-us/azure/databricks/clusters/configure#cluster-tags): You can create custom tags as key-value pairs when you create a cluster, and Azure Databricks applies these tags to underlying cluster resources – VMs, DBUs, Public IP Addresses, Disks. 
 
-2. [Pool Tags](https://docs.microsoft.com/en-us/azure/databricks/clusters/instance-pools/configure#--pool-tags): You can create custom tags as key-value pairs when you create a pool, and Azure Databricks applies these tags to underlying pool resources – VMs, Public IP Addresses, Disks. Pool-backed clusters inherit default and custom tags from the pool configuration. 
+2. [Pool Tags](https://learn.microsoft.com/en-us/azure/databricks/clusters/instance-pools/configure#--pool-tags): You can create custom tags as key-value pairs when you create a pool, and Azure Databricks applies these tags to underlying pool resources – VMs, Public IP Addresses, Disks. Pool-backed clusters inherit default and custom tags from the pool configuration. 
 
-3. [Workspace Tags](https://docs.microsoft.com/en-us/azure/databricks/administration-guide/account-settings/usage-detail-tags-azure): You can create custom tags as key-value pairs when you create an Azure Databricks workspaces. These tags apply to underlying resources within the workspace – VMs, DBUs, and others. 
+3. [Workspace Tags](https://learn.microsoft.com/en-us/azure/databricks/administration-guide/account-settings/usage-detail-tags-azure): You can create custom tags as key-value pairs when you create an Azure Databricks workspaces. These tags apply to underlying resources within the workspace – VMs, DBUs, and others. 
 
 Please see below on how tags propagate for DBUs and VMs
 
@@ -621,10 +621,10 @@ Please see below on how tags propagate for DBUs and VMs
  * DBU Tag = Workspace Tag + Cluster Tag
  * VM Tag = Workspace Tag + Cluster Tag 
 
-These tags (default and custom) propagate to [Cost Analysis Reports](https://docs.microsoft.com/en-us/azure/cost-management-billing/costs/quick-acm-cost-analysis) that you can access in the Azure Portal. The below section will explain how to do cost/usage analysis using these tags.
+These tags (default and custom) propagate to [Cost Analysis Reports](https://learn.microsoft.com/en-us/azure/cost-management-billing/costs/quick-acm-cost-analysis) that you can access in the Azure Portal. The below section will explain how to do cost/usage analysis using these tags.
 
 ### Cost/Usage Analysis
-The Cost Analysis report is available under Cost Management within Azure Portal. Please refer to [Cost Management](https://docs.microsoft.com/en-us/azure/cost-management-billing/costs/quick-acm-cost-analysis)section to get a detailed overview on how to use Cost Management.  
+The Cost Analysis report is available under Cost Management within Azure Portal. Please refer to [Cost Management](https://learn.microsoft.com/en-us/azure/cost-management-billing/costs/quick-acm-cost-analysis)section to get a detailed overview on how to use Cost Management.  
 
    ![Cost Management](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management.png "Cost Management")
 
@@ -653,7 +653,7 @@ To chargeback, you can filter this report by using the tag option. For example, 
  
 You also have option to consume this data from CSV or a native Power BI connector for Cost Management. Please see below:
 
-1. To download this data to CSV, you can set export from Cost Management + Billing -> Usage + Charges and choose Usage Details Version 2 on the right. Refer [this](https://docs.microsoft.com/en-us/azure/cost-management-billing/reservations/understand-reserved-instance-usage-ea#download-the-usage-csv-file-with-new-data) for more details. Once downloaded, you can view the cost usage data and filter based on tags to chargeback. In the CSV, you can refer the Meter Name to get the Databricks workload consumed. In addition, this is how the other fields are represented for meters related to Azure Databricks.
+1. To download this data to CSV, you can set export from Cost Management + Billing -> Usage + Charges and choose Usage Details Version 2 on the right. Refer [this](https://learn.microsoft.com/en-us/azure/cost-management-billing/reservations/understand-reserved-instance-usage-ea#download-the-usage-csv-file-with-new-data) for more details. Once downloaded, you can view the cost usage data and filter based on tags to chargeback. In the CSV, you can refer the Meter Name to get the Databricks workload consumed. In addition, this is how the other fields are represented for meters related to Azure Databricks.
 
    * Quantity = Number of Virtual Machines x Number of hours x DBU count
    * Effective Price = DBU price based on the SKU
@@ -661,7 +661,7 @@ You also have option to consume this data from CSV or a native Power BI connecto
   
     ![Cost Management export](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20export.png "Cost Management export")
 
-2. There is a native [Cost Management Connector](https://docs.microsoft.com/en-us/power-bi/connect-data/desktop-connect-azure-cost-management) in Power BI that allows one to make powerful, customized visualization and cost/usage reports. 
+2. There is a native [Cost Management Connector](https://learn.microsoft.com/en-us/power-bi/connect-data/desktop-connect-azure-cost-management) in Power BI that allows one to make powerful, customized visualization and cost/usage reports. 
 
     ![Cost Management connector](https://github.com/Azure/AzureDatabricksBestPractices/blob/master/Cost%20Management%20connector.png "Cost Management connector")
   
@@ -721,15 +721,15 @@ Please refer to [Azure Databricks pricing page](https://azure.microsoft.com/en-u
 
 
 #### Step 1 - Create a Log Analytics Workspace
-Please follow the instructions [here](https://docs.microsoft.com/en-us/azure/azure-monitor/learn/quick-collect-linux-computer#create-a-workspace) to create a Log Analytics workspace
+Please follow the instructions [here](https://learn.microsoft.com/en-us/azure/azure-monitor/learn/quick-collect-linux-computer#create-a-workspace) to create a Log Analytics workspace
 
 #### Step 2- Get Log Analytics Workspace Credentials
-Get the workspace id and key using instructions [here.](https://docs.microsoft.com/en-us/azure/azure-monitor/learn/quick-collect-linux-computer#obtain-workspace-id-and-key)
+Get the workspace id and key using instructions [here.](https://learn.microsoft.com/en-us/azure/azure-monitor/learn/quick-collect-linux-computer#obtain-workspace-id-and-key)
 
 Store these in Azure Key Vault-based Secrets backend
 
 #### Step 3 - Configure Data Collection in Log Analytics Workspace
-Please follow the instructions [here.](https://docs.microsoft.com/en-us/azure/azure-monitor/learn/quick-collect-linux-computer#collect-event-and-performance-data)
+Please follow the instructions [here.](https://learn.microsoft.com/en-us/azure/azure-monitor/learn/quick-collect-linux-computer#collect-event-and-performance-data)
 
 #### Step 4 - Configure the Init Script
 Replace the *LOG_ANALYTICS_WORKSPACE_ID* and *LOG_ANALYTICS_WORKSPACE_KEY* with your own info.
@@ -739,10 +739,10 @@ Replace the *LOG_ANALYTICS_WORKSPACE_ID* and *LOG_ANALYTICS_WORKSPACE_KEY* with 
 Now it could be used as a global script with all clusters (change the path to /databricks/init in that case), or as a cluster-scoped script with specific ones. We recommend using cluster scoped scripts as explained in this doc earlier.
 
 #### Step 5 - View Collected Data via Azure Portal
-See [this](https://docs.microsoft.com/en-us/azure/azure-monitor/learn/quick-collect-linux-computer#view-data-collected) document.
+See [this](https://learn.microsoft.com/en-us/azure/azure-monitor/learn/quick-collect-linux-computer#view-data-collected) document.
 
 #### References
-   * https://docs.microsoft.com/en-us/azure/azure-monitor/learn/quick-collect-linux-computer
+   * https://learn.microsoft.com/en-us/azure/azure-monitor/learn/quick-collect-linux-computer
    * https://github.com/Microsoft/OMS-Agent-for-Linux/blob/master/docs/OMS-Agent-for-Linux.md
    * https://github.com/Microsoft/OMS-Agent-for-Linux/blob/master/docs/Troubleshooting.md
 
