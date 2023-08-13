@@ -4,4 +4,4 @@ select
     order_date,
     status
 
-from jaffle_shop_orders
+from quickstart_catalog.quickstart_schema.jaffle_shop_orders
