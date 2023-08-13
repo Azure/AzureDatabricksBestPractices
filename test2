@@ -1,0 +1,3 @@
+select distinct color
+from test
+sort by color asc
